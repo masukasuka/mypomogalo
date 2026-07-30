@@ -393,12 +393,10 @@
         <div id="section-calc" class="content-section active">
             <h2>Учет смены</h2>
 
-            <!-- Итоги за месяц с фильтром и нормой -->
             <div class="summary-card">
                 <h3>
                     <span>Период:</span>
                     <select id="monthFilter" onchange="onMonthFilterChange()" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.4); border-radius: 6px; padding: 2px 6px; font-size: 12px; outline: none;">
-                        <!-- Заполняется динамически -->
                     </select>
                 </h3>
                 <div class="summary-stats" id="monthlySummary">
@@ -450,16 +448,14 @@
                 </div>
             </div>
 
-            <!-- Контейнер списка -->
             <div class="history-list" id="historyList"></div>
 
-            <!-- Контейнер календаря -->
             <div class="calendar-view" id="calendarView">
                 <div class="calendar-grid" id="calendarGrid"></div>
             </div>
         </div>
 
-        <!-- РАЗДЕЛ 2: Выписки скоростей (с 3 подпунктами) -->
+        <!-- РАЗДЕЛ 2: Выписки скоростей -->
         <div id="section-speeds" class="content-section">
             <h2>Справочные материалы</h2>
             
@@ -469,19 +465,18 @@
                 <button class="sub-nav-btn" onclick="showSubSection('relief')">Рельеф пути</button>
             </div>
 
-            <!-- Подпункт 1: Выписки скоростей -->
             <div id="sub-speeds" class="sub-section">
                 <div class="card">
                     <p style="font-size: 13px; color: var(--tg-theme-hint-color);">Здесь будут храниться постоянные и временные ограничения скоростей по участку.</p>
                 </div>
             </div>
 
-            <!-- Подпункт 2: Пробы тормозов (Объединенная таблица + Поиск) -->
+            <!-- Подпункт 2: Пробы тормозов (Полная таблица с точными данными из документов) -->
             <div id="sub-brakes" class="sub-section active">
                 <div class="card" style="margin-bottom: 12px; padding: 10px;">
                     <div class="input-group" style="margin-bottom: 0;">
                         <label for="brakeSearchInput" style="font-weight: 600; color: var(--tg-theme-button-color);">🔍 Быстрый поиск участка или станции:</label>
-                        <input type="text" id="brakeSearchInput" placeholder="Например: Осиповичи - Верейцы" oninput="filterBrakesTable(this.value)" style="margin-top: 4px;">
+                        <input type="text" id="brakeSearchInput" placeholder="Например: Фаниполь, Орша, Бобр" oninput="filterBrakesTable(this.value)" style="margin-top: 4px;">
                     </div>
                 </div>
 
@@ -492,7 +487,7 @@
 
                 <div class="brake-card open">
                     <div class="brake-card-title">
-                        <span>Сводная таблица проб тормозов по всем участкам</span>
+                        <span>Таблица 2 — Проверки действия тормозов (Минск — Барановичи / Орша)</span>
                     </div>
                     <div class="brake-card-content" style="display: block; border-top: none; padding-top: 0; overflow-x: auto;">
                         <table id="brakesTable" style="width:100%; border-collapse: collapse; font-size: 11px; margin-bottom: 8px;">
@@ -502,174 +497,72 @@
                                 <th style="padding: 4px;">СК</th>
                                 <th style="padding: 4px;">Т.п.</th>
                             </tr>
-                            <!-- Орша — Минск (Страница 7) -->
-                            <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Орша – Минск</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Крупки – Приямино*</td><td>635-2</td><td>55</td><td>400</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Приямино – Новосады*</td><td>651-1</td><td>55</td><td>450</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Новосады – Борисов*</td><td>664-2</td><td>55</td><td>450</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Борисов – Жодино</td><td>678-2</td><td>55</td><td>400</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Жодино – Красное Знамя</td><td>695-3</td><td>55</td><td>400</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Красное Знамя – Смолевичи</td><td>705-3</td><td>45</td><td>450</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Смолевичи – Городище*</td><td>724-1</td><td>45</td><td>400</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Городище – Колодищи</td><td>731-9</td><td>45</td><td>400</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Колодищи – Озерище*</td><td>735-1</td><td>40</td><td>350</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Озерище – Степянка*</td><td>740-3</td><td>45</td><td>400</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Степянка – Минск-Вост.</td><td>744-3</td><td>35</td><td>400</td></tr>
 
-                            <!-- Орша узел -->
-                            <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Орша узел</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Орша-Центр. – Рез. Пост № 2 (НМ18)</td><td>85-4</td><td>25</td><td>250</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Орша-Зап. – Орша-Центр. (ч. парк 3)</td><td>84-10</td><td>25</td><td>250</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Орша-Зап. – Рез. Пост № 2 (п. ВГ)</td><td>89-7</td><td>25</td><td>250</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Орша-Зап. – Рез. Пост № 2 (ч. парк Е)</td><td>540-3</td><td>25</td><td>250</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Орша-Вост. – Рез. Пост № 1 (У вх. ЧВ)</td><td>82-9</td><td>25</td><td>250</td></tr>
+                            <!-- Минск — Барановичи -->
+                            <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Минск — Барановичи</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Минск-Сорт. — Помыслище</td><td>759-8</td><td>40</td><td>250</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Помыслище — Фаниполь</td><td>763-5</td><td>55</td><td>400</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Фаниполь — Койданово*</td><td>777-7</td><td>55</td><td>400</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Койданово — Негорелое*</td><td>792-6</td><td>55</td><td>400</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Негорелое — Колосово</td><td>806-7</td><td>55</td><td>400</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Колосово — Столбцы</td><td>820-6</td><td>55</td><td>400</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Столбцы — Городея</td><td>835-5</td><td>55</td><td>400</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Городея — Погорельцы</td><td>859-7</td><td>55</td><td>400</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Погорельцы — Барановичи</td><td>874-1</td><td>55</td><td>400</td></tr>
 
-                            <!-- Барановичи – Брест (Страница 7-8) -->
-                            <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Барановичи – Брест*</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Барановичи-Центр. – Грицевец</td><td>897-2</td><td>50</td><td>400</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Грицевец – Лесная</td><td>908-4</td><td>50</td><td>350</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Лесная – Доманово</td><td>923-7</td><td>50</td><td>300</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Доманово – Ивацевичи</td><td>947-1</td><td>50</td><td>300</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Ивацевичи – Коссово-Пол.</td><td>964-3</td><td>60</td><td>400</td></tr>
+                            <!-- Барановичи — Минск -->
+                            <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Барановичи — Минск</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Барановичи — Погорельцы</td><td>885-5</td><td>55</td><td>400</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Погорельцы — Городея</td><td>864-5</td><td>55</td><td>400</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Городея — Столбцы</td><td>841-9</td><td>55</td><td>400</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Столбцы — Колосово</td><td>819-1</td><td>55</td><td>400</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Колосово — Негорелое</td><td>806-6</td><td>55</td><td>400</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Негорелое — Койданово*</td><td>795-9</td><td>55</td><td>400</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Койданово — Фаниполь*</td><td>784-9</td><td>55</td><td>400</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Фаниполь — Помыслище*</td><td>767-3</td><td>55</td><td>400</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Помыслище — Минск Сорт.**</td><td>757-8</td><td>40</td><td>400</td></tr>
 
-                            <!-- Коссово-Пол. – Брест-Вост. (Страница 8) -->
-                            <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Коссово-Пол. – Брест-Вост.</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Коссово-Пол. – Бронная Гора</td><td>972-9</td><td>50</td><td>300</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Бронная Гора – Белоозерск</td><td>7-0</td><td>40</td><td>400</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Бронная Гора – Береза-Карт.</td><td>983-3</td><td>50</td><td>400</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Береза-Карт. – Оранчицы</td><td>1000-5</td><td>50</td><td>350</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Оранчицы – Тевли</td><td>1026-5</td><td>50</td><td>350</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Тевли – Жабинка</td><td>1054-5</td><td>50</td><td>350</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Жабинка – Брест-Вост.</td><td>1075-8</td><td>60</td><td>400</td></tr>
+                            <!-- Минск — Орша -->
+                            <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Минск — Орша</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Минск-Пасс. — Минск-Вост.</td><td>749-9</td><td>25</td><td>250</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Минск-Сорт. — Минск-Вост.</td><td>750-6</td><td>25</td><td>250</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Озерище — Околица</td><td>735-2</td><td>45</td><td>400</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Степянка — Озерище</td><td>739-1</td><td>45</td><td>400</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Колодищи — Городище</td><td>723-7</td><td>55</td><td>450</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Озерище — Колодищи</td><td>705-1</td><td>55</td><td>450</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Городище — Смолевичи</td><td>698-2</td><td>55</td><td>450</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Смолевичи — Красное Знамя</td><td>685-1</td><td>55</td><td>450</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Красное Знамя — Жодино</td><td>662-2</td><td>55</td><td>450</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Жодино — Борисов</td><td>655-1</td><td>55</td><td>450</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Борисов — Новосады</td><td>644-1</td><td>55</td><td>450</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Новосады — Приямино</td><td>629-1</td><td>55</td><td>450</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Приямино — Крупки</td><td>611-1</td><td>70</td><td>500</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Бобр — Крупки*</td><td>593-3</td><td>35</td><td>350</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Славное — Толочин</td><td>580-4</td><td>55</td><td>400</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Толочин — Коханово</td><td>558-1</td><td>55</td><td>400</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Коханово — Орша</td><td>540-5</td><td>55</td><td>400</td></tr>
 
-                            <!-- Брест – Барановичи (Страница 8) -->
-                            <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Брест – Барановичи*</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Брест-Вост. – Жабинка</td><td>1084-9</td><td>50</td><td>350</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Жабинка – Тевли</td><td>1065-8</td><td>50</td><td>350</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Тевли – Оранчицы</td><td>1032-8</td><td>50</td><td>350</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Оранчицы – Береза-Карт.</td><td>1018-6</td><td>50</td><td>350</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Береза-Карт. – Бронная Гора</td><td>990-10</td><td>50</td><td>350</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Белоозерск – Бронная Гора</td><td>16-1</td><td>40</td><td>400</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Бронная Гора – Коссово-Пол.</td><td>976-7</td><td>50</td><td>300</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Коссово-Пол. – Ивацевичи</td><td>965-8</td><td>50</td><td>350</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Ивацевичи – Доманово</td><td>953-9</td><td>50</td><td>350</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Доманово – Лесная</td><td>925-4</td><td>50</td><td>350</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Лесная – Грицевец</td><td>912-7</td><td>50</td><td>350</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Грицевец – Барановичи-Центр.</td><td>902-2</td><td>50</td><td>350</td></tr>
-
-                            <!-- Молодечно – Минск (Страница 8) -->
-                            <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Молодечно – Минск</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Молодечно – Уша</td><td>823-5</td><td>40</td><td>350</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Дубравы – Радошковичи</td><td>790-9</td><td>55</td><td>500</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Радошковичи – Беларусь</td><td>782-7</td><td>40</td><td>400</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Беларусь – Крыжовка</td><td>773-5</td><td>40</td><td>450</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Ратомка – Ждановичи</td><td>765-8</td><td>55</td><td>500</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Ждановичи – Минск-Сев.</td><td>757-8</td><td>40</td><td>400</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Минск-Сорт. – Минск-Вост.</td><td>749-9</td><td>25</td><td>250</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Дегтяревка – Богатырево</td><td>48-9</td><td>50</td><td>500</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Помыслище – Минск-Сорт.*</td><td>757-8</td><td>40</td><td>400</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Помыслище – Колядичи</td><td>37-7</td><td>40</td><td>400</td></tr>
-
-                            <!-- Минск – Молодечно (Страница 8) -->
-                            <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Минск – Молодечно</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Степянка – Минск-Вост.</td><td>744-3</td><td>45</td><td>450</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Минск-Сев. – Ждановичи</td><td>758-3</td><td>40</td><td>400</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Минск-Сорт. – Помыслище</td><td>759-8</td><td>40</td><td>250</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Помыслище – Дегтяревка</td><td>44-4</td><td>40</td><td>400</td></tr>
-
-                            <!-- Дегтяревка – Молодечно (Страница 9) -->
-                            <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Дегтяревка – Молодечно</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Дегтяревка – Крыжовка*</td><td>54-4</td><td>40</td><td>400</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Крыжовка – Беларусь</td><td>771-5</td><td>40</td><td>400</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Ратомка – Беларусь</td><td>771-5</td><td>40</td><td>400</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Дубравы – Олехновичи</td><td>796-3</td><td>50</td><td>400</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Олехновичи – Уша</td><td>800-1</td><td>40</td><td>450</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Уша – Молодечно</td><td>817-4</td><td>50</td><td>400</td></tr>
-
-                            <!-- Минск – Осиповичи (Страница 9) -->
-                            <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Минск – Осиповичи</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Минск-Сорт. – Минск-Южн.</td><td>495-1</td><td>35</td><td>400</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Колядичи – Михановичи</td><td>482-10</td><td>55</td><td>500</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Михановичи – Руденск</td><td>472-8</td><td>50</td><td>500</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Руденск – Пуховичи</td><td>453-6</td><td>40</td><td>400</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Пуховичи – Талька</td><td>430-2</td><td>50</td><td>500</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Талька – Верейцы</td><td>405-9</td><td>50</td><td>500</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Верейцы – Осиповичи</td><td>394-1</td><td>40</td><td>400</td></tr>
-
-                            <!-- Осиповичи – Минск (Страница 9) -->
-                            <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Осиповичи – Минск</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Осиповичи – Верейцы</td><td>396-1</td><td>40</td><td>450</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Верейцы – Талька</td><td>403-1</td><td>50</td><td>500</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Талька – Пуховичи</td><td>419-6</td><td>50</td><td>500</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Пуховичи – Руденск</td><td>440-3</td><td>50</td><td>500</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Руденск – Михановичи</td><td>459-1</td><td>40</td><td>450</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Колядичи – Минск-Южн.</td><td>490-9</td><td>40</td><td>500</td></tr>
-
-                            <!-- Брестский узел (Страница 9) -->
-                            <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Брестский узел</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Восточный парк</td><td>1091-1</td><td>25</td><td>200</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Западный парк</td><td>1094-8</td><td>25</td><td>200</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Брест парк Буг – Тересполь</td><td>210-7</td><td>20</td><td>100</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Брест-Вост. – Кандибор</td><td>2-3</td><td>30</td><td>200</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Брест парк Буг – Брест-Сев.</td><td>2-3</td><td>25</td><td>200</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Кобыляны – Тересполь</td><td>205-9</td><td>20</td><td>100</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Брест парк Буг – Брест-Вост.</td><td>1094-1</td><td>25</td><td>200</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Кандибор – Брест-Вост.</td><td>2-2</td><td>25</td><td>200</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Брест-Сев. – Брест парк Буг</td><td>2-3</td><td>25</td><td>200</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Брест-Вост. – Брест-Сев. (инж.)</td><td>2-9</td><td>30</td><td>250</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Брест-Сев. (инж.) – Брест-Вост.</td><td>2-9</td><td>25</td><td>250</td></tr>
-
-                            <!-- Жлобин – Осиповичи (Страница 10) -->
-                            <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Жлобин – Осиповичи</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Жлобин-Сорт. – Жлобин-Зап.*</td><td>286-9</td><td>40</td><td>250</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Жлобин-Сорт. – Жлобин-Зап.</td><td>288-5</td><td>40</td><td>200</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Жлобин-Зап. – Красный Берег</td><td>291-1</td><td>45</td><td>300</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Красный Берег – Телуша</td><td>308-4</td><td>50</td><td>300</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Телуша – Савичи</td><td>329-1</td><td>50</td><td>300</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Савичи – Березина</td><td>340-7</td><td>50</td><td>300</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Бобруйск – Мирадино</td><td>351-1</td><td>40</td><td>250</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Мирадино – Татарка</td><td>362-9</td><td>40</td><td>250</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Татарка – Осиповичи 3</td><td>380-4</td><td>50</td><td>300</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Осиповичи 3 – Осиповичи 1</td><td>387-8</td><td>40</td><td>250</td></tr>
-
-                            <!-- Осиповичи – Жлобин (Страница 10) -->
-                            <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Осиповичи – Жлобин</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Осиповичи 1 – Осиповичи 3</td><td>388-9</td><td>40</td><td>250</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Осиповичи 1 – Осиповичи 3</td><td>3-10</td><td>35</td><td>300</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Осиповичи 3 – Татарка</td><td>381-7</td><td>40</td><td>250</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Татарка – Мирадино</td><td>374-5</td><td>40</td><td>250</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Мирадино – Бобруйск</td><td>348-6</td><td>50</td><td>300</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Бобруйск – Березина</td><td>346-10</td><td>35</td><td>250</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Березина – Савичи</td><td>342-6</td><td>40</td><td>250</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Савичи – Телуша</td><td>326-10</td><td>50</td><td>300</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Телуша – Красный Берег</td><td>318-10</td><td>50</td><td>300</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Красный Берег – Жлобин-Зап.</td><td>294-3</td><td>45</td><td>300</td></tr>
-
-                            <!-- Колодищи – Колядичи через Шабаны (Страница 10) -->
-                            <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Колодищи – Колядичи (через Шабаны)</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Колодищи – Шабаны</td><td>4-6</td><td>40</td><td>300</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Шабаны – Гатово*</td><td>19-1</td><td>35</td><td>400</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Гатово – п.п. Асеевка</td><td>22-8</td><td>30</td><td>350</td></tr>
-
-                            <!-- Колядичи – Колодищи через Шабаны (Страница 10) -->
-                            <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Колядичи – Колодищи (через Шабаны)</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Колядичи – п.п. Асеевка</td><td>483-10</td><td>55</td><td>500</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Гатово – Шабаны*</td><td>19-1</td><td>35</td><td>300</td></tr>
-                            <tr class="brake-row"><td style="padding: 4px;">Шабаны – Колодищи</td><td>3-5</td><td>40</td><td>300</td></tr>
+                            <!-- Орша — Минск -->
+                            <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Орша — Минск</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Орша-Зап. — Орша-Вост. (за вых. св.)</td><td>1-10</td><td>25</td><td>250</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Орша (парк Е) — Коханово</td><td>540-5</td><td>35</td><td>200</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Орша — Коханово</td><td>540-5</td><td>55</td><td>400</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Коханово — Толочин</td><td>567-1</td><td>55</td><td>400</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Толочин — Славное</td><td>596-4</td><td>55</td><td>400</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Славное — Бобр*</td><td>614-1</td><td>70</td><td>500</td></tr>
+                            <tr class="brake-row"><td style="padding: 4px;">Бобр — Крупки</td><td>622-1</td><td>55</td><td>350</td></tr>
                         </table>
 
                         <div id="noBrakesMatch" style="display: none; text-align: center; padding: 12px; font-size: 12px; color: var(--tg-theme-hint-color);">
                             Ничего не найдено по вашему запросу
                         </div>
 
-                        <b style="display: block; margin-top: 8px;">Общие и детальные примечания:</b><br>
-                        • <b>Орша – Минск:</b> Славное – Бобр: 55 км/ч, 500 м; Крупки – Приямино: 45 км/ч, 350 м; Приямино – Новосады: 45 км/ч, 400 м; Новосады – Борисов: 45 км/ч, 400 м; Смолевичи – Городище: 40 км/ч, 350 м; Колодищи – Озерище: 40 км/ч, 300 м; Озерище – Степянка: 40 км/ч, 350 м.<br>
-                        • <b>Брест – Барановичи:</b> для вывозных/сборных с ЧМЭ3: скорость 30 км/ч, путь 300 м.<br>
-                        • <b>Помыслище:</b> отправление с 13-го пути ст. Помыслище: скорость 30 км/ч, путь 300 м.<br>
-                        • <b>Дегтяревка – Крыжовка (54 км):</b> проверка нечетных поездов независимо от ранней при скорости не менее 40 км/ч.<br>
-                        • <b>Жлобин – Осиповичи:</b> для грузовых на тепловозной тяге.<br>
-                        • <b>Шабаны – Гатово (ч/з Шабаны) для вывозных/сборных с ЧМЭ3, ТМЭ:</b> проверка на 15 км 8 пк при 25 км/ч, путь 250 м.<br>
-                        • <b>Гатово – Шабаны (обратно) для вывозных/сборных:</b> проверка на 20 км 5 пк при 25 км/ч, путь 250 м.
+                        <b style="display: block; margin-top: 8px;">Примечания и особые условия:</b><br>
+                        • <b>Минск — Барановичи (*):</b> Для вывозных, передаточных, сборных поездов, ведомых тепловозами <b>ЧМЭ3 (в/и) и ТМЭ3 (в/и)</b> на перегоне Фаниполь — Койданово: скорость 45 км/ч, тормозной путь 300 м; Койданово — Негорелое: скорость 40 км/ч, тормозной путь 250 м.<br>
+                        • <b>Барановичи — Минск (*):</b> Для вывозных, передаточных, сборных поездов, ведомых тепловозами <b>ЧМЭ3 (в/и) и ТМЭ3 (в/и)</b> на перегоне Негорелое — Койданово: скорость 30 км/ч, путь 250 м; Койданово — Фаниполь: скорость 40 км/ч, путь 300 м; Фаниполь — Помыслище: скорость 35 км/ч, путь 300 м.<br>
+                        • <b>Помыслище (**):</b> При отправлении с 13-го пути станции Помыслище скорость проверки — 30 км/ч, тормозной путь 300 м.<br>
+                        • <b>Минск — Орша (*):</b> Для перегона Бобр — Крупки (км 593): скорость 35 км/ч, путь 350 м.<br>
+                        • <b>Орша — Минск (*):</b> На участке Минск — Орша для вывозных, передаточных, сборных поездов, ведомых тепловозами ЧМЭ3 (в/и), ТМЭ3 (в/и), М62 (в/и) на перегоне Бобр — Славное проверку производить при скорости 55 км/ч, тормозной путь 500 м (при этом в таблице для Славное — Бобр указана скорость 70 км/ч, путь 500 м).
                     </div>
                 </div>
             </div>
@@ -731,7 +624,6 @@
             }
         }
 
-        // Переключение подпунктов внутри второго раздела
         function showSubSection(subId) {
             document.querySelectorAll('.sub-section').forEach(sub => sub.classList.remove('active'));
             document.querySelectorAll('.sub-nav-btn').forEach(btn => btn.classList.remove('active'));
@@ -747,7 +639,6 @@
             }
         }
 
-        // Функция фильтрации таблицы проб тормозов (поиск)
         function filterBrakesTable(query) {
             let filter = query.toLowerCase().trim();
             let table = document.getElementById('brakesTable');
@@ -757,12 +648,10 @@
             let noMatchEl = document.getElementById('noBrakesMatch');
             let matchCount = 0;
 
-            let lastGroupRow = null;
-
             for (let i = 1; i < rows.length; i++) {
                 let row = rows[i];
                 if (row.classList.contains('route-group')) {
-                    lastGroupRow = row;
+                    // пропускаем заголовки групп при прямой проверке текста, обработаем ниже
                 } else if (row.classList.contains('brake-row')) {
                     let text = row.textContent.toLowerCase();
                     if (filter === '' || text.includes(filter)) {
@@ -1069,16 +958,10 @@
             
             let totalH = 0;
             let visibleCount = 0;
-            let shiftsMap = {};
 
             shifts.forEach(s => {
                 let shiftMonth = s.date ? s.date.substring(0, 7) : '';
                 let matchesFilter = (selectedMonth === 'ALL' || shiftMonth === selectedMonth);
-
-                if (s.date) {
-                    if (!shiftsMap[s.date]) shiftsMap[s.date] = [];
-                    shiftsMap[s.date].push(s);
-                }
 
                 if (matchesFilter) {
                     totalH += parseFloat(s.hours) || 0;
@@ -1180,7 +1063,6 @@
                 dayDiv.className = 'calendar-day';
 
                 let dayStr = day < 10 ? '0' + day : day;
-                let fullDateStr = `${selectedMonth}-${dayStr}`;
 
                 let dayShifts = monthShiftsMap[day] || [];
                 
