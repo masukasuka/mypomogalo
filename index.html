@@ -321,6 +321,65 @@
             margin-top: 1px;
             opacity: 0.8;
         }
+
+        /* Стили для подпунктов второго раздела */
+        .sub-nav {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+        .sub-nav-btn {
+            background: var(--tg-theme-secondary-bg-color, #e0e0e0);
+            border: none;
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: 12px;
+            color: var(--tg-theme-text-color);
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .sub-nav-btn.active {
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-theme-button-text-color);
+            font-weight: 600;
+        }
+        .sub-section {
+            display: none;
+        }
+        .sub-section.active {
+            display: block;
+        }
+
+        /* Карточки проб тормозов */
+        .brake-card {
+            background: var(--tg-theme-secondary-bg-color, #f1f1f1);
+            border-radius: 10px;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            border-left: 4px solid var(--tg-theme-button-color);
+        }
+        .brake-card-title {
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        .brake-card-content {
+            font-size: 12px;
+            color: var(--tg-theme-hint-color, #555);
+            margin-top: 6px;
+            line-height: 1.4;
+            display: none;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            padding-top: 6px;
+        }
+        .brake-card.open .brake-card-content {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -400,11 +459,74 @@
             </div>
         </div>
 
-        <!-- РАЗДЕЛ 2: Выписки скоростей -->
+        <!-- РАЗДЕЛ 2: Выписки скоростей (с 3 подпунктами) -->
         <div id="section-speeds" class="content-section">
-            <h2>Выписки скоростей</h2>
-            <div class="card">
-                <p style="font-size: 13px; color: var(--tg-theme-hint-color);">Здесь будут ваши данные по скоростям.</p>
+            <h2>Справочные материалы</h2>
+            
+            <div class="sub-nav">
+                <button class="sub-nav-btn active" onclick="showSubSection('speeds')">Выписки скоростей</button>
+                <button class="sub-nav-btn" onclick="showSubSection('brakes')">Пробы тормозов</button>
+                <button class="sub-nav-btn" onclick="showSubSection('relief')">Рельеф пути</button>
+            </div>
+
+            <!-- Подпункт 1: Выписки скоростей -->
+            <div id="sub-speeds" class="sub-section active">
+                <div class="card">
+                    <p style="font-size: 13px; color: var(--tg-theme-hint-color);">Здесь будут храниться постоянные и временные ограничения скоростей по участку.</p>
+                </div>
+            </div>
+
+            <!-- Подпункт 2: Пробы тормозов -->
+            <div id="sub-brakes" class="sub-section">
+                <div class="brake-card" onclick="toggleBrakeCard(this)">
+                    <div class="brake-card-title">
+                        <span>Полная проба тормозов</span>
+                        <span style="font-size: 12px; color: var(--tg-theme-hint-color);">▼</span>
+                    </div>
+                    <div class="brake-card-content">
+                        <b>Когда проводится:</b> Перед отправлением поезда с формирования или расформирования, с пунктов смены локомотивов или бригад, после отцепки локомотива.<br>
+                        <b>Порядок:</b> Зарядка расчетного давления, проверка плотности тормозной сети, торможение на полную величину ступени, выдержка в заторможенном состоянии, отпуск тормозов и проверка отпуска хвостовых вагонов.
+                    </div>
+                </div>
+
+                <div class="brake-card" onclick="toggleBrakeCard(this)">
+                    <div class="brake-card-title">
+                        <span>Сокращенная проба тормозов</span>
+                        <span style="font-size: 12px; color: var(--tg-theme-hint-color);">▼</span>
+                    </div>
+                    <div class="brake-card-content">
+                        <b>Когда проводится:</b> При изменении бригады без отцепки локомотива, после смены локомотива (если автотормоза поезда были заряжены от другого источника), при прицепке вагонов к готовому поезду с проверкой работы хвостового вагона.<br>
+                        <b>Порядок:</b> Проверка наличия давления в ГМ и ТМ, торможение краном машиниста на 1.5–1.7 кгс/см², проверка срабатывания тормозов на двух последних вагонах, отпуск тормозов.
+                    </div>
+                </div>
+
+                <div class="brake-card" onclick="toggleBrakeCard(this)">
+                    <div class="brake-card-title">
+                        <span>Проверка ЭТТ (электропневматических тормозов)</span>
+                        <span style="font-size: 12px; color: var(--tg-theme-hint-color);">▼</span>
+                    </div>
+                    <div class="brake-card-content">
+                        <b>Когда проводится:</b> В пассажирских поездах перед отправлением с начальной станции и после смены локомотива.<br>
+                        <b>Порядок:</b> Проверка целостности цепи ЭПТ по сигнальным лампам на пульте управления в положениях III, IV, V (или Va, Vб) крана машиниста, а также контроль торможения и отпуска по манометрам ТМ и ТЦ.
+                    </div>
+                </div>
+
+                <div class="brake-card" onclick="toggleBrakeCard(this)">
+                    <div class="brake-card-title">
+                        <span>Проверка плотности тормозной сети</span>
+                        <span style="font-size: 12px; color: var(--tg-theme-hint-color);">▼</span>
+                    </div>
+                    <div class="brake-card-content">
+                        <b>Порядок измерения:</b> Производится при положении ручки крана машиниста в поездном положении после зарядки сети до установленного давления. Замеряется время падения давления в главном резервуаре или по падению давления в тормозной магистрали после перекрывания комбинированного крана (в зависимости от регламента).
+                    </div>
+                </div>
+            </div>
+
+            <!-- Подпункт 3: Рельеф пути -->
+            <div id="sub-relief" class="sub-section">
+                <div class="card">
+                    <p style="font-size: 13px; color: var(--tg-theme-hint-color);">Здесь будут памятки по затяжным спускам, профилю и сложным участкам.</p>
+                </div>
             </div>
         </div>
 
@@ -423,7 +545,7 @@
 
     <nav>
         <button class="nav-btn active" onclick="showSection('calc')">Часы</button>
-        <button class="nav-btn" onclick="showSection('speeds')">Скорости</button>
+        <button class="nav-btn" onclick="showSection('speeds')">Справка</button>
         <button class="nav-btn" onclick="showSection('docs')">Акты</button>
         <button class="nav-btn" onclick="showSection('notes')">Заметки</button>
     </nav>
@@ -434,7 +556,7 @@
             tg.expand();
         }
 
-        let currentViewMode = 'list'; // 'list' или 'calendar'
+        let currentViewMode = 'list';
 
         let dateInput = document.getElementById('shiftDate');
         if (dateInput && !dateInput.value) {
@@ -452,6 +574,30 @@
             let activeBtn = document.querySelector(`button[onclick="showSection('${sectionId}')"]`);
             if (activeBtn) activeBtn.classList.add('active');
             
+            if (tg && tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('light');
+            }
+        }
+
+        // Переключение подпунктов внутри второго раздела
+        function showSubSection(subId) {
+            document.querySelectorAll('.sub-section').forEach(sub => sub.classList.remove('active'));
+            document.querySelectorAll('.sub-nav-btn').forEach(btn => btn.classList.remove('active'));
+
+            let targetSub = document.getElementById('sub-' + subId);
+            if (targetSub) targetSub.classList.add('active');
+
+            let activeSubBtn = document.querySelector(`button[onclick="showSubSection('${subId}')"]`);
+            if (activeSubBtn) activeSubBtn.classList.add('active');
+
+            if (tg && tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('light');
+            }
+        }
+
+        // Раскрытие карточек проб тормозов
+        function toggleBrakeCard(cardEl) {
+            cardEl.classList.toggle('open');
             if (tg && tg.HapticFeedback) {
                 tg.HapticFeedback.impactOccurred('light');
             }
@@ -720,8 +866,6 @@
             
             let totalH = 0;
             let visibleCount = 0;
-
-            // Карта смен для календаря по датам 'YYYY-MM-DD'
             let shiftsMap = {};
 
             shifts.forEach(s => {
@@ -801,7 +945,6 @@
             
             gridEl.innerHTML = '';
 
-            // Дни недели
             const weekdays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
             weekdays.forEach(wd => {
                 let div = document.createElement('div');
@@ -810,20 +953,16 @@
                 gridEl.appendChild(div);
             });
 
-            // Первый день месяца и количество дней
             let firstDayIndex = new Date(year, month - 1, 1).getDay();
-            // Превращаем воскресенье (0) в 7 для удобства Пн-ВС
             firstDayIndex = firstDayIndex === 0 ? 7 : firstDayIndex;
             let daysInMonth = new Date(year, month, 0).getDate();
 
-            // Пустые ячейки до начала месяца
             for (let i = 1; i < firstDayIndex; i++) {
                 let emptyDiv = document.createElement('div');
                 emptyDiv.className = 'calendar-day empty';
                 gridEl.appendChild(emptyDiv);
             }
 
-            // Индексируем смены по дням выбранного месяца
             let monthShiftsMap = {};
             shifts.forEach(s => {
                 if (s.date && s.date.startsWith(selectedMonth)) {
@@ -833,7 +972,6 @@
                 }
             });
 
-            // Дни месяца
             for (let day = 1; day <= daysInMonth; day++) {
                 let dayDiv = document.createElement('div');
                 dayDiv.className = 'calendar-day';
@@ -849,9 +987,9 @@
                     
                     dayDiv.innerHTML = `<span>${day}</span><span class="calendar-day-hours">${sumDayHours.toFixed(1)}ч</span>`;
                     
-                    // По клику на день в календаре открываем редактирование первой смены за этот день
                     dayDiv.onclick = function() {
                         editShift(dayShifts[0].id);
+                        switchSection('calc');
                         switchView('list');
                     };
                 } else {
