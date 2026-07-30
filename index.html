@@ -757,32 +757,23 @@
             let noMatchEl = document.getElementById('noBrakesMatch');
             let matchCount = 0;
 
-            // Проходим по всем строкам таблицы, кроме шапкой (индекс 0)
-            let currentGroupVisible = false;
             let lastGroupRow = null;
 
             for (let i = 1; i < rows.length; i++) {
                 let row = rows[i];
                 if (row.classList.contains('route-group')) {
-                    // Если это строка заголовка направления/участка
                     lastGroupRow = row;
-                    currentGroupVisible = false;
                 } else if (row.classList.contains('brake-row')) {
                     let text = row.textContent.toLowerCase();
                     if (filter === '' || text.includes(filter)) {
                         row.style.display = '';
                         matchCount++;
-                        currentGroupVisible = true;
-                        if (lastGroupRow) {
-                            lastGroupRow.style.display = '';
-                        }
                     } else {
                         row.style.display = 'none';
                     }
                 }
             }
 
-            // Пройдемся еще раз, чтобы скрыть заголовки групп, у которых нет видимых дочерних строк
             if (filter !== '') {
                 let currentGroupHasVisible = false;
                 let groupRowToToggle = null;
@@ -805,7 +796,6 @@
                     groupRowToToggle.style.display = currentGroupHasVisible ? '' : 'none';
                 }
             } else {
-                // Если поиск пустой — показываем всё
                 for (let i = 1; i < rows.length; i++) {
                     rows[i].style.display = '';
                 }
