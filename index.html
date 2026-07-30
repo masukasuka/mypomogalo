@@ -148,6 +148,20 @@
             font-size: 14px;
         }
 
+        .cancel-edit-btn {
+            width: 100%;
+            padding: 8px;
+            background-color: #888888;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 13px;
+            margin-top: 6px;
+            display: none;
+        }
+
         .result-box {
             background: rgba(36, 129, 204, 0.1);
             border: 1px dashed var(--tg-theme-button-color);
@@ -216,14 +230,26 @@
             align-items: flex-start;
             border: 1px solid var(--tg-theme-hint-color, #eee);
         }
+        .action-btns {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+        .action-btn {
+            background: none;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .edit-btn {
+            background: #f0ad4e;
+            color: white;
+        }
         .delete-btn {
             background: #ff4d4d;
             color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 4px 8px;
-            cursor: pointer;
-            font-size: 11px;
         }
     </style>
 </head>
@@ -256,6 +282,7 @@
             </div>
 
             <div class="card">
+                <input type="hidden" id="editingId" value="">
                 <div class="input-group">
                     <label>Дата смены:</label>
                     <input type="date" id="shiftDate">
@@ -280,7 +307,8 @@
                     <label>Примечания / Заметки:</label>
                     <textarea id="shiftNote" placeholder="Например: поезд №123, маршрут..."></textarea>
                 </div>
-                <button class="calc-btn" onclick="saveShift()">Рассчитать и сохранить</button>
+                <button class="calc-btn" id="saveBtn" onclick="saveShift()">Рассчитать и сохранить</button>
+                <button class="cancel-edit-btn" id="cancelBtn" onclick="cancelEdit()">Отменить редактирование</button>
                 
                 <div class="result-box" id="lastResult" style="display:none;"></div>
             </div>
@@ -364,6 +392,7 @@
         updateHistoryUI();
 
         function saveShift() {
+            let editingIdEl = document.getElementById('editingId');
             let dateEl = document.getElementById('shiftDate');
             let startEl = document.getElementById('startTime');
             let endEl = document.getElementById('endTime');
@@ -394,23 +423,45 @@
             let baseHours = baseMin / 60;
             let totalHours = baseHours + passengerH + restH;
 
-            let shiftData = {
-                id: Date.now(),
-                date: date,
-                base: baseHours.toFixed(2),
-                passenger: passengerH.toFixed(2),
-                rest: restH.toFixed(2),
-                hours: totalHours.toFixed(2),
-                note: noteText
-            };
+            let editId = editingIdEl.value;
 
-            shifts.unshift(shiftData);
+            if (editId) {
+                // Редактирование существующей смены
+                let index = shifts.findIndex(s => s.id == editId);
+                if (index !== -1) {
+                    shifts[index] = {
+                        id: parseInt(editId),
+                        date: date,
+                        startTime: startEl.value,
+                        endTime: endEl.value,
+                        passenger: passengerH.toFixed(2),
+                        rest: restH.toFixed(2),
+                        base: baseHours.toFixed(2),
+                        hours: totalHours.toFixed(2),
+                        note: noteText
+                    };
+                }
+                cancelEdit(); // Сбрасываем режим редактирования
+            } else {
+                // Создание новой смены
+                let shiftData = {
+                    id: Date.now(),
+                    date: date,
+                    startTime: startEl.value,
+                    endTime: endEl.value,
+                    passenger: passengerH.toFixed(2),
+                    rest: restH.toFixed(2),
+                    base: baseHours.toFixed(2),
+                    hours: totalHours.toFixed(2),
+                    note: noteText
+                };
+                shifts.unshift(shiftData);
+            }
             
             try {
                 localStorage.setItem('my_shifts', JSON.stringify(shifts));
             } catch (e) {}
 
-            // Очищаем поле примечания после сохранения
             noteEl.value = '';
 
             let resBox = document.getElementById('lastResult');
@@ -430,7 +481,46 @@
             }
         }
 
+        window.editShift = function(id) {
+            let shift = shifts.find(s => s.id == id);
+            if (!shift) return;
+
+            document.getElementById('editingId').value = shift.id;
+            document.getElementById('shiftDate').value = shift.date || '';
+            document.getElementById('startTime').value = shift.startTime || '08:00';
+            document.getElementById('endTime').value = shift.endTime || '17:00';
+            document.getElementById('passengerHours').value = shift.passenger || '0';
+            document.getElementById('restHours').value = shift.rest || '0';
+            document.getElementById('shiftNote').value = shift.note || '';
+
+            document.getElementById('saveBtn').textContent = 'Сохранить изменения';
+            document.getElementById('cancelBtn').style.display = 'block';
+
+            // Прокручиваем к форме ввода
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            if (tg && tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('medium');
+            }
+        }
+
+        window.cancelEdit = function() {
+            document.getElementById('editingId').value = '';
+            document.getElementById('saveBtn').textContent = 'Рассчитать и сохранить';
+            document.getElementById('cancelBtn').style.display = 'none';
+            document.getElementById('shiftNote').value = '';
+            
+            let today = new Date().toISOString().split('T')[0];
+            document.getElementById('shiftDate').value = today;
+        }
+
         window.deleteShift = function(id) {
+            // Если удаляем запись, которая сейчас редактируется, сбрасываем форму
+            let editingIdEl = document.getElementById('editingId');
+            if (editingIdEl && editingIdEl.value == id) {
+                cancelEdit();
+            }
+
             shifts = shifts.filter(s => s.id !== id);
             try {
                 localStorage.setItem('my_shifts', JSON.stringify(shifts));
@@ -556,8 +646,9 @@
                             <strong>${s.date}</strong><br>
                             ⏱ <b>${hInt} ч. ${mInt} мин.</b> (${hNum.toFixed(2)} ч.)${detailsText}
                         </div>
-                        <div>
-                            <button class="delete-btn" onclick="deleteShift(${s.id})">Удалить</button>
+                        <div class="action-btns">
+                            <button class="action-btn edit-btn" onclick="editShift(${s.id})" title="Редактировать">✏️</button>
+                            <button class="action-btn delete-btn" onclick="deleteShift(${s.id})" title="Удалить">🗑</button>
                         </div>
                     `;
                     listEl.appendChild(item);
