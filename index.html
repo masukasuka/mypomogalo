@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+[30.07.2026 21:12] Maska: <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -7,12 +7,11 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            /* Цвета подстраиваются под тему Telegram */
             --tg-theme-bg-color: #ffffff;
             --tg-theme-text-color: #222222;
             --tg-theme-button-color: #2481cc;
             --tg-theme-button-text-color: #ffffff;
-            --main-blue: #4a56ba; /* Ваш цвет фона */
+            --main-blue: #4a56ba;
         }
 
         body {
@@ -23,14 +22,13 @@
             padding: 0;
             display: flex;
             flex-direction: column;
-            height: 100vh; /* На всю высоту экрана */
+            height: 100vh;
             overflow: hidden;
         }
 
-        /* Шапка приложения */
         header {
             text-align: center;
-            padding: 16px;
+            padding: 14px;
             background-color: var(--main-blue);
             color: white;
             border-bottom: 1px solid rgba(255,255,255,0.2);
@@ -42,17 +40,15 @@
             font-weight: 600;
         }
 
-        /* Основной контейнер (где меняется контент) */
         main {
-            flex: 1; /* Занимает всё свободное пространство */
+            flex: 1;
             background-color: var(--tg-theme-bg-color);
             border-radius: 20px 20px 0 0;
-            padding: 20px;
-            overflow-y: auto; /* Прокрутка внутри контента */
+            padding: 16px;
+            overflow-y: auto;
             margin-top: 10px;
         }
 
-        /* Секции контента (скрыты по умолчанию) */
         .content-section {
             display: none;
             animation: fadeIn 0.3s;
@@ -67,13 +63,12 @@
             to { opacity: 1; }
         }
 
-        /* Навигационная панель (четыре блока снизу) */
         nav {
             background-color: var(--tg-theme-bg-color);
-            padding: 16px;
+            padding: 12px 16px;
             display: flex;
             justify-content: space-between;
-            gap: 10px;
+            gap: 6px;
             border-top: 1px solid var(--tg-theme-hint-color, #ccc);
             box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
         }
@@ -82,10 +77,10 @@
             flex: 1;
             background: none;
             border: 1px solid var(--tg-theme-hint-color, #aaa);
-            border-radius: 12px;
-            padding: 12px 5px;
+            border-radius: 10px;
+            padding: 10px 2px;
             text-align: center;
-            font-size: 13px;
+            font-size: 11px;
             color: var(--tg-theme-hint-color, #666);
             cursor: pointer;
             transition: all 0.2s;
@@ -99,28 +94,99 @@
             font-weight: 600;
         }
 
-        /* Стили для содержимого разделов */
         h2 {
-            font-size: 20px;
+            font-size: 18px;
             margin-top: 0;
             color: var(--tg-theme-button-color);
+            margin-bottom: 12px;
         }
-        
-        p { color: var(--tg-theme-hint-color); }
 
-        /* Стили для калькулятора (из прошлого кода) */
+        /* Карточки и формы */
         .card {
             background: var(--tg-theme-secondary-bg-color, #f1f1f1);
-            padding: 15px;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+        .input-group {
+            margin-bottom: 10px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            color: var(--tg-theme-hint-color);
+            margin-bottom: 4px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid var(--tg-theme-hint-color, #ccc);
+            border-radius: 8px;
+            background: var(--tg-theme-bg-color);
+            color: var(--tg-theme-text-color);
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .calc-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-theme-button-text-color);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+        }
+[30.07.2026 21:12] Maska: .result-box {
+            background: rgba(36, 129, 204, 0.1);
+            border: 1px dashed var(--tg-theme-button-color);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-size: 13px;
+        }
+
+        /* Блок итогов за месяц */
+        .summary-card {
+            background: var(--tg-theme-button-color);
+            color: var(--tg-theme-button-text-color);
+            padding: 12px;
             border-radius: 12px;
             margin-bottom: 16px;
         }
-        .input-group { margin-bottom: 12px; }
-        .input-group label { display: block; font-size: 13px; color: var(--tg-theme-hint-color); margin-bottom: 4px; }
-        .input-group input { width: 100%; padding: 10px; border: 1px solid var(--tg-theme-hint-color, #ccc); border-radius: 8px; background: var(--tg-theme-bg-color); box-sizing: border-box;}
-        .calc-btn { width: 100%; padding: 12px; background-color: var(--tg-theme-button-color); color: var(--tg-theme-button-text-color); border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
-        .result { margin-top: 16px; font-size: 18px; font-weight: bold; text-align: center; color: var(--tg-theme-button-color); }
+        .summary-card h3 { margin: 0 0 8px 0; font-size: 14px; }
+        .summary-stats { font-size: 13px; line-height: 1.4; }
 
+        /* История смен */
+        .history-list {
+            max-height: 180px;
+            overflow-y: auto;
+        }
+        .history-item {
+            background: var(--tg-theme-bg-color);
+            padding: 8px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--tg-theme-hint-color, #eee);
+        }
+        .delete-btn {
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 11px;
+        }
     </style>
 </head>
 <body>
@@ -132,113 +198,200 @@
     <main>
         <!-- РАЗДЕЛ 1: Калькулятор часов -->
         <div id="section-calc" class="content-section active">
-            <h2>Калькулятор часов</h2>
+            <h2>Учет смены</h2>
+
+            <!-- Итоги за месяц -->
+            <div class="summary-card">
+                <h3>Итоги за сохраненные смены:</h3>
+                <div class="summary-stats" id="monthlySummary">
+                    Отработано: 0 ч. | Ночных: 0 ч. | Сумма: 0 ₽
+                </div>
+            </div>
+
             <div class="card">
                 <div class="input-group">
-                    <label>Время начала смены:</label>
+                    <label>Дата смены:</label>
+                    <input type="date" id="shiftDate">
+                </div>
+                <div class="input-group">
+                    <label>Время начала:</label>
                     <input type="time" id="startTime">
                 </div>
                 <div class="input-group">
-                    <label>Время окончания смены:</label>
+                    <label>Время окончания:</label>
                     <input type="time" id="endTime">
                 </div>
                 <div class="input-group">
-                    <label>Перерыв (в минутах):</label>
+                    <label>Перерыв (минут):</label>
                     <input type="number" id="breakTime" value="0" min="0">
                 </div>
-                <button class="calc-btn" onclick="calculateHours()">Рассчитать часы</button>
+                <div class="input-group">
+                    <label>Часовая ставка (₽/час):</label>
+                    <input type="number" id="hourlyRate" value="500" min="0">
+                </div>
+                <button class="calc-btn" onclick="saveShift()">Рассчитать и сохранить</button>
+                
+                <div class="result-box" id="lastResult" style="display:none;"></div>
             </div>
-            <div class="result" id="resultText"></div>
+
+            <h2>История смен</h2>
+            <div class="history-list" id="historyList">
+                <!-- Сюда добавляются смены -->
+            </div>
         </div>
 
-        <!-- РАЗДЕЛ 2: Выписки скоростей (пустое место) -->
+        <!-- РАЗДЕЛ 2: Выписки скоростей -->
         <div id="section-speeds" class="content-section">
             <h2>Выписки скоростей</h2>
             <div class="card">
-                <p>Здесь будут ваши таблицы скоростей.</p>
-                <p>Пример: Путь 1 — 60 км/ч</p>
-                <p>Пример: Путь 2 — 40 км/ч</p>
+                <p style="font-size: 13px; color: var(--tg-theme-hint-color);">Здесь будут ваши данные по скоростям.</p>
             </div>
         </div>
 
-        <!-- РАЗДЕЛ 3: Нормативные акты (пустое место) -->
+        <!-- РАЗДЕЛ 3: Нормативные акты -->
         <div id="section-docs" class="content-section">
             <h2>Нормативные акты</h2>
-            <p>Раздел в разработке.</p>
+            <p style="font-size: 13px; color: var(--tg-theme-hint-color);">Раздел в разработке.</p>
         </div>
 
-        <!-- РАЗДЕЛ 4: Заметки (пустое место) -->
+        <!-- РАЗДЕЛ 4: Заметки -->
         <div id="section-notes" class="content-section">
             <h2>Заметки</h2>
-            <p>Раздел в разработке.</p>
+            <p style="font-size: 13px; color: var(--tg-theme-hint-color);">Раздел в разработке.</p>
         </div>
     </main>
-
-    <!-- НИЖНЯЯ НАВИГАЦИЯ (Ваши 4 кнопки) -->
-    <nav>
-        <button class="nav-btn active" onclick="showSection('calc')">Калькулятор часов</button>
-        <button class="nav-btn" onclick="showSection('speeds')">Выписки скоростей</button>
-        <button class="nav-btn" onclick="showSection('docs')">Нормативные акты</button>
+[30.07.2026 21:12] Maska: <nav>
+        <button class="nav-btn active" onclick="showSection('calc')">Часы</button>
+        <button class="nav-btn" onclick="showSection('speeds')">Скорости</button>
+        <button class="nav-btn" onclick="showSection('docs')">Акты</button>
         <button class="nav-btn" onclick="showSection('notes')">Заметки</button>
     </nav>
 
     <script>
-        // Инициализация Telegram Web App
         let tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Функция переключения разделов
+        // Установка текущей даты по умолчанию
+        document.getElementById('shiftDate').valueAsDate = new Date();
+
         function showSection(sectionId) {
-            // Скрываем все разделы
-            let sections = document.querySelectorAll('.content-section');
-            sections.forEach(section => section.classList.remove('active'));
+            document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
 
-            // Убираем активность со всех кнопок
-            let navBtns = document.querySelectorAll('.nav-btn');
-            navBtns.forEach(btn => btn.classList.remove('active'));
-
-            // Показываем нужный раздел
             document.getElementById('section-' + sectionId).classList.add('active');
-
-            // Делаем нужную кнопку активной
-            // Нам нужно найти кнопку, которая вызывает showSection с этим id
             let activeBtn = document.querySelector(button[onclick="showSection('${sectionId}')"]);
             if (activeBtn) activeBtn.classList.add('active');
             
-            // Заставляем телефон вибрировать при нажатии (легкий отклик)
             if(tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         }
 
-        // --- Логика Калькулятора ---
-        function calculateHours() {
+        // Загрузка истории при запуске
+        let shifts = JSON.parse(localStorage.getItem('my_shifts')) || [];
+        updateHistoryUI();
+
+        function saveShift() {
+            let date = document.getElementById('shiftDate').value;
             let start = document.getElementById('startTime').value;
             let end = document.getElementById('endTime').value;
-            let breakMinutes = parseInt(document.getElementById('breakTime').value) || 0;
-            if (!start || !end) {
-                document.getElementById('resultText').innerText = "Введите время начала и конца.";
+            let breakM = parseInt(document.getElementById('breakTime').value) || 0;
+            let rate = parseFloat(document.getElementById('hourlyRate').value) || 0;
+
+            if (!date  !start  !end) {
+                alert("Заполните дату, время начала и конца смены!");
                 return;
             }
 
             let [sH, sM] = start.split(':').map(Number);
             let [eH, eM] = end.split(':').map(Number);
 
-            let startTotal = sH * 60 + sM;
-            let endTotal = eH * 60 + eM;
+            let startMin = sH * 60 + sM;
+            let endMin = eH * 60 + eM;
 
-            // Переход через полночь
-            if (endTotal < startTotal) endTotal += 24 * 60;
+            if (endMin < startMin) endMin += 24 * 60; // переход через полночь
 
-            let totalMin = (endTotal - startTotal) - breakMinutes;
-
+            let totalMin = (endMin - startMin) - breakM;
             if (totalMin < 0) {
-                document.getElementById('resultText').innerText = "Ошибка: перерыв больше смены!";
+                alert("Ошибка: перерыв больше времени смены!");
                 return;
             }
 
-            let h = Math.floor(totalMin / 60);
-            let m = totalMin % 60;
+            let totalHours = totalMin / 60;
 
-            document.getElementById('resultText').innerText = Итого: ${h} ч. ${m} мин.;
+            // Расчет ночных часов (с 22:00 до 06:00)
+            let nightMinutes = 0;
+            for (let m = startMin; m < endMin; m++) {
+                let currentHourOfDay = Math.floor((m % (24 * 60)) / 60);
+                if (currentHourOfDay >= 22 || currentHourOfDay < 6) {
+                    // Проверяем, не попадает ли минута на перерыв (условно считаем перерыв в начале/конце)
+                    nightMinutes++;
+                }
+            }
+            let nightHours = nightMinutes / 60;
+
+            // Расчет зарплаты (ночные часы с коэффициентом 1.5, обычные по ставке)
+            let regularHours = Math.max(0, totalHours - nightHours);
+            let earnedMoney = (regularHours * rate) + (nightHours * rate * 1.5);
+
+            let shiftData = {
+                id: Date.now(),
+                date: date,
+                hours: totalHours.toFixed(1),
+                night: nightHours.toFixed(1),
+                money: earnedMoney.toFixed(0)
+            };
+
+            shifts.unshift.shiftData ? shifts.unshift(shiftData) : shifts.unshift(shiftData);
+            localStorage.setItem('my_shifts', JSON.stringify(shifts));
+
+            // Показываем результат последней смены
+            let resBox = document.getElementById('lastResult');
+            resBox.style.display = 'block';
+            resBox.innerHTML = Отработано: <b>${Math.floor(totalHours)} ч. ${Math.round((totalHours%1)*60)} мин.</b><br>Ночных: <b>${nightHours.toFixed(1)} ч.</b><br>Сумма: <b>${earnedMoney.toFixed(0)} ₽</b>;
+
+            updateHistoryUI();
+            if(tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+        }
+[30.07.2026 21:12] Maska: function deleteShift(id) {
+            shifts = shifts.filter(s => s.id !== id);
+            localStorage.setItem('my_shifts', JSON.stringify(shifts));
+            updateHistoryUI();
+        }
+
+        function updateHistoryUI() {
+            let listEl = document.getElementById('historyList');
+            let summaryEl = document.getElementById('monthlySummary');
+            
+            listEl.innerHTML = '';
+            
+            let totalH = 0;
+            let totalN = 0;
+            let totalM = 0;
+
+            if (shifts.length === 0) {
+                listEl.innerHTML = '<p style="font-size:12px; color:var(--tg-theme-hint-color); text-align:center;">Нет сохраненных смен</p>';
+            }
+
+            shifts.forEach(s => {
+                totalH += parseFloat(s.hours);
+                totalN += parseFloat(s.night);
+                totalM += parseFloat(s.money);
+
+                let item = document.createElement('div');
+                item.className = 'history-item';
+                item.innerHTML = 
+                    <div>
+                        <strong>${s.date}</strong><br>
+                        ⏱ ${s.hours} ч. (ноч: ${s.night} ч.)
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="color:var(--tg-theme-button-color); font-weight:bold;">${s.money} ₽</span><br>
+                        <button class="delete-btn" onclick="deleteShift(${s.id})">Удалить</button>
+                    </div>
+                ;
+                listEl.appendChild(item);
+            });
+
+            summaryEl.innerHTML = Отработано: <b>${totalH.toFixed(1)} ч.</b> | Ночных: <b>${totalN.toFixed(1)} ч.</b><br>Итого за всё время: <b>${totalM.toFixed(0)} ₽</b>;
         }
     </script>
 </body>
