@@ -1,4 +1,4 @@
-[30.07.2026 21:12] Maska: <!DOCTYPE html>
+[30.07.2026 21:20] Maska: <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -101,7 +101,6 @@
             margin-bottom: 12px;
         }
 
-        /* Карточки и формы */
         .card {
             background: var(--tg-theme-secondary-bg-color, #f1f1f1);
             padding: 12px;
@@ -142,7 +141,7 @@
             cursor: pointer;
             font-size: 14px;
         }
-[30.07.2026 21:12] Maska: .result-box {
+[30.07.2026 21:20] Maska: .result-box {
             background: rgba(36, 129, 204, 0.1);
             border: 1px dashed var(--tg-theme-button-color);
             padding: 10px;
@@ -151,7 +150,6 @@
             font-size: 13px;
         }
 
-        /* Блок итогов за месяц */
         .summary-card {
             background: var(--tg-theme-button-color);
             color: var(--tg-theme-button-text-color);
@@ -162,7 +160,6 @@
         .summary-card h3 { margin: 0 0 8px 0; font-size: 14px; }
         .summary-stats { font-size: 13px; line-height: 1.4; }
 
-        /* История смен */
         .history-list {
             max-height: 180px;
             overflow-y: auto;
@@ -200,7 +197,6 @@
         <div id="section-calc" class="content-section active">
             <h2>Учет смены</h2>
 
-            <!-- Итоги за месяц -->
             <div class="summary-card">
                 <h3>Итоги за сохраненные смены:</h3>
                 <div class="summary-stats" id="monthlySummary">
@@ -235,9 +231,7 @@
             </div>
 
             <h2>История смен</h2>
-            <div class="history-list" id="historyList">
-                <!-- Сюда добавляются смены -->
-            </div>
+            <div class="history-list" id="historyList"></div>
         </div>
 
         <!-- РАЗДЕЛ 2: Выписки скоростей -->
@@ -260,7 +254,7 @@
             <p style="font-size: 13px; color: var(--tg-theme-hint-color);">Раздел в разработке.</p>
         </div>
     </main>
-[30.07.2026 21:12] Maska: <nav>
+[30.07.2026 21:20] Maska: <nav>
         <button class="nav-btn active" onclick="showSection('calc')">Часы</button>
         <button class="nav-btn" onclick="showSection('speeds')">Скорости</button>
         <button class="nav-btn" onclick="showSection('docs')">Акты</button>
@@ -269,32 +263,55 @@
 
     <script>
         let tg = window.Telegram.WebApp;
-        tg.expand();
+        if (tg && tg.expand) {
+            tg.expand();
+        }
 
         // Установка текущей даты по умолчанию
-        document.getElementById('shiftDate').valueAsDate = new Date();
+        let dateInput = document.getElementById('shiftDate');
+        if (dateInput) {
+            let today = new Date().toISOString().split('T')[0];
+            dateInput.value = today;
+        }
 
         function showSection(sectionId) {
             document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
 
-            document.getElementById('section-' + sectionId).classList.add('active');
+            let targetSection = document.getElementById('section-' + sectionId);
+            if (targetSection) targetSection.classList.add('active');
+
             let activeBtn = document.querySelector(button[onclick="showSection('${sectionId}')"]);
             if (activeBtn) activeBtn.classList.add('active');
             
-            if(tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+            if (tg && tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('light');
+            }
         }
 
         // Загрузка истории при запуске
-        let shifts = JSON.parse(localStorage.getItem('my_shifts')) || [];
+        let shifts = [];
+        try {
+            shifts = JSON.parse(localStorage.getItem('my_shifts')) || [];
+        } catch (e) {
+            shifts = [];
+        }
         updateHistoryUI();
 
         function saveShift() {
-            let date = document.getElementById('shiftDate').value;
-            let start = document.getElementById('startTime').value;
-            let end = document.getElementById('endTime').value;
-            let breakM = parseInt(document.getElementById('breakTime').value) || 0;
-            let rate = parseFloat(document.getElementById('hourlyRate').value) || 0;
+            let dateEl = document.getElementById('shiftDate');
+            let startEl = document.getElementById('startTime');
+            let endEl = document.getElementById('endTime');
+            let breakEl = document.getElementById('breakTime');
+            let rateEl = document.getElementById('hourlyRate');
+
+            if (!dateEl  !startEl  !endEl) return;
+
+            let date = dateEl.value;
+            let start = startEl.value;
+            let end = endEl.value;
+            let breakM = parseInt(breakEl ? breakEl.value : 0) || 0;
+            let rate = parseFloat(rateEl ? rateEl.value : 0) || 0;
 
             if (!date  !start  !end) {
                 alert("Заполните дату, время начала и конца смены!");
@@ -307,7 +324,9 @@
             let startMin = sH * 60 + sM;
             let endMin = eH * 60 + eM;
 
-            if (endMin < startMin) endMin += 24 * 60; // переход через полночь
+            if (endMin < startMin) {
+                endMin += 24 * 60; // переход через полночь
+            }
 
             let totalMin = (endMin - startMin) - breakM;
             if (totalMin < 0) {
@@ -322,13 +341,11 @@
             for (let m = startMin; m < endMin; m++) {
                 let currentHourOfDay = Math.floor((m % (24 * 60)) / 60);
                 if (currentHourOfDay >= 22 || currentHourOfDay < 6) {
-                    // Проверяем, не попадает ли минута на перерыв (условно считаем перерыв в начале/конце)
                     nightMinutes++;
                 }
             }
             let nightHours = nightMinutes / 60;
 
-            // Расчет зарплаты (ночные часы с коэффициентом 1.5, обычные по ставке)
             let regularHours = Math.max(0, totalHours - nightHours);
             let earnedMoney = (regularHours * rate) + (nightHours * rate * 1.5);
 
@@ -340,26 +357,41 @@
                 money: earnedMoney.toFixed(0)
             };
 
-            shifts.unshift.shiftData ? shifts.unshift(shiftData) : shifts.unshift(shiftData);
-            localStorage.setItem('my_shifts', JSON.stringify(shifts));
-
-            // Показываем результат последней смены
-            let resBox = document.getElementById('lastResult');
-            resBox.style.display = 'block';
-            resBox.innerHTML = Отработано: <b>${Math.floor(totalHours)} ч. ${Math.round((totalHours%1)*60)} мин.</b><br>Ночных: <b>${nightHours.toFixed(1)} ч.</b><br>Сумма: <b>${earnedMoney.toFixed(0)} ₽</b>;
+            shifts.unshift(shiftData);
+            
+            try {
+                localStorage.setItem('my_shifts', JSON.stringify(shifts));
+            } catch (e) {
+                console.error("Не удалось сохранить в LocalStorage", e);
+            }
+[30.07.2026 21:20] Maska: let resBox = document.getElementById('lastResult');
+            if (resBox) {
+                resBox.style.display = 'block';
+                let hInt = Math.floor(totalHours);
+                let mInt = Math.round((totalHours - hInt) * 60);
+                resBox.innerHTML = Отработано: <b>${hInt} ч. ${mInt} мин.</b><br>Ночных: <b>${nightHours.toFixed(1)} ч.</b><br>Сумма: <b>${earnedMoney.toFixed(0)} ₽</b>;
+            }
 
             updateHistoryUI();
-            if(tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+            
+            if (tg && tg.HapticFeedback) {
+                tg.HapticFeedback.notificationOccurred('success');
+            }
         }
-[30.07.2026 21:12] Maska: function deleteShift(id) {
+
+        window.deleteShift = function(id) {
             shifts = shifts.filter(s => s.id !== id);
-            localStorage.setItem('my_shifts', JSON.stringify(shifts));
+            try {
+                localStorage.setItem('my_shifts', JSON.stringify(shifts));
+            } catch (e) {}
             updateHistoryUI();
         }
 
         function updateHistoryUI() {
             let listEl = document.getElementById('historyList');
             let summaryEl = document.getElementById('monthlySummary');
+            
+            if (!listEl || !summaryEl) return;
             
             listEl.innerHTML = '';
             
@@ -368,13 +400,13 @@
             let totalM = 0;
 
             if (shifts.length === 0) {
-                listEl.innerHTML = '<p style="font-size:12px; color:var(--tg-theme-hint-color); text-align:center;">Нет сохраненных смен</p>';
+                listEl.innerHTML = '<p style="font-size:12px; color:var(--tg-theme-hint-color); text-align:center; padding: 10px;">Нет сохраненных смен</p>';
             }
 
             shifts.forEach(s => {
-                totalH += parseFloat(s.hours);
-                totalN += parseFloat(s.night);
-                totalM += parseFloat(s.money);
+                totalH += parseFloat(s.hours) || 0;
+                totalN += parseFloat(s.night) || 0;
+                totalM += parseFloat(s.money) || 0;
 
                 let item = document.createElement('div');
                 item.className = 'history-item';
