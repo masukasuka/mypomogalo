@@ -1,4 +1,4 @@
-[30.07.2026 21:27] Maska: <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -141,7 +141,8 @@
             cursor: pointer;
             font-size: 14px;
         }
-[30.07.2026 21:27] Maska: .result-box {
+
+        .result-box {
             background: rgba(36, 129, 204, 0.1);
             border: 1px dashed var(--tg-theme-button-color);
             padding: 10px;
@@ -211,11 +212,11 @@
                 </div>
                 <div class="input-group">
                     <label>Время начала:</label>
-                    <input type="time" id="startTime">
+                    <input type="time" id="startTime" value="08:00">
                 </div>
                 <div class="input-group">
                     <label>Время окончания:</label>
-                    <input type="time" id="endTime">
+                    <input type="time" id="endTime" value="17:00">
                 </div>
                 <div class="input-group">
                     <label>Перерыв (минут):</label>
@@ -254,7 +255,8 @@
             <p style="font-size: 13px; color: var(--tg-theme-hint-color);">Раздел в разработке.</p>
         </div>
     </main>
-[30.07.2026 21:27] Maska: <nav>
+
+    <nav>
         <button class="nav-btn active" onclick="showSection('calc')">Часы</button>
         <button class="nav-btn" onclick="showSection('speeds')">Скорости</button>
         <button class="nav-btn" onclick="showSection('docs')">Акты</button>
@@ -267,9 +269,9 @@
             tg.expand();
         }
 
-        // Установка текущей даты по умолчанию
+        // Автозаполнение даты и стандартного времени при старте
         let dateInput = document.getElementById('shiftDate');
-        if (dateInput) {
+        if (dateInput && !dateInput.value) {
             let today = new Date().toISOString().split('T')[0];
             dateInput.value = today;
         }
@@ -281,7 +283,7 @@
             let targetSection = document.getElementById('section-' + sectionId);
             if (targetSection) targetSection.classList.add('active');
 
-            let activeBtn = document.querySelector(button[onclick="showSection('${sectionId}')"]);
+            let activeBtn = document.querySelector(`button[onclick="showSection('${sectionId}')"]`);
             if (activeBtn) activeBtn.classList.add('active');
             
             if (tg && tg.HapticFeedback) {
@@ -305,37 +307,33 @@
             let breakEl = document.getElementById('breakTime');
             let rateEl = document.getElementById('hourlyRate');
 
-            if (!dateEl  !startEl  !endEl) return;
-
-            let date = dateEl.value;
-            let start = startEl.value;
-            let end = endEl.value;
-            let breakM = parseInt(breakEl ? breakEl.value : 0) || 0;
-            let rate = parseFloat(rateEl ? rateEl.value : 0) || 0;
-
-            if (!date  !start  !end) {
-                alert("Заполните дату, время начала и конца смены!");
+            if (!dateEl.value || !startEl.value || !endEl.value) {
+                alert("Пожалуйста, заполните дату, время начала и окончания смены!");
                 return;
             }
 
-            let [sH, sM] = start.split(':').map(Number);
-            let [eH, eM] = end.split(':').map(Number);
+            let date = dateEl.value;
+            let [sH, sM] = startEl.value.split(':').map(Number);
+            let [eH, eM] = endEl.value.split(':').map(Number);
+            let breakM = parseInt(breakEl.value) || 0;
+            let rate = parseFloat(rateEl.value) || 0;
 
             let startMin = sH * 60 + sM;
             let endMin = eH * 60 + eM;
 
             if (endMin < startMin) {
-                endMin += 24 * 60;
+                endMin += 24 * 60; // переход через полночь
             }
 
             let totalMin = (endMin - startMin) - breakM;
             if (totalMin < 0) {
-                alert("Ошибка: перерыв больше времени смены!");
+                alert("Ошибка: перерыв больше общей продолжительности смены!");
                 return;
             }
 
             let totalHours = totalMin / 60;
 
+            // Расчет ночных часов (с 22:00 до 06:00)
             let nightMinutes = 0;
             for (let m = startMin; m < endMin; m++) {
                 let currentHourOfDay = Math.floor((m % (24 * 60)) / 60);
@@ -360,13 +358,16 @@
             
             try {
                 localStorage.setItem('my_shifts', JSON.stringify(shifts));
-            } catch (e) {}
-[30.07.2026 21:27] Maska: let resBox = document.getElementById('lastResult');
+            } catch (e) {
+                console.error("Ошибка сохранения", e);
+            }
+
+            let resBox = document.getElementById('lastResult');
             if (resBox) {
                 resBox.style.display = 'block';
                 let hInt = Math.floor(totalHours);
                 let mInt = Math.round((totalHours - hInt) * 60);
-                resBox.innerHTML = Отработано: <b>${hInt} ч. ${mInt} мин.</b><br>Ночных: <b>${nightHours.toFixed(1)} ч.</b><br>Сумма: <b>${earnedMoney.toFixed(0)} ₽</b>;
+                resBox.innerHTML = `Успешно сохранено!<br>Отработано: <b>${hInt} ч. ${mInt} мин.</b><br>Ночных: <b>${nightHours.toFixed(1)} ч.</b><br>Сумма: <b>${earnedMoney.toFixed(0)} ₽</b>`;
             }
 
             updateHistoryUI();
@@ -407,7 +408,7 @@
 
                 let item = document.createElement('div');
                 item.className = 'history-item';
-                item.innerHTML = 
+                item.innerHTML = `
                     <div>
                         <strong>${s.date}</strong><br>
                         ⏱ ${s.hours} ч. (ноч: ${s.night} ч.)
@@ -416,11 +417,11 @@
                         <span style="color:var(--tg-theme-button-color); font-weight:bold;">${s.money} ₽</span><br>
                         <button class="delete-btn" onclick="deleteShift(${s.id})">Удалить</button>
                     </div>
-                ;
+                `;
                 listEl.appendChild(item);
             });
 
-            summaryEl.innerHTML = Отработано: <b>${totalH.toFixed(1)} ч.</b> | Ночных: <b>${totalN.toFixed(1)} ч.</b><br>Итого за всё время: <b>${totalM.toFixed(0)} ₽</b>;
+            summaryEl.innerHTML = `Отработано: <b>${totalH.toFixed(1)} ч.</b> | Ночных: <b>${totalN.toFixed(1)} ч.</b><br>Итого за всё время: <b>${totalM.toFixed(0)} ₽</b>`;
         }
     </script>
 </body>
