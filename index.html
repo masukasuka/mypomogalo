@@ -3,120 +3,242 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Учет рабочих часов</title>
-    <!-- Подключаем официальный стиль Telegram Web App -->
+    <title>«Помогало»</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        :root {
+            /* Цвета подстраиваются под тему Telegram */
+            --tg-theme-bg-color: #ffffff;
+            --tg-theme-text-color: #222222;
+            --tg-theme-button-color: #2481cc;
+            --tg-theme-button-text-color: #ffffff;
+            --main-blue: #4a56ba; /* Ваш цвет фона */
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--tg-theme-bg-color, #ffffff);
-            color: var(--tg-theme-text-color, #000000);
+            background-color: var(--main-blue);
+            color: var(--tg-theme-text-color);
             margin: 0;
-            padding: 16px;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh; /* На всю высоту экрана */
+            overflow: hidden;
         }
+
+        /* Шапка приложения */
+        header {
+            text-align: center;
+            padding: 16px;
+            background-color: var(--main-blue);
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        header h1 {
+            font-size: 18px;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        /* Основной контейнер (где меняется контент) */
+        main {
+            flex: 1; /* Занимает всё свободное пространство */
+            background-color: var(--tg-theme-bg-color);
+            border-radius: 20px 20px 0 0;
+            padding: 20px;
+            overflow-y: auto; /* Прокрутка внутри контента */
+            margin-top: 10px;
+        }
+
+        /* Секции контента (скрыты по умолчанию) */
+        .content-section {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Навигационная панель (четыре блока снизу) */
+        nav {
+            background-color: var(--tg-theme-bg-color);
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            border-top: 1px solid var(--tg-theme-hint-color, #ccc);
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
+
+        .nav-btn {
+            flex: 1;
+            background: none;
+            border: 1px solid var(--tg-theme-hint-color, #aaa);
+            border-radius: 12px;
+            padding: 12px 5px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--tg-theme-hint-color, #666);
+            cursor: pointer;
+            transition: all 0.2s;
+            box-sizing: border-box;
+        }
+
+        .nav-btn.active {
+            background-color: var(--tg-theme-button-color);
+            color: var(--tg-theme-button-text-color);
+            border-color: var(--tg-theme-button-color);
+            font-weight: 600;
+        }
+
+        /* Стили для содержимого разделов */
         h2 {
             font-size: 20px;
-            margin-bottom: 16px;
+            margin-top: 0;
+            color: var(--tg-theme-button-color);
         }
+        
+        p { color: var(--tg-theme-hint-color); }
+
+        /* Стили для калькулятора (из прошлого кода) */
         .card {
             background: var(--tg-theme-secondary-bg-color, #f1f1f1);
-            padding: 12px;
+            padding: 15px;
             border-radius: 12px;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
-        label {
-            display: block;
-            font-size: 14px;
-            margin-bottom: 6px;
-            color: var(--tg-theme-hint-color, #888888);
-        }
-        input {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-            border: 1px solid var(--tg-theme-hint-color, #ccc);
-            border-radius: 8px;
-            font-size: 16px;
-            background: var(--tg-theme-bg-color, #ffffff);
-            color: var(--tg-theme-text-color, #000000);
-            margin-bottom: 12px;
-        }
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--tg-theme-button-color, #2481cc);
-            color: var(--tg-theme-button-text-color, #ffffff);
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .result {
-            margin-top: 16px;
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-        }
+        .input-group { margin-bottom: 12px; }
+        .input-group label { display: block; font-size: 13px; color: var(--tg-theme-hint-color); margin-bottom: 4px; }
+        .input-group input { width: 100%; padding: 10px; border: 1px solid var(--tg-theme-hint-color, #ccc); border-radius: 8px; background: var(--tg-theme-bg-color); box-sizing: border-box;}
+        .calc-btn { width: 100%; padding: 12px; background-color: var(--tg-theme-button-color); color: var(--tg-theme-button-text-color); border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .result { margin-top: 16px; font-size: 18px; font-weight: bold; text-align: center; color: var(--tg-theme-button-color); }
+
     </style>
 </head>
 <body>
 
-    <h2>Учет смены</h2>
+    <header>
+        <h1>Помогало</h1>
+    </header>
 
-    <div class="card">
-        <label for="startTime">Время начала смены:</label>
-        <input type="time" id="startTime">
+    <main>
+        <!-- РАЗДЕЛ 1: Калькулятор часов -->
+        <div id="section-calc" class="content-section active">
+            <h2>Калькулятор часов</h2>
+            <div class="card">
+                <div class="input-group">
+                    <label>Время начала смены:</label>
+                    <input type="time" id="startTime">
+                </div>
+                <div class="input-group">
+                    <label>Время окончания смены:</label>
+                    <input type="time" id="endTime">
+                </div>
+                <div class="input-group">
+                    <label>Перерыв (в минутах):</label>
+                    <input type="number" id="breakTime" value="0" min="0">
+                </div>
+                <button class="calc-btn" onclick="calculateHours()">Рассчитать часы</button>
+            </div>
+            <div class="result" id="resultText"></div>
+        </div>
 
-        <label for="endTime">Время окончания смены:</label>
-        <input type="time" id="endTime">
+        <!-- РАЗДЕЛ 2: Выписки скоростей (пустое место) -->
+        <div id="section-speeds" class="content-section">
+            <h2>Выписки скоростей</h2>
+            <div class="card">
+                <p>Здесь будут ваши таблицы скоростей.</p>
+                <p>Пример: Путь 1 — 60 км/ч</p>
+                <p>Пример: Путь 2 — 40 км/ч</p>
+            </div>
+        </div>
 
-        <label for="breakTime">Перерыв (в минутах):</label>
-        <input type="number" id="breakTime" value="0" min="0">
+        <!-- РАЗДЕЛ 3: Нормативные акты (пустое место) -->
+        <div id="section-docs" class="content-section">
+            <h2>Нормативные акты</h2>
+            <p>Раздел в разработке.</p>
+        </div>
 
-        <button onclick="calculateHours()">Рассчитать часы</button>
-    </div>
+        <!-- РАЗДЕЛ 4: Заметки (пустое место) -->
+        <div id="section-notes" class="content-section">
+            <h2>Заметки</h2>
+            <p>Раздел в разработке.</p>
+        </div>
+    </main>
 
-    <div class="result" id="resultText"></div>
+    <!-- НИЖНЯЯ НАВИГАЦИЯ (Ваши 4 кнопки) -->
+    <nav>
+        <button class="nav-btn active" onclick="showSection('calc')">Калькулятор часов</button>
+        <button class="nav-btn" onclick="showSection('speeds')">Выписки скоростей</button>
+        <button class="nav-btn" onclick="showSection('docs')">Нормативные акты</button>
+        <button class="nav-btn" onclick="showSection('notes')">Заметки</button>
+    </nav>
 
     <script>
         // Инициализация Telegram Web App
         let tg = window.Telegram.WebApp;
         tg.expand();
 
+        // Функция переключения разделов
+        function showSection(sectionId) {
+            // Скрываем все разделы
+            let sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.classList.remove('active'));
+
+            // Убираем активность со всех кнопок
+            let navBtns = document.querySelectorAll('.nav-btn');
+            navBtns.forEach(btn => btn.classList.remove('active'));
+
+            // Показываем нужный раздел
+            document.getElementById('section-' + sectionId).classList.add('active');
+
+            // Делаем нужную кнопку активной
+            // Нам нужно найти кнопку, которая вызывает showSection с этим id
+            let activeBtn = document.querySelector(button[onclick="showSection('${sectionId}')"]);
+            if (activeBtn) activeBtn.classList.add('active');
+            
+            // Заставляем телефон вибрировать при нажатии (легкий отклик)
+            if(tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+        }
+
+        // --- Логика Калькулятора ---
         function calculateHours() {
             let start = document.getElementById('startTime').value;
             let end = document.getElementById('endTime').value;
             let breakMinutes = parseInt(document.getElementById('breakTime').value) || 0;
-
             if (!start || !end) {
-                document.getElementById('resultTextinnerText = "Пожалуйста, введите время начала и конца."';
+                document.getElementById('resultText').innerText = "Введите время начала и конца.";
                 return;
             }
 
-            // Переводим время в минуты от начала суток
-            let [startHour, startMin] = start.split(':').map(Number);
-            let [endHour, endMin] = end.split(':').map(Number);
+            let [sH, sM] = start.split(':').map(Number);
+            let [eH, eM] = end.split(':').map(Number);
 
-            let startTotalMin = startHour * 60 + startMin;
-            let endTotalMin = endHour * 60 + endMin;
+            let startTotal = sH * 60 + sM;
+            let endTotal = eH * 60 + eM;
 
-            // Если смена перешла через полночь
-            if (endTotalMin < startTotalMin) {
-                endTotalMin += 24 * 60;
-            }
+            // Переход через полночь
+            if (endTotal < startTotal) endTotal += 24 * 60;
 
-            let diffMin = (endTotalMin - startTotalMin) - breakMinutes;
+            let totalMin = (endTotal - startTotal) - breakMinutes;
 
-            if (diffMin < 0) {
-                document.getElementById('resultText').innerText = "Ошибка: перерыв больше времени смены!";
+            if (totalMin < 0) {
+                document.getElementById('resultText').innerText = "Ошибка: перерыв больше смены!";
                 return;
             }
 
-            let hours = Math.floor(diffMin / 60);
-            let minutes = diffMin % 60;
+            let h = Math.floor(totalMin / 60);
+            let m = totalMin % 60;
 
-            document.getElementById('resultText').innerText = Итого отработано: ${hours} ч. ${minutes} мин.;
+            document.getElementById('resultText').innerText = Итого: ${h} ч. ${m} мин.;
         }
     </script>
 </body>
