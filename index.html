@@ -119,7 +119,7 @@
             margin-bottom: 4px;
         }
 
-        .input-group input {
+        .input-group input, .input-group select {
             width: 100%;
             padding: 8px 10px;
             border: 1px solid var(--tg-theme-hint-color, #ccc);
@@ -158,8 +158,42 @@
             border-radius: 12px;
             margin-bottom: 16px;
         }
-        .summary-card h3 { margin: 0 0 8px 0; font-size: 14px; }
-        .summary-stats { font-size: 13px; line-height: 1.4; }
+        .summary-card h3 { 
+            margin: 0 0 8px 0; 
+            font-size: 14px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        .summary-stats { font-size: 13px; line-height: 1.5; }
+
+        .norm-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 6px;
+            padding-top: 6px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            font-size: 13px;
+        }
+        .norm-input {
+            width: 70px;
+            padding: 4px 6px;
+            border: 1px solid rgba(255,255,255,0.4);
+            border-radius: 6px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-align: right;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
 
         .history-list {
             max-height: 180px;
@@ -198,10 +232,20 @@
         <div id="section-calc" class="content-section active">
             <h2>Учет смены</h2>
 
+            <!-- Итоги за месяц с фильтром и нормой -->
             <div class="summary-card">
-                <h3>Итоги за сохраненные смены:</h3>
+                <h3>
+                    <span>Период:</span>
+                    <select id="monthFilter" onchange="onMonthFilterChange()" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.4); border-radius: 6px; padding: 2px 6px; font-size: 12px; outline: none;">
+                        <!-- Заполняется динамически -->
+                    </select>
+                </h3>
                 <div class="summary-stats" id="monthlySummary">
-                    Отработано: 0 ч. | Ночных: 0 ч. | Сумма: 0 ₽
+                    Отработано: <b>0 ч.</b>
+                </div>
+                <div class="norm-container" id="normBlock">
+                    <span>Норма часов за месяц:</span>
+                    <input type="number" id="monthNormInput" class="norm-input" value="160" min="0" onchange="saveNormForCurrentMonth(this.value)">
                 </div>
             </div>
 
@@ -222,16 +266,14 @@
                     <label>Перерыв (минут):</label>
                     <input type="number" id="breakTime" value="0" min="0">
                 </div>
-                <div class="input-group">
-                    <label>Часовая ставка (₽/час):</label>
-                    <input type="number" id="hourlyRate" value="500" min="0">
-                </div>
                 <button class="calc-btn" onclick="saveShift()">Рассчитать и сохранить</button>
                 
                 <div class="result-box" id="lastResult" style="display:none;"></div>
             </div>
 
-            <h2>История смен</h2>
+            <div class="history-header">
+                <h2>История смен</h2>
+            </div>
             <div class="history-list" id="historyList"></div>
         </div>
 
@@ -269,7 +311,6 @@
             tg.expand();
         }
 
-        // Автозаполнение даты и стандартного времени при старте
         let dateInput = document.getElementById('shiftDate');
         if (dateInput && !dateInput.value) {
             let today = new Date().toISOString().split('T')[0];
@@ -291,13 +332,21 @@
             }
         }
 
-        // Загрузка истории при запуске
         let shifts = [];
         try {
             shifts = JSON.parse(localStorage.getItem('my_shifts')) || [];
         } catch (e) {
             shifts = [];
         }
+
+        let norms = {};
+        try {
+            norms = JSON.parse(localStorage.getItem('my_month_norms')) || {};
+        } catch (e) {
+            norms = {};
+        }
+        
+        updateMonthFilterOptions();
         updateHistoryUI();
 
         function saveShift() {
@@ -305,7 +354,6 @@
             let startEl = document.getElementById('startTime');
             let endEl = document.getElementById('endTime');
             let breakEl = document.getElementById('breakTime');
-            let rateEl = document.getElementById('hourlyRate');
 
             if (!dateEl.value || !startEl.value || !endEl.value) {
                 alert("Пожалуйста, заполните дату, время начала и окончания смены!");
@@ -316,13 +364,12 @@
             let [sH, sM] = startEl.value.split(':').map(Number);
             let [eH, eM] = endEl.value.split(':').map(Number);
             let breakM = parseInt(breakEl.value) || 0;
-            let rate = parseFloat(rateEl.value) || 0;
 
             let startMin = sH * 60 + sM;
             let endMin = eH * 60 + eM;
 
             if (endMin < startMin) {
-                endMin += 24 * 60; // переход через полночь
+                endMin += 24 * 60;
             }
 
             let totalMin = (endMin - startMin) - breakM;
@@ -333,43 +380,29 @@
 
             let totalHours = totalMin / 60;
 
-            // Расчет ночных часов (с 22:00 до 06:00)
-            let nightMinutes = 0;
-            for (let m = startMin; m < endMin; m++) {
-                let currentHourOfDay = Math.floor((m % (24 * 60)) / 60);
-                if (currentHourOfDay >= 22 || currentHourOfDay < 6) {
-                    nightMinutes++;
-                }
-            }
-            let nightHours = nightMinutes / 60;
-
-            let regularHours = Math.max(0, totalHours - nightHours);
-            let earnedMoney = (regularHours * rate) + (nightHours * rate * 1.5);
-
             let shiftData = {
                 id: Date.now(),
                 date: date,
-                hours: totalHours.toFixed(1),
-                night: nightHours.toFixed(1),
-                money: earnedMoney.toFixed(0)
+                hours: totalHours.toFixed(2)
             };
 
             shifts.unshift(shiftData);
             
             try {
                 localStorage.setItem('my_shifts', JSON.stringify(shifts));
-            } catch (e) {
-                console.error("Ошибка сохранения", e);
-            }
+            } catch (e) {}
 
             let resBox = document.getElementById('lastResult');
             if (resBox) {
                 resBox.style.display = 'block';
                 let hInt = Math.floor(totalHours);
                 let mInt = Math.round((totalHours - hInt) * 60);
-                resBox.innerHTML = `Успешно сохранено!<br>Отработано: <b>${hInt} ч. ${mInt} мин.</b><br>Ночных: <b>${nightHours.toFixed(1)} ч.</b><br>Сумма: <b>${earnedMoney.toFixed(0)} ₽</b>`;
+                resBox.innerHTML = `Успешно сохранено!<br>Отработано за смену: <b>${hInt} ч. ${mInt} мин.</b> (${totalHours.toFixed(2)} ч.)`;
             }
 
+            // Автоматически переключаем фильтр на месяц добавленной смены
+            let shiftMonth = date.substring(0, 7);
+            updateMonthFilterOptions(shiftMonth);
             updateHistoryUI();
             
             if (tg && tg.HapticFeedback) {
@@ -382,46 +415,141 @@
             try {
                 localStorage.setItem('my_shifts', JSON.stringify(shifts));
             } catch (e) {}
+            updateMonthFilterOptions();
+            updateHistoryUI();
+        }
+
+        function updateMonthFilterOptions(selectMonth = null) {
+            let filterEl = document.getElementById('monthFilter');
+            if (!filterEl) return;
+
+            let currentSelection = selectMonth || filterEl.value;
+
+            let monthsSet = new Set();
+            shifts.forEach(s => {
+                if (s.date && s.date.length >= 7) {
+                    monthsSet.add(s.date.substring(0, 7));
+                }
+            });
+
+            let monthsArray = Array.from(monthsSet).sort().reverse();
+            let currentMonthStr = new Date().toISOString().substring(0, 7);
+            if (!monthsArray.includes(currentMonthStr)) {
+                monthsArray.unshift(currentMonthStr);
+            }
+
+            filterEl.innerHTML = '';
+            
+            let optAll = document.createElement('option');
+            optAll.value = 'ALL';
+            optAll.textContent = 'За всё время';
+            filterEl.appendChild(optAll);
+
+            const monthNames = {
+                '01': 'Январь', '02': 'Февраль', '03': 'Март', '04': 'Апрель',
+                '05': 'Май', '06': 'Июнь', '07': 'Июль', '08': 'Август',
+                '09': 'Сентябрь', '10': 'Октябрь', '11': 'Ноябрь', '12': 'Декабрь'
+            };
+
+            monthsArray.forEach(m => {
+                let opt = document.createElement('option');
+                opt.value = m;
+                let [year, monthNum] = m.split('-');
+                opt.textContent = `${monthNames[monthNum] || monthNum} ${year}`;
+                filterEl.appendChild(opt);
+            });
+
+            if (currentSelection && Array.from(filterEl.options).some(o => o.value === currentSelection)) {
+                filterEl.value = currentSelection;
+            } else {
+                filterEl.value = currentMonthStr;
+            }
+        }
+
+        function onMonthFilterChange() {
+            updateHistoryUI();
+        }
+
+        function saveNormForCurrentMonth(val) {
+            let filterEl = document.getElementById('monthFilter');
+            if (!filterEl) return;
+            let selectedMonth = filterEl.value;
+            if (selectedMonth === 'ALL') return; // для «За всё время» норму не сохраняем отдельно
+
+            norms[selectedMonth] = parseFloat(val) || 0;
+            try {
+                localStorage.setItem('my_month_norms', JSON.stringify(norms));
+            } catch (e) {}
             updateHistoryUI();
         }
 
         function updateHistoryUI() {
             let listEl = document.getElementById('historyList');
             let summaryEl = document.getElementById('monthlySummary');
+            let filterEl = document.getElementById('monthFilter');
+            let normBlock = document.getElementById('normBlock');
+            let normInput = document.getElementById('monthNormInput');
             
             if (!listEl || !summaryEl) return;
+            
+            let selectedMonth = filterEl ? filterEl.value : 'ALL';
+            
+            // Управление видимостью поля нормы (скрываем для режима «За всё время»)
+            if (selectedMonth === 'ALL') {
+                if (normBlock) normBlock.style.display = 'none';
+            } else {
+                if (normBlock) normBlock.style.display = 'flex';
+                // Подставляем сохраненную норму для выбранного месяца (по умолчанию 160)
+                let currentNorm = norms[selectedMonth] !== undefined ? norms[selectedMonth] : 160;
+                if (normInput) normInput.value = currentNorm;
+            }
             
             listEl.innerHTML = '';
             
             let totalH = 0;
-            let totalN = 0;
-            let totalM = 0;
-
-            if (shifts.length === 0) {
-                listEl.innerHTML = '<p style="font-size:12px; color:var(--tg-theme-hint-color); text-align:center; padding: 10px;">Нет сохраненных смен</p>';
-            }
+            let visibleCount = 0;
 
             shifts.forEach(s => {
-                totalH += parseFloat(s.hours) || 0;
-                totalN += parseFloat(s.night) || 0;
-                totalM += parseFloat(s.money) || 0;
+                let shiftMonth = s.date ? s.date.substring(0, 7) : '';
+                let matchesFilter = (selectedMonth === 'ALL' || shiftMonth === selectedMonth);
 
-                let item = document.createElement('div');
-                item.className = 'history-item';
-                item.innerHTML = `
-                    <div>
-                        <strong>${s.date}</strong><br>
-                        ⏱ ${s.hours} ч. (ноч: ${s.night} ч.)
-                    </div>
-                    <div style="text-align: right;">
-                        <span style="color:var(--tg-theme-button-color); font-weight:bold;">${s.money} ₽</span><br>
-                        <button class="delete-btn" onclick="deleteShift(${s.id})">Удалить</button>
-                    </div>
-                `;
-                listEl.appendChild(item);
+                if (matchesFilter) {
+                    totalH += parseFloat(s.hours) || 0;
+                    visibleCount++;
+
+                    let hNum = parseFloat(s.hours) || 0;
+                    let hInt = Math.floor(hNum);
+                    let mInt = Math.round((hNum - hInt) * 60);
+
+                    let item = document.createElement('div');
+                    item.className = 'history-item';
+                    item.innerHTML = `
+                        <div>
+                            <strong>${s.date}</strong><br>
+                            ⏱ ${hInt} ч. ${mInt} мин. (${hNum.toFixed(2)} ч.)
+                        </div>
+                        <div>
+                            <button class="delete-btn" onclick="deleteShift(${s.id})">Удалить</button>
+                        </div>
+                    `;
+                    listEl.appendChild(item);
+                }
             });
 
-            summaryEl.innerHTML = `Отработано: <b>${totalH.toFixed(1)} ч.</b> | Ночных: <b>${totalN.toFixed(1)} ч.</b><br>Итого за всё время: <b>${totalM.toFixed(0)} ₽</b>`;
+            if (visibleCount === 0) {
+                listEl.innerHTML = '<p style="font-size:12px; color:var(--tg-theme-hint-color); text-align:center; padding: 10px;">Нет смен за выбранный период</p>';
+            }
+
+            if (selectedMonth === 'ALL') {
+                summaryEl.innerHTML = `Всего отработано: <b>${totalH.toFixed(2)} ч.</b>`;
+            } else {
+                let currentNorm = norms[selectedMonth] !== undefined ? norms[selectedMonth] : 160;
+                let diff = totalH - currentNorm;
+                let diffStr = diff >= 0 ? `+${diff.toFixed(2)} ч. (переработка)` : `${diff.toFixed(2)} ч. (недоработка)`;
+                if (Math.abs(diff) < 0.01) diffStr = 'Норма выполнена';
+
+                summaryEl.innerHTML = `Отработано: <b>${totalH.toFixed(2)} ч.</b> из <b>${currentNorm} ч.</b><br>Баланс: <b>${diffStr}</b>`;
+            }
         }
     </script>
 </body>
