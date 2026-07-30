@@ -215,8 +215,30 @@
             margin-bottom: 8px;
         }
 
+        .view-toggle {
+            display: flex;
+            background: var(--tg-theme-secondary-bg-color, #e0e0e0);
+            border-radius: 6px;
+            padding: 2px;
+            gap: 2px;
+        }
+        .view-toggle-btn {
+            background: none;
+            border: none;
+            border-radius: 4px;
+            padding: 3px 8px;
+            font-size: 11px;
+            cursor: pointer;
+            color: var(--tg-theme-text-color, #333);
+        }
+        .view-toggle-btn.active {
+            background: var(--tg-theme-button-color);
+            color: var(--tg-theme-button-text-color);
+            font-weight: 600;
+        }
+
         .history-list {
-            max-height: 180px;
+            max-height: 220px;
             overflow-y: auto;
         }
         .history-item {
@@ -250,6 +272,54 @@
         .delete-btn {
             background: #ff4d4d;
             color: white;
+        }
+
+        /* Стили календарной сетки */
+        .calendar-view {
+            display: none;
+            background: var(--tg-theme-bg-color);
+            border: 1px solid var(--tg-theme-hint-color, #ccc);
+            border-radius: 8px;
+            padding: 8px;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            text-align: center;
+        }
+        .calendar-weekday {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--tg-theme-hint-color, #888);
+            padding-bottom: 4px;
+        }
+        .calendar-day {
+            aspect-ratio: 1;
+            background: var(--tg-theme-secondary-bg-color, #f4f4f4);
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 11px;
+            position: relative;
+            cursor: default;
+        }
+        .calendar-day.empty {
+            background: none;
+        }
+        .calendar-day.has-shift {
+            background: rgba(36, 129, 204, 0.2);
+            border: 1px solid var(--tg-theme-button-color);
+            color: var(--tg-theme-button-color);
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .calendar-day-hours {
+            font-size: 8px;
+            margin-top: 1px;
+            opacity: 0.8;
         }
     </style>
 </head>
@@ -315,8 +385,19 @@
 
             <div class="history-header">
                 <h2>История смен</h2>
+                <div class="view-toggle">
+                    <button class="view-toggle-btn active" id="btnListView" onclick="switchView('list')">Список</button>
+                    <button class="view-toggle-btn" id="btnCalView" onclick="switchView('calendar')">Календарь</button>
+                </div>
             </div>
+
+            <!-- Контейнер списка -->
             <div class="history-list" id="historyList"></div>
+
+            <!-- Контейнер календаря -->
+            <div class="calendar-view" id="calendarView">
+                <div class="calendar-grid" id="calendarGrid"></div>
+            </div>
         </div>
 
         <!-- РАЗДЕЛ 2: Выписки скоростей -->
@@ -353,6 +434,8 @@
             tg.expand();
         }
 
+        let currentViewMode = 'list'; // 'list' или 'calendar'
+
         let dateInput = document.getElementById('shiftDate');
         if (dateInput && !dateInput.value) {
             let today = new Date().toISOString().split('T')[0];
@@ -369,6 +452,31 @@
             let activeBtn = document.querySelector(`button[onclick="showSection('${sectionId}')"]`);
             if (activeBtn) activeBtn.classList.add('active');
             
+            if (tg && tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('light');
+            }
+        }
+
+        function switchView(mode) {
+            currentViewMode = mode;
+            let listEl = document.getElementById('historyList');
+            let calEl = document.getElementById('calendarView');
+            let btnList = document.getElementById('btnListView');
+            let btnCal = document.getElementById('btnCalView');
+
+            if (mode === 'list') {
+                listEl.style.display = 'block';
+                calEl.style.display = 'none';
+                btnList.classList.add('active');
+                btnCal.classList.remove('active');
+            } else {
+                listEl.style.display = 'none';
+                calEl.style.display = 'block';
+                btnCal.classList.add('active');
+                btnList.classList.remove('active');
+                renderCalendar();
+            }
+
             if (tg && tg.HapticFeedback) {
                 tg.HapticFeedback.impactOccurred('light');
             }
@@ -426,7 +534,6 @@
             let editId = editingIdEl.value;
 
             if (editId) {
-                // Редактирование существующей смены
                 let index = shifts.findIndex(s => s.id == editId);
                 if (index !== -1) {
                     shifts[index] = {
@@ -441,9 +548,8 @@
                         note: noteText
                     };
                 }
-                cancelEdit(); // Сбрасываем режим редактирования
+                cancelEdit();
             } else {
-                // Создание новой смены
                 let shiftData = {
                     id: Date.now(),
                     date: date,
@@ -496,7 +602,6 @@
             document.getElementById('saveBtn').textContent = 'Сохранить изменения';
             document.getElementById('cancelBtn').style.display = 'block';
 
-            // Прокручиваем к форме ввода
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
             if (tg && tg.HapticFeedback) {
@@ -515,7 +620,6 @@
         }
 
         window.deleteShift = function(id) {
-            // Если удаляем запись, которая сейчас редактируется, сбрасываем форму
             let editingIdEl = document.getElementById('editingId');
             if (editingIdEl && editingIdEl.value == id) {
                 cancelEdit();
@@ -617,9 +721,17 @@
             let totalH = 0;
             let visibleCount = 0;
 
+            // Карта смен для календаря по датам 'YYYY-MM-DD'
+            let shiftsMap = {};
+
             shifts.forEach(s => {
                 let shiftMonth = s.date ? s.date.substring(0, 7) : '';
                 let matchesFilter = (selectedMonth === 'ALL' || shiftMonth === selectedMonth);
+
+                if (s.date) {
+                    if (!shiftsMap[s.date]) shiftsMap[s.date] = [];
+                    shiftsMap[s.date].push(s);
+                }
 
                 if (matchesFilter) {
                     totalH += parseFloat(s.hours) || 0;
@@ -668,6 +780,85 @@
                 if (Math.abs(diff) < 0.01) diffStr = 'Норма выполнена';
 
                 summaryEl.innerHTML = `Отработано: <b>${totalH.toFixed(2)} ч.</b> из <b>${currentNorm} ч.</b><br>Баланс: <b>${diffStr}</b>`;
+            }
+
+            if (currentViewMode === 'calendar') {
+                renderCalendar();
+            }
+        }
+
+        function renderCalendar() {
+            let gridEl = document.getElementById('calendarGrid');
+            let filterEl = document.getElementById('monthFilter');
+            if (!gridEl || !filterEl) return;
+
+            let selectedMonth = filterEl.value;
+            if (selectedMonth === 'ALL') {
+                selectedMonth = new Date().toISOString().substring(0, 7);
+            }
+
+            let [year, month] = selectedMonth.split('-').map(Number);
+            
+            gridEl.innerHTML = '';
+
+            // Дни недели
+            const weekdays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+            weekdays.forEach(wd => {
+                let div = document.createElement('div');
+                div.className = 'calendar-weekday';
+                div.textContent = wd;
+                gridEl.appendChild(div);
+            });
+
+            // Первый день месяца и количество дней
+            let firstDayIndex = new Date(year, month - 1, 1).getDay();
+            // Превращаем воскресенье (0) в 7 для удобства Пн-ВС
+            firstDayIndex = firstDayIndex === 0 ? 7 : firstDayIndex;
+            let daysInMonth = new Date(year, month, 0).getDate();
+
+            // Пустые ячейки до начала месяца
+            for (let i = 1; i < firstDayIndex; i++) {
+                let emptyDiv = document.createElement('div');
+                emptyDiv.className = 'calendar-day empty';
+                gridEl.appendChild(emptyDiv);
+            }
+
+            // Индексируем смены по дням выбранного месяца
+            let monthShiftsMap = {};
+            shifts.forEach(s => {
+                if (s.date && s.date.startsWith(selectedMonth)) {
+                    let dayNum = parseInt(s.date.split('-')[2]);
+                    if (!monthShiftsMap[dayNum]) monthShiftsMap[dayNum] = [];
+                    monthShiftsMap[dayNum].push(s);
+                }
+            });
+
+            // Дни месяца
+            for (let day = 1; day <= daysInMonth; day++) {
+                let dayDiv = document.createElement('div');
+                dayDiv.className = 'calendar-day';
+
+                let dayStr = day < 10 ? '0' + day : day;
+                let fullDateStr = `${selectedMonth}-${dayStr}`;
+
+                let dayShifts = monthShiftsMap[day] || [];
+                
+                if (dayShifts.length > 0) {
+                    dayDiv.classList.add('has-shift');
+                    let sumDayHours = dayShifts.reduce((acc, s) => acc + (parseFloat(s.hours) || 0), 0);
+                    
+                    dayDiv.innerHTML = `<span>${day}</span><span class="calendar-day-hours">${sumDayHours.toFixed(1)}ч</span>`;
+                    
+                    // По клику на день в календаре открываем редактирование первой смены за этот день
+                    dayDiv.onclick = function() {
+                        editShift(dayShifts[0].id);
+                        switchView('list');
+                    };
+                } else {
+                    dayDiv.textContent = day;
+                }
+
+                gridEl.appendChild(dayDiv);
             }
         }
     </script>
