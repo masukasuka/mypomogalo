@@ -350,7 +350,6 @@
             display: block;
         }
 
-        /* Внутренние мини-табы для подраздела Пробы тормозов */
         .brake-sub-nav {
             display: flex;
             gap: 6px;
@@ -400,6 +399,39 @@
             color: var(--tg-theme-hint-color, #555);
             margin-top: 6px;
             line-height: 1.4;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            padding-top: 6px;
+        }
+
+        /* Стили для заметок с фото */
+        .note-card {
+            background: var(--tg-theme-bg-color);
+            border: 1px solid var(--tg-theme-hint-color, #ccc);
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+        .note-card-text {
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin-bottom: 8px;
+            color: var(--tg-theme-text-color);
+        }
+        .note-card-img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            display: block;
+            cursor: pointer;
+        }
+        .note-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: var(--tg-theme-hint-color);
             border-top: 1px solid rgba(0,0,0,0.05);
             padding-top: 6px;
         }
@@ -494,15 +526,14 @@
                 </div>
             </div>
 
-            <!-- Подпункт 2: Пробы тормозов (С разделением на Грузовые и Пассажирские) -->
+            <!-- Пробы тормозов -->
             <div id="sub-brakes" class="sub-section active">
-                <!-- Внутренние мини-табы -->
                 <div class="brake-sub-nav">
                     <button class="brake-sub-btn active" onclick="showBrakeSub('cargo')">Грузовые</button>
                     <button class="brake-sub-btn" onclick="showBrakeSub('passenger')">Пассажирские</button>
                 </div>
 
-                <!-- БЛОК 1: ГРУЗОВЫЕ (Сюда перенесена вся ваша таблица) -->
+                <!-- Грузовые пробы -->
                 <div id="brakeSub-cargo" class="brake-sub-content active">
                     <div class="card" style="margin-bottom: 12px; padding: 10px;">
                         <div class="input-group" style="margin-bottom: 0;">
@@ -528,241 +559,70 @@
                                     <th style="padding: 4px;">СК</th>
                                     <th style="padding: 4px;">Т.п.</th>
                                 </tr>
-
-                                <!-- Минск — Барановичи -->
                                 <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Минск — Барановичи</td></tr>
                                 <tr class="brake-row"><td style="padding: 4px;">Минск-Сорт. — Помыслище</td><td>759-8</td><td>40</td><td>250</td></tr>
                                 <tr class="brake-row"><td style="padding: 4px;">Помыслище — Фаниполь</td><td>763-5</td><td>55</td><td>400</td></tr>
                                 <tr class="brake-row"><td style="padding: 4px;">Фаниполь — Койданово*</td><td>777-7</td><td>55</td><td>400</td></tr>
                                 <tr class="brake-row"><td style="padding: 4px;">Койданово — Негорелое*</td><td>792-6</td><td>55</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Негорелое — Колосово</td><td>806-7</td><td>55</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Колосово — Столбцы</td><td>820-6</td><td>55</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Столбцы — Городея</td><td>835-5</td><td>55</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Городея — Погорельцы</td><td>859-7</td><td>55</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Погорельцы — Барановичи</td><td>874-1</td><td>55</td><td>400</td></tr>
-
-                                <!-- Барановичи — Минск -->
-                                <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Барановичи — Минск</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Барановичи — Погорельцы</td><td>885-5</td><td>55</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Погорельцы — Городея</td><td>864-5</td><td>55</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Городея — Столбцы</td><td>841-9</td><td>55</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Столбцы — Колосово</td><td>819-1</td><td>55</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Колосово — Негорелое</td><td>806-6</td><td>55</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Негорелое — Койданово*</td><td>795-9</td><td>55</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Койданово — Фаниполь*</td><td>784-9</td><td>55</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Фаниполь — Помыслище*</td><td>767-3</td><td>55</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Помыслище — Минск Сорт.**</td><td>757-8</td><td>40</td><td>400</td></tr>
-
-                                <!-- Минск — Орша -->
-                                <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Минск — Орша</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Минск-Пасс. — Минск-Вост.</td><td>749-9</td><td>25</td><td>250</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Минск-Сорт. — Минск-Вост.</td><td>750-6</td><td>25</td><td>250</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Озерище — Околица</td><td>735-2</td><td>45</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Степянка — Озерище</td><td>739-1</td><td>45</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Колодищи — Городище</td><td>723-7</td><td>55</td><td>450</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Озерище — Колодищи</td><td>705-1</td><td>55</td><td>450</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Городище — Смолевичи</td><td>698-2</td><td>55</td><td>450</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Смолевичи — Красное Знамя</td><td>685-1</td><td>55</td><td>450</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Красное Знамя — Жодино</td><td>662-2</td><td>55</td><td>450</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Жодино — Борисов</td><td>655-1</td><td>55</td><td>450</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Борисов — Новосады</td><td>644-1</td><td>55</td><td>450</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Новосады — Приямино</td><td>629-1</td><td>55</td><td>450</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Приямино — Крупки</td><td>611-1</td><td>70</td><td>500</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Бобр — Крупки*</td><td>593-3</td><td>35</td><td>350</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Славное — Толочин</td><td>580-4</td><td>55</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Толочин — Коханово</td><td>558-1</td><td>55</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Коханово — Орша</td><td>540-5</td><td>55</td><td>400</td></tr>
-
-                                <!-- Орша — Минск -->
-                                <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Орша — Минск</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Орша-Зап. — Орша-Вост. (за вых. св.)</td><td>1-10</td><td>25</td><td>250</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Орша (парк Е) — Коханово</td><td>540-5</td><td>35</td><td>200</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Орша — Коханово</td><td>540-5</td><td>55</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Коханово — Толочин</td><td>567-1</td><td>55</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Толочин — Славное</td><td>596-4</td><td>55</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Славное — Бобр*</td><td>614-1</td><td>70</td><td>500</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Бобр — Крупки</td><td>622-1</td><td>55</td><td>350</td></tr>
-
-                                <!-- Крупки — Минск-Вост. -->
-                                <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Крупки — Минск-Вост. (стр. 7)</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Крупки — Приямино*</td><td>635-2</td><td>55</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Приямино — Новосады*</td><td>651-1</td><td>55</td><td>450</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Новосады — Борисов*</td><td>664-2</td><td>55</td><td>450</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Борисов — Жодино</td><td>678-2</td><td>55</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Жодино — Красное Знамя</td><td>695-3</td><td>55</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Красное Знамя — Смолевичи</td><td>705-3</td><td>45</td><td>450</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Смолевичи — Городище*</td><td>724-1</td><td>45</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Городище — Колодищи</td><td>731-9</td><td>45</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Колодищи — Озерище*</td><td>735-1</td><td>40</td><td>350</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Озерище — Степянка*</td><td>740-3</td><td>45</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Степянка — Минск-Вост.</td><td>744-3</td><td>35</td><td>400</td></tr>
-
-                                <!-- Орша узел -->
-                                <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Орша узел</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Орша-Центр. — Рез. Пост № 2 (вых. св. НМ18)</td><td>85-4</td><td>25</td><td>250</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Орша-Зап. — Орша-Центр. (через парк 3)</td><td>84-10</td><td>25</td><td>250</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Орша-Зап. — Рез. Пост № 2 (по пути ВГ)</td><td>89-7</td><td>25</td><td>250</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Орша-Зап. — Рез. Пост № 2 (через парк Е)</td><td>540-3</td><td>25</td><td>250</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Орша-Вост. — Рез. Пост № 1 (у входного ЧВ)</td><td>82-9</td><td>25</td><td>250</td></tr>
-
-                                <!-- Барановичи — Брест -->
-                                <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Барановичи — Брест*</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Барановичи-Центр. — Грицевец</td><td>897-2</td><td>50</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Грицевец — Лесная</td><td>908-4</td><td>50</td><td>350</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Лесная — Доманово</td><td>923-7</td><td>50</td><td>300</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Доманово — Ивацевичи</td><td>947-1</td><td>50</td><td>300</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Ивацевичи — Коссово-Пол.</td><td>964-3</td><td>60</td><td>400</td></tr>
-
-                                <!-- Брест — Барановичи -->
-                                <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Брест — Барановичи*</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Коссово-Пол. — Бронная Гора</td><td>972-9</td><td>50</td><td>300</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Бронная Гора — Белоозерск</td><td>7-0</td><td>40</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Бронная Гора — Береза-Карт.</td><td>983-3</td><td>50</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Береза-Карт. — Оранчицы</td><td>1000-5</td><td>50</td><td>350</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Оранчицы — Тевли</td><td>1026-5</td><td>50</td><td>350</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Тевли — Жабинка</td><td>1054-5</td><td>50</td><td>350</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Жабинка — Брест-Вост.</td><td>1075-8</td><td>60</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Брест-Вост. — Жабинка</td><td>1084-9</td><td>50</td><td>350</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Жабинка — Тевли</td><td>1065-8</td><td>50</td><td>350</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Тевли — Оранчицы</td><td>1032-8</td><td>50</td><td>350</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Оранчицы — Береза-Карт.</td><td>1018-6</td><td>50</td><td>350</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Береза-Карт. — Бронная Гора</td><td>990-10</td><td>50</td><td>350</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Белоозерск — Бронная Гора</td><td>16-1</td><td>40</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Бронная Гора — Коссово-Пол.</td><td>976-7</td><td>50</td><td>300</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Коссово-Пол. — Ивацевичи</td><td>965-8</td><td>50</td><td>350</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Ивацевичи — Доманово</td><td>953-9</td><td>50</td><td>350</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Доманово — Лесная</td><td>925-4</td><td>50</td><td>350</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Лесная — Грицевец</td><td>912-7</td><td>50</td><td>350</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Грицевец — Барановичи-Центр.</td><td>902-2</td><td>50</td><td>350</td></tr>
-
-                                <!-- Брестский узел -->
-                                <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Брестский узел</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Брест-Вост. — Брест парк Буг</td><td>1091-1</td><td>25</td><td>200</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Западный парк</td><td>1094-8</td><td>25</td><td>200</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Брест парк Буг — Тересполь</td><td>210-7</td><td>20</td><td>100</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Брест-Восточный — Кандибор</td><td>2-3</td><td>30</td><td>200</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Брест парк Буг — Брест-Сев.</td><td>2-3</td><td>25</td><td>200</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Кобыляны — Тересполь</td><td>205-9</td><td>20</td><td>100</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Брест парк Буг — Брест-Вост.</td><td>1094-1</td><td>25</td><td>200</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Кандибор — Брест-Вост.</td><td>2-2</td><td>25</td><td>200</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Брест-Сев. — Брест парк Буг</td><td>2-3</td><td>25</td><td>200</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Брест-Вост. — Брест-Сев. (инж парк)</td><td>2-9</td><td>30</td><td>250</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Брест-Сев. (инж. Парк) — Брест-Вост.</td><td>2-9</td><td>25</td><td>250</td></tr>
-
-                                <!-- Молодечно — Минск -->
-                                <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Молодечно — Минск</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Молодечно — Уша</td><td>823-5</td><td>40</td><td>350</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Дубравы — Радошковичи</td><td>790-9</td><td>55</td><td>500</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Радошковичи — Беларусь</td><td>782-7</td><td>40</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Беларусь — Крыжовка</td><td>773-5</td><td>40</td><td>450</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Ратомка — Ждановичи</td><td>765-8</td><td>55</td><td>500</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Ждановичи — Минск-Сев.</td><td>757-8</td><td>40</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Минск-Сорт. — Минск-Вост.</td><td>749-9</td><td>25</td><td>250</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Дегтяревка — Богатырево</td><td>48-9</td><td>50</td><td>500</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Помыслище — Минск-Сорт.*</td><td>757-8</td><td>40</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Помыслище — Колядичи</td><td>37-7</td><td>40</td><td>400</td></tr>
-
-                                <!-- Минск — Молодечно -->
-                                <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Минск — Молодечно</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Степянка — Минск-Вост.</td><td>744-3</td><td>45</td><td>450</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Минск-Сев. — Ждановичи</td><td>758-3</td><td>40</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Минск-Сорт. — Помыслище</td><td>759-8</td><td>40</td><td>250</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Помыслище — Дегтяревка</td><td>44-4</td><td>40</td><td>400</td></tr>
-
-                                <!-- Дегтяревка — Крыжовка / Минск — Осиповичи -->
-                                <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Дегтяревка — Крыжовка / Минск — Осиповичи</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Дегтяревка — Крыжовка*</td><td>54-4</td><td>40</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Крыжовка — Беларусь</td><td>771-5</td><td>40</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Ратомка — Беларусь</td><td>771-5</td><td>40</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Дубравы — Олехновичи</td><td>796-3</td><td>50</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Олехновичи — Уша</td><td>800-1</td><td>40</td><td>450</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Уша — Молодечно</td><td>817-4</td><td>50</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Минск-Сорт. — Минск-Южн.</td><td>495-1</td><td>35</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Колядичи — Михановичи</td><td>482-10</td><td>55</td><td>500</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Михановичи — Руденск</td><td>472-8</td><td>50</td><td>500</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Руденск — Пуховичи</td><td>453-6</td><td>40</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Пуховичи — Талька</td><td>430-2</td><td>50</td><td>500</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Талька — Верейцы</td><td>405-9</td><td>50</td><td>500</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Верейцы — Осиповичи</td><td>394-1</td><td>40</td><td>400</td></tr>
-
-                                <!-- Осиповичи — Минск -->
-                                <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Осиповичи — Минск</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Осиповичи — Верейцы</td><td>396-1</td><td>40</td><td>450</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Верейцы — Талька</td><td>403-1</td><td>50</td><td>500</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Талька — Пуховичи</td><td>419-6</td><td>50</td><td>500</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Пуховичи — Руденск</td><td>440-3</td><td>50</td><td>500</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Руденск — Михановичи</td><td>459-1</td><td>40</td><td>450</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Колядичи — Минск-Южн.</td><td>490-9</td><td>40</td><td>500</td></tr>
-
-                                <!-- Жлобин — Осиповичи -->
-                                <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Жлобин — Осиповичи (Стр. 10)</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Жлобин-Сорт. — Жлобин-Зап.*</td><td>286-9</td><td>40</td><td>250</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Жлобин-Сорт. — Жлобин-Зап.</td><td>288-5</td><td>40</td><td>200</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Жлобин-Зап. — Красный Берег</td><td>291-1</td><td>45</td><td>300</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Красный Берег — Телуша</td><td>308-4</td><td>50</td><td>300</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Телуша — Савичи</td><td>329-1</td><td>50</td><td>300</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Савичи — Березина</td><td>340-7</td><td>50</td><td>300</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Бобруйск — Мирадино</td><td>351-1</td><td>40</td><td>250</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Мирадино — Татарка</td><td>362-9</td><td>40</td><td>250</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Татарка — Осиповичи 3</td><td>380-4</td><td>50</td><td>300</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Осиповичи 3 — Осиповичи 1</td><td>387-8</td><td>40</td><td>250</td></tr>
-
-                                <!-- Осиповичи — Жлобин -->
-                                <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Осиповичи — Жлобин (Стр. 10)</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Осиповичи 1 — Осиповичи 3</td><td>388-9</td><td>40</td><td>250</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Осиповичи 1 — Осиповичи 3</td><td>3-10</td><td>35</td><td>300</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Осиповичи 3 — Татарка</td><td>381-7</td><td>40</td><td>250</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Татарка — Мирадино</td><td>374-5</td><td>40</td><td>250</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Мирадино — Бобруйск</td><td>348-6</td><td>50</td><td>300</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Бобруйск — Березина</td><td>346-10</td><td>35</td><td>250</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Березина — Савичи</td><td>342-6</td><td>40</td><td>250</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Савичи — Телуша</td><td>326-10</td><td>50</td><td>300</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Телуша — Красный Берег</td><td>318-10</td><td>50</td><td>300</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Красный Берег — Жлобин-Зап.</td><td>294-3</td><td>45</td><td>300</td></tr>
-
-                                <!-- Колодищи — Колядичи через Шабаны -->
-                                <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Колодищи — Колядичи / Колядичи — Колодищи (через Шабаны)</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Колодищи — Шабаны</td><td>4-6</td><td>40</td><td>300</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Шабаны — Гатово*</td><td>19-1</td><td>35</td><td>400</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Гатово — п.п. Асеевка</td><td>22-8</td><td>30</td><td>350</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Колядичи — п.п. Асеевка</td><td>483-10</td><td>55</td><td>500</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Гатово — Шабаны*</td><td>19-1</td><td>35</td><td>300</td></tr>
-                                <tr class="brake-row"><td style="padding: 4px;">Шабаны — Колодищи</td><td>3-5</td><td>40</td><td>300</td></tr>
                             </table>
-
                             <div id="noBrakesMatch" style="display: none; text-align: center; padding: 12px; font-size: 12px; color: var(--tg-theme-hint-color);">
                                 Ничего не найдено по вашему запросу
                             </div>
-
-                            <b style="display: block; margin-top: 8px;">Примечания и особые условия со всех страниц:</b><br>
-                            • <b>Стр. 5 (Минск — Барановичи):</b> Для вывозных, передаточных, сборных поездов, ведомых тепловозами ЧМЭ3 (в/и) и ТМЭ3 (в/и) на перегоне Фаниполь — Койданово: ск. 45 км/ч, путь 300 м; Койданово — Негорелое: ск. 40 км/ч, путь 250 м.<br>
-                            • <b>Стр. 6 (Барановичи — Минск):</b> Для вывозных, передаточных, сборных поездов, ведомых тепловозами ЧМЭ3 (в/и) и ТМЭ3 (в/и) на перегоне Негорелое — Койданово: ск. 30 км/ч, путь 250 м; Койданово — Фаниполь: ск. 40 км/ч, путь 300 м; Фаниполь — Помыслище: ск. 35 км/ч, путь 300 м. При отправлении с 13-го пути ст. Помыслище — ск. 30 км/ч, путь 300 м.<br>
-                            • <b>Стр. 6 (Минск — Орша):</b> Для перегона Бобр — Крупки (км 593): ск. 35 км/ч, путь 350 м.<br>
-                            • <b>Стр. 6 (Орша — Минск):</b> Для вывозных, передаточных, сборных поездов, ведомых тепловозами ЧМЭ3 (в/и), ТМЭ3 (в/и), М62 (в/и) на перегоне Бобр — Славное: ск. 55 км/ч, путь 500 м.<br>
-                            • <b>Стр. 7 (Орша — Минск продолжение):</b> Славное — Бобр: ск. 55 км/ч, путь 500 м; Крупки — Приямино: ск. 45 км/ч, путь 350 м; Приямино — Новосады: ск. 45 км/ч, путь 400 м; Новосады — Борисов: ск. 45 км/ч, путь 400 м; Смолевичи — Городище: ск. 40 км/ч, путь 350 м; Колодищи — Озерище: ск. 40 км/ч, путь 300 м; Озерище — Степянка: ск. 40 км/ч, путь 350 м.<br>
-                            • <b>Стр. 7 (Барановичи — Брест):</b> Для вывозных, передаточных, сборных поездов, ведомых тепловозами ЧМЭ3, в указанных местах производить проверку действия тормозов со скоростью 30 км/ч, тормозной путь 300 м.<br>
-                            • <b>Стр. 8 (Брест — Барановичи):</b> Для вывозных, передаточных, сборных поездов, ведомых тепловозами ЧМЭ3, в указанных местах производить проверку действия тормозов со скоростью 30 км/ч, тормозной путь 300 м.<br>
-                            • <b>Стр. 8 (Молодечно — Минск):</b> При отправлении с 13-го пути станции Помыслище скорость проверки — 30 км/ч, тормозной путь 300 м; Помыслище — Минск-Сорт: ск. 40 км/ч, путь 400 м.<br>
-                            • <b>Стр. 9 (Дегтяревка — Крыжовка):</b> На перегоне Дегтяревка — Крыжовка на 54 км локомотивным бригадам нечетных поездов производить проверку действия тормозов независимо от ранее произведенной проверки при скорости не менее 40 км/ч.<br>
-                            • <b>Стр. 10 (Жлобин — Осиповичи):</b> Жлобин-Сорт. — Жлобин-Зап.: для грузовых поездов на тепловозной тяге (ск. 40 км/ч, путь 250 м).<br>
-                            • <b>Стр. 10 (Колодищи — Колядичи через Шабаны):</b> На участке Колодищи — Колядичи (через Шабаны) для вывозных, передаточных, сборных поездов, ведомых тепловозами ЧМЭ3(в/и), ТМЭ3(в/и) на перегоне Шабаны — Гатово проверку действия тормозов производить при скорости 25 км/ч на 15 км 8 пк, тормозной путь 250 м.<br>
-                            • <b>Стр. 10 (Колядичи — Колодищи через Шабаны):</b> На участке Колядичи — Колодищи (через Шабаны) для вывозных, передаточных, сборных поездов, ведомых тепловозами ЧМЭ3(в/и), ТМЭ3(в/и) на перегоне Гатово — Шабаны проверку действия тормозов производить при скорости 25 км/ч на 20 км 5 пк, тормозной путь 250 м.
                         </div>
                     </div>
                 </div>
 
-                <!-- БЛОК 2: ПАССАЖИРСКИЕ -->
+                <!-- Пассажирские пробы -->
                 <div id="brakeSub-passenger" class="brake-sub-content">
+                    <div class="card" style="margin-bottom: 12px; padding: 10px;">
+                        <div class="input-group" style="margin-bottom: 0;">
+                            <label for="passengerBrakeSearch" style="font-weight: 600; color: var(--tg-theme-button-color);">🔍 Поиск по нормативам (пасс.):</label>
+                            <input type="text" id="passengerBrakeSearch" placeholder="Например: полная, сокращенная, ЭПТ" oninput="filterPassengerBrakes(this.value)" style="margin-top: 4px;">
+                        </div>
+                    </div>
+
                     <div class="card">
-                        <p style="font-size: 13px; color: var(--tg-theme-hint-color);">Здесь будут размещены данные, таблицы и нормативы для опробования автотормозов пассажирских поездов.</p>
+                        <h3 style="margin-top: 0; font-size: 14px; color: var(--tg-theme-button-color);">💡 Экспресс-расчёт пассажирских проб</h3>
+                        <div class="input-group">
+                            <label>Тип проверки тормозов:</label>
+                            <select id="passTrialType" onchange="togglePassTrialMode()">
+                                <option value="full">Полная проверка</option>
+                                <option value="short">Сокращенная проверка</option>
+                                <option value="density">Проверка плотности</option>
+                            </select>
+                        </div>
+                        <div class="input-group" id="passCarsGroup">
+                            <label>Количество вагонов:</label>
+                            <input type="number" id="passCarsCount" value="15" min="1" max="30">
+                        </div>
+                        <button class="calc-btn" onclick="calculatePassTrialNorm()">Проверить норматив</button>
+                        <div class="result-box" id="passTrialResult" style="display: none; margin-top: 10px;"></div>
+                    </div>
+
+                    <div class="brake-card pass-brake-card" data-keywords="полная проверка эпт электоропневматические автотормоза">
+                        <div class="brake-card-title"><span>Полное опробование автотормозов (пассажирские)</span></div>
+                        <div class="brake-card-content" style="display: block; border-top: none; padding-top: 0;">
+                            • Проверка действия ЭПТ на каждые два вагона с хвоста при отправлении с начальных станций.<br>
+                            • Убедиться в отпуске тормозов всех вагонов.
+                        </div>
+                    </div>
+
+                    <div class="brake-card pass-brake-card" data-keywords="сокращенная проверка хвост конец">
+                        <div class="brake-card-title"><span>Сокращенное опробование тормозов</span></div>
+                        <div class="brake-card-content" style="display: block; border-top: none; padding-top: 0;">
+                            • Выполняется после прицепки локомотива, смены бригад, при стоянке более 20 минут.<br>
+                            • Проверяется действие автотормозов двух хвостовых вагонов.
+                        </div>
+                    </div>
+                    <div id="noPassBrakesMatch" style="display: none; text-align: center; padding: 12px; font-size: 12px; color: var(--tg-theme-hint-color);">
+                        Ничего не найдено
                     </div>
                 </div>
             </div>
 
-            <!-- Подпункт 3: Рельеф пути -->
             <div id="sub-relief" class="sub-section">
                 <div class="card">
-                    <p style="font-size: 13px; color: var(--tg-theme-hint-color);">Здесь будут памятки по затяжным спускам, профилю и сложным участкам.</p>
+                    <p style="font-size: 13px; color: var(--tg-theme-hint-color);">Здесь будут памятки по затяжным спускам и профилю пути.</p>
                 </div>
             </div>
         </div>
@@ -773,10 +633,35 @@
             <p style="font-size: 13px; color: var(--tg-theme-hint-color);">Раздел в разработке.</p>
         </div>
 
-        <!-- РАЗДЕЛ 4: Заметки -->
+        <!-- РАЗДЕЛ 4: Заметки (С фото и текстом) -->
         <div id="section-notes" class="content-section">
             <h2>Заметки</h2>
-            <p style="font-size: 13px; color: var(--tg-theme-hint-color);">Раздел в разработке.</p>
+            
+            <div class="card">
+                <input type="hidden" id="noteEditingId" value="">
+                <div class="input-group">
+                    <label>Текст заметки:</label>
+                    <textarea id="noteTextContent" placeholder="Введите текст, памятку или важную информацию..."></textarea>
+                </div>
+                
+                <div class="input-group">
+                    <label>Прикрепить фото:</label>
+                    <input type="file" id="noteImageInput" accept="image/*" style="font-size: 12px; padding: 6px;">
+                </div>
+                
+                <div id="noteImagePreviewContainer" style="display: none; margin-bottom: 10px; position: relative;">
+                    <img id="noteImagePreview" src="" alt="Превью" style="max-width: 100%; max-height: 150px; border-radius: 8px; display: block;">
+                    <button type="button" onclick="clearNoteImage()" style="position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 12px;">✕</button>
+                </div>
+
+                <button class="calc-btn" id="saveNoteBtn" onclick="saveNote()">Сохранить заметку</button>
+                <button class="cancel-edit-btn" id="cancelNoteEditBtn" onclick="cancelNoteEdit()" style="display: none; width: 100%; padding: 8px; background-color: #888888; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px; margin-top: 6px;">Отменить редактирование</button>
+            </div>
+
+            <div class="history-header">
+                <h2>Сохраненные заметки</h2>
+            </div>
+            <div class="history-list" id="notesList"></div>
         </div>
     </main>
 
@@ -808,7 +693,7 @@
             let targetSection = document.getElementById('section-' + sectionId);
             if (targetSection) targetSection.classList.add('active');
 
-            let activeBtn = document.querySelector(`button[onclick="showSection('${sectionId}')"]`);
+            let activeBtn = document.querySelector(`.nav-btn[onclick="showSection('${sectionId}')"]`);
             if (activeBtn) activeBtn.classList.add('active');
             
             if (tg && tg.HapticFeedback) {
@@ -823,7 +708,7 @@
             let targetSub = document.getElementById('sub-' + subId);
             if (targetSub) targetSub.classList.add('active');
 
-            let activeSubBtn = document.querySelector(`button[onclick="showSubSection('${subId}')"]`);
+            let activeSubBtn = document.querySelector(`.sub-nav-btn[onclick="showSubSection('${subId}')"]`);
             if (activeSubBtn) activeSubBtn.classList.add('active');
 
             if (tg && tg.HapticFeedback) {
@@ -831,7 +716,6 @@
             }
         }
 
-        // Функция переключения внутренних подпунктов проб тормозов (Грузовые / Пассажирские)
         function showBrakeSub(subType) {
             document.querySelectorAll('.brake-sub-content').forEach(content => content.classList.remove('active'));
             document.querySelectorAll('.brake-sub-btn').forEach(btn => btn.classList.remove('active'));
@@ -839,7 +723,7 @@
             let targetContent = document.getElementById('brakeSub-' + subType);
             if (targetContent) targetContent.classList.add('active');
 
-            let activeBtn = document.querySelector(`button[onclick="showBrakeSub('${subType}')"]`);
+            let activeBtn = document.querySelector(`.brake-sub-btn[onclick="showBrakeSub('${subType}')"]`);
             if (activeBtn) activeBtn.classList.add('active');
 
             if (tg && tg.HapticFeedback) {
@@ -847,6 +731,7 @@
             }
         }
 
+        // Фильтр грузовых проб
         function filterBrakesTable(query) {
             let filter = query.toLowerCase().trim();
             let table = document.getElementById('brakesTable');
@@ -858,9 +743,7 @@
 
             for (let i = 1; i < rows.length; i++) {
                 let row = rows[i];
-                if (row.classList.contains('route-group')) {
-                    // skip group header temporarily
-                } else if (row.classList.contains('brake-row')) {
+                if (!row.classList.contains('route-group') && row.classList.contains('brake-row')) {
                     let text = row.textContent.toLowerCase();
                     if (filter === '' || text.includes(filter)) {
                         row.style.display = '';
@@ -870,34 +753,51 @@
                     }
                 }
             }
-
-            if (filter !== '') {
-                let currentGroupHasVisible = false;
-                let groupRowToToggle = null;
-
-                for (let i = 1; i < rows.length; i++) {
-                    let row = rows[i];
-                    if (row.classList.contains('route-group')) {
-                        if (groupRowToToggle) {
-                            groupRowToToggle.style.display = currentGroupHasVisible ? '' : 'none';
-                        }
-                        groupRowToToggle = row;
-                        currentGroupHasVisible = false;
-                    } else if (row.classList.contains('brake-row')) {
-                        if (row.style.display !== 'none') {
-                            currentGroupHasVisible = true;
-                        }
-                    }
-                }
-                if (groupRowToToggle) {
-                    groupRowToToggle.style.display = currentGroupHasVisible ? '' : 'none';
-                }
-            } else {
-                for (let i = 1; i < rows.length; i++) {
-                    rows[i].style.display = '';
-                }
+            if (noMatchEl) {
+                noMatchEl.style.display = (matchCount === 0 && filter !== '') ? 'block' : 'none';
             }
+        }
 
+        // Логика пассажирских проб
+        function togglePassTrialMode() {
+            let mode = document.getElementById('passTrialType').value;
+            let carsGroup = document.getElementById('passCarsGroup');
+            carsGroup.style.display = (mode === 'density') ? 'none' : 'block';
+        }
+
+        function calculatePassTrialNorm() {
+            let type = document.getElementById('passTrialType').value;
+            let cars = parseInt(document.getElementById('passCarsCount').value) || 15;
+            let resBox = document.getElementById('passTrialResult');
+            if (!resBox) return;
+            resBox.style.display = 'block';
+
+            if (type === 'full') {
+                resBox.innerHTML = `<strong>Полная проверка (${cars} ваг.):</strong><br>• Проверка ЭПТ/автотормозов по всей длине состава.<br>• Контроль отпуска хвостового вагона.`;
+            } else if (type === 'short') {
+                resBox.innerHTML = `<strong>Сокращенная проверка (${cars} ваг.):</strong><br>• Проверка торможения и отпуска <b>2-х хвостовых вагонов</b>.`;
+            } else {
+                resBox.innerHTML = `<strong>Плотность тормозной сети:</strong><br>• Фиксация времени падения давления при закрытом кране машиниста.`;
+            }
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+        }
+
+        function filterPassengerBrakes(query) {
+            let filter = query.toLowerCase().trim();
+            let cards = document.querySelectorAll('.pass-brake-card');
+            let noMatchEl = document.getElementById('noPassBrakesMatch');
+            let matchCount = 0;
+
+            cards.forEach(card => {
+                let keywords = card.getAttribute('data-keywords') || '';
+                let text = card.textContent.toLowerCase();
+                if (filter === '' || text.includes(filter) || keywords.includes(filter)) {
+                    card.style.display = 'block';
+                    matchCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
             if (noMatchEl) {
                 noMatchEl.style.display = (matchCount === 0 && filter !== '') ? 'block' : 'none';
             }
@@ -922,25 +822,12 @@
                 btnList.classList.remove('active');
                 renderCalendar();
             }
-
-            if (tg && tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('light');
-            }
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         }
 
-        let shifts = [];
-        try {
-            shifts = JSON.parse(localStorage.getItem('my_shifts')) || [];
-        } catch (e) {
-            shifts = [];
-        }
-
-        let norms = {};
-        try {
-            norms = JSON.parse(localStorage.getItem('my_month_norms')) || {};
-        } catch (e) {
-            norms = {};
-        }
+        // Хранилище смен и норм
+        let shifts = JSON.parse(localStorage.getItem('my_shifts')) || [];
+        let norms = JSON.parse(localStorage.getItem('my_month_norms')) || {};
         
         updateMonthFilterOptions();
         updateHistoryUI();
@@ -955,11 +842,10 @@
             let noteEl = document.getElementById('shiftNote');
 
             if (!dateEl.value || !startEl.value || !endEl.value) {
-                alert("Пожалуйста, заполните дату, время начала и окончания смены!");
+                alert("Заполните дату, время начала и окончания!");
                 return;
             }
 
-            let date = dateEl.value;
             let [sH, sM] = startEl.value.split(':').map(Number);
             let [eH, eM] = endEl.value.split(':').map(Number);
             let passengerH = parseFloat(passengerEl.value) || 0;
@@ -968,15 +854,9 @@
 
             let startMin = sH * 60 + sM;
             let endMin = eH * 60 + eM;
+            if (endMin < startMin) endMin += 24 * 60;
 
-            if (endMin < startMin) {
-                endMin += 24 * 60;
-            }
-
-            let baseMin = (endMin - startMin);
-            let baseHours = baseMin / 60;
-            let totalHours = baseHours + passengerH + restH;
-
+            let totalHours = ((endMin - startMin) / 60) + passengerH + restH;
             let editId = editingIdEl.value;
 
             if (editId) {
@@ -984,36 +864,30 @@
                 if (index !== -1) {
                     shifts[index] = {
                         id: parseInt(editId),
-                        date: date,
+                        date: dateEl.value,
                         startTime: startEl.value,
                         endTime: endEl.value,
                         passenger: passengerH.toFixed(2),
                         rest: restH.toFixed(2),
-                        base: baseHours.toFixed(2),
                         hours: totalHours.toFixed(2),
                         note: noteText
                     };
                 }
                 cancelEdit();
             } else {
-                let shiftData = {
+                shifts.unshift({
                     id: Date.now(),
-                    date: date,
+                    date: dateEl.value,
                     startTime: startEl.value,
                     endTime: endEl.value,
                     passenger: passengerH.toFixed(2),
                     rest: restH.toFixed(2),
-                    base: baseHours.toFixed(2),
                     hours: totalHours.toFixed(2),
                     note: noteText
-                };
-                shifts.unshift(shiftData);
+                });
             }
             
-            try {
-                localStorage.setItem('my_shifts', JSON.stringify(shifts));
-            } catch (e) {}
-
+            localStorage.setItem('my_shifts', JSON.stringify(shifts));
             noteEl.value = '';
 
             let resBox = document.getElementById('lastResult');
@@ -1021,16 +895,12 @@
                 resBox.style.display = 'block';
                 let hInt = Math.floor(totalHours);
                 let mInt = Math.round((totalHours - hInt) * 60);
-                resBox.innerHTML = `Успешно сохранено!<br>Итого за смену: <b>${hInt} ч. ${mInt} мин.</b> (${totalHours.toFixed(2)} ч.)`;
+                resBox.innerHTML = `Успешно сохранено!<br>Итого за смену: <b>${hInt} ч. ${mInt} мин.</b>`;
             }
 
-            let shiftMonth = date.substring(0, 7);
-            updateMonthFilterOptions(shiftMonth);
+            updateMonthFilterOptions(dateEl.value.substring(0, 7));
             updateHistoryUI();
-            
-            if (tg && tg.HapticFeedback) {
-                tg.HapticFeedback.notificationOccurred('success');
-            }
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
         }
 
         window.editShift = function(id) {
@@ -1047,12 +917,7 @@
 
             document.getElementById('saveBtn').textContent = 'Сохранить изменения';
             document.getElementById('cancelBtn').style.display = 'block';
-
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            
-            if (tg && tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('medium');
-            }
         }
 
         window.cancelEdit = function() {
@@ -1060,21 +925,13 @@
             document.getElementById('saveBtn').textContent = 'Рассчитать и сохранить';
             document.getElementById('cancelBtn').style.display = 'none';
             document.getElementById('shiftNote').value = '';
-            
-            let today = new Date().toISOString().split('T')[0];
-            document.getElementById('shiftDate').value = today;
+            document.getElementById('shiftDate').value = new Date().toISOString().split('T')[0];
         }
 
         window.deleteShift = function(id) {
-            let editingIdEl = document.getElementById('editingId');
-            if (editingIdEl && editingIdEl.value == id) {
-                cancelEdit();
-            }
-
+            if (document.getElementById('editingId').value == id) cancelEdit();
             shifts = shifts.filter(s => s.id !== id);
-            try {
-                localStorage.setItem('my_shifts', JSON.stringify(shifts));
-            } catch (e) {}
+            localStorage.setItem('my_shifts', JSON.stringify(shifts));
             updateMonthFilterOptions();
             updateHistoryUI();
         }
@@ -1082,64 +939,34 @@
         function updateMonthFilterOptions(selectMonth = null) {
             let filterEl = document.getElementById('monthFilter');
             if (!filterEl) return;
-
             let currentSelection = selectMonth || filterEl.value;
 
             let monthsSet = new Set();
-            shifts.forEach(s => {
-                if (s.date && s.date.length >= 7) {
-                    monthsSet.add(s.date.substring(0, 7));
-                }
-            });
+            shifts.forEach(s => { if (s.date) monthsSet.add(s.date.substring(0, 7)); });
 
             let monthsArray = Array.from(monthsSet).sort().reverse();
             let currentMonthStr = new Date().toISOString().substring(0, 7);
-            if (!monthsArray.includes(currentMonthStr)) {
-                monthsArray.unshift(currentMonthStr);
-            }
+            if (!monthsArray.includes(currentMonthStr)) monthsArray.unshift(currentMonthStr);
 
-            filterEl.innerHTML = '';
-            
-            let optAll = document.createElement('option');
-            optAll.value = 'ALL';
-            optAll.textContent = 'За всё время';
-            filterEl.appendChild(optAll);
-
-            const monthNames = {
-                '01': 'Январь', '02': 'Февраль', '03': 'Март', '04': 'Апрель',
-                '05': 'Май', '06': 'Июнь', '07': 'Июль', '08': 'Август',
-                '09': 'Сентябрь', '10': 'Октябрь', '11': 'Ноябрь', '12': 'Декабрь'
-            };
+            filterEl.innerHTML = '<option value="ALL">За всё время</option>';
+            const monthNames = {'01':'Январь','02':'Февраль','03':'Март','04':'Апрель','05':'Май','06':'Июнь','07':'Июль','08':'Август','09':'Сентябрь','10':'Октябрь','11':'Ноябрь','12':'Декабрь'};
 
             monthsArray.forEach(m => {
+                let [y, mn] = m.split('-');
                 let opt = document.createElement('option');
                 opt.value = m;
-                let [year, monthNum] = m.split('-');
-                opt.textContent = `${monthNames[monthNum] || monthNum} ${year}`;
+                opt.textContent = `${monthNames[mn] || mn} ${y}`;
                 filterEl.appendChild(opt);
             });
-
-            if (currentSelection && Array.from(filterEl.options).some(o => o.value === currentSelection)) {
-                filterEl.value = currentSelection;
-            } else {
-                filterEl.value = currentMonthStr;
-            }
+            filterEl.value = currentSelection && filterEl.querySelector(`option[value="${currentSelection}"]`) ? currentSelection : currentMonthStr;
         }
 
-        function onMonthFilterChange() {
-            updateHistoryUI();
-        }
-
+        function onMonthFilterChange() { updateHistoryUI(); }
         function saveNormForCurrentMonth(val) {
-            let filterEl = document.getElementById('monthFilter');
-            if (!filterEl) return;
-            let selectedMonth = filterEl.value;
-            if (selectedMonth === 'ALL') return;
-
-            norms[selectedMonth] = parseFloat(val) || 0;
-            try {
-                localStorage.setItem('my_month_norms', JSON.stringify(norms));
-            } catch (e) {}
+            let m = document.getElementById('monthFilter').value;
+            if (m === 'ALL') return;
+            norms[m] = parseFloat(val) || 0;
+            localStorage.setItem('my_month_norms', JSON.stringify(norms));
             updateHistoryUI();
         }
 
@@ -1149,147 +976,243 @@
             let filterEl = document.getElementById('monthFilter');
             let normBlock = document.getElementById('normBlock');
             let normInput = document.getElementById('monthNormInput');
-            
             if (!listEl || !summaryEl) return;
-            
+
             let selectedMonth = filterEl ? filterEl.value : 'ALL';
-            
             if (selectedMonth === 'ALL') {
                 if (normBlock) normBlock.style.display = 'none';
             } else {
                 if (normBlock) normBlock.style.display = 'flex';
-                let currentNorm = norms[selectedMonth] !== undefined ? norms[selectedMonth] : 160;
-                if (normInput) normInput.value = currentNorm;
+                if (normInput) normInput.value = norms[selectedMonth] !== undefined ? norms[selectedMonth] : 160;
             }
-            
+
             listEl.innerHTML = '';
-            
-            let totalH = 0;
-            let visibleCount = 0;
+            let totalH = 0, visibleCount = 0;
 
             shifts.forEach(s => {
-                let shiftMonth = s.date ? s.date.substring(0, 7) : '';
-                let matchesFilter = (selectedMonth === 'ALL' || shiftMonth === selectedMonth);
-
-                if (matchesFilter) {
+                let matches = (selectedMonth === 'ALL' || (s.date && s.date.startsWith(selectedMonth)));
+                if (matches) {
                     totalH += parseFloat(s.hours) || 0;
                     visibleCount++;
-
                     let hNum = parseFloat(s.hours) || 0;
-                    let hInt = Math.floor(hNum);
-                    let mInt = Math.round((hNum - hInt) * 60);
-
-                    let detailsText = '';
-                    let pass = parseFloat(s.passenger) || 0;
-                    let rst = parseFloat(s.rest) || 0;
-                    if (pass > 0 || rst > 0) {
-                        detailsText += `<br><span style="font-size: 11px; color: var(--tg-theme-hint-color);">Пасс: ${pass}ч. | Отдых: ${rst}ч.</span>`;
-                    }
-                    if (s.note && s.note.trim() !== '') {
-                        detailsText += `<br><span style="font-size: 11px; color: var(--tg-theme-button-color);">📝 ${s.note}</span>`;
-                    }
+                    let hInt = Math.floor(hNum), mInt = Math.round((hNum - hInt) * 60);
+                    let details = s.note ? `<br><span style="color:var(--tg-theme-button-color);">📝 ${s.note}</span>` : '';
 
                     let item = document.createElement('div');
                     item.className = 'history-item';
                     item.innerHTML = `
-                        <div style="flex: 1; padding-right: 8px;">
-                            <strong>${s.date}</strong><br>
-                            ⏱ <b>${hInt} ч. ${mInt} мин.</b> (${hNum.toFixed(2)} ч.)${detailsText}
-                        </div>
+                        <div style="flex:1;"><strong>${s.date}</strong><br>⏱ <b>${hInt} ч. ${mInt} мин.</b>${details}</div>
                         <div class="action-btns">
-                            <button class="action-btn edit-btn" onclick="editShift(${s.id})" title="Редактировать">✏️</button>
-                            <button class="action-btn delete-btn" onclick="deleteShift(${s.id})" title="Удалить">🗑</button>
-                        </div>
-                    `;
+                            <button class="action-btn edit-btn" onclick="editShift(${s.id})">✏️</button>
+                            <button class="action-btn delete-btn" onclick="deleteShift(${s.id})">🗑</button>
+                        </div>`;
                     listEl.appendChild(item);
                 }
             });
 
-            if (visibleCount === 0) {
-                listEl.innerHTML = '<p style="font-size:12px; color:var(--tg-theme-hint-color); text-align:center; padding: 10px;">Нет смен за выбранный период</p>';
-            }
+            if (visibleCount === 0) listEl.innerHTML = '<p style="font-size:12px; color:var(--tg-theme-hint-color); text-align:center;">Нет смен за период</p>';
 
             if (selectedMonth === 'ALL') {
                 summaryEl.innerHTML = `Всего отработано: <b>${totalH.toFixed(2)} ч.</b>`;
             } else {
-                let currentNorm = norms[selectedMonth] !== undefined ? norms[selectedMonth] : 160;
-                let diff = totalH - currentNorm;
+                let norm = norms[selectedMonth] !== undefined ? norms[selectedMonth] : 160;
+                let diff = totalH - norm;
                 let diffStr = diff >= 0 ? `+${diff.toFixed(2)} ч. (переработка)` : `${diff.toFixed(2)} ч. (недоработка)`;
                 if (Math.abs(diff) < 0.01) diffStr = 'Норма выполнена';
-
-                summaryEl.innerHTML = `Отработано: <b>${totalH.toFixed(2)} ч.</b> из <b>${currentNorm} ч.</b><br>Баланс: <b>${diffStr}</b>`;
+                summaryEl.innerHTML = `Отработано: <b>${totalH.toFixed(2)} ч.</b> из <b>${norm} ч.</b><br>Баланс: <b>${diffStr}</b>`;
             }
-
-            if (currentViewMode === 'calendar') {
-                renderCalendar();
-            }
+            if (currentViewMode === 'calendar') renderCalendar();
         }
 
         function renderCalendar() {
             let gridEl = document.getElementById('calendarGrid');
-            let filterEl = document.getElementById('monthFilter');
-            if (!gridEl || !filterEl) return;
-
-            let selectedMonth = filterEl.value;
-            if (selectedMonth === 'ALL') {
-                selectedMonth = new Date().toISOString().substring(0, 7);
-            }
+            let selectedMonth = document.getElementById('monthFilter').value;
+            if (!gridEl) return;
+            if (selectedMonth === 'ALL') selectedMonth = new Date().toISOString().substring(0, 7);
 
             let [year, month] = selectedMonth.split('-').map(Number);
-            
             gridEl.innerHTML = '';
-
-            const weekdays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-            weekdays.forEach(wd => {
+            ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].forEach(wd => {
                 let div = document.createElement('div');
                 div.className = 'calendar-weekday';
                 div.textContent = wd;
                 gridEl.appendChild(div);
             });
 
-            let firstDayIndex = new Date(year, month - 1, 1).getDay();
-            firstDayIndex = firstDayIndex === 0 ? 7 : firstDayIndex;
+            let firstDay = (new Date(year, month - 1, 1).getDay() || 7) - 1;
             let daysInMonth = new Date(year, month, 0).getDate();
 
-            for (let i = 1; i < firstDayIndex; i++) {
-                let emptyDiv = document.createElement('div');
-                emptyDiv.className = 'calendar-day empty';
-                gridEl.appendChild(emptyDiv);
+            for (let i = 0; i < firstDay; i++) {
+                let empty = document.createElement('div');
+                empty.className = 'calendar-day empty';
+                gridEl.appendChild(empty);
             }
 
-            let monthShiftsMap = {};
+            let monthMap = {};
             shifts.forEach(s => {
                 if (s.date && s.date.startsWith(selectedMonth)) {
-                    let dayNum = parseInt(s.date.split('-')[2]);
-                    if (!monthShiftsMap[dayNum]) monthShiftsMap[dayNum] = [];
-                    monthShiftsMap[dayNum].push(s);
+                    let d = parseInt(s.date.split('-')[2]);
+                    if (!monthMap[d]) monthMap[d] = [];
+                    monthMap[d].push(s);
                 }
             });
 
             for (let day = 1; day <= daysInMonth; day++) {
                 let dayDiv = document.createElement('div');
                 dayDiv.className = 'calendar-day';
-
-                let dayShifts = monthShiftsMap[day] || [];
-                
+                let dayShifts = monthMap[day] || [];
                 if (dayShifts.length > 0) {
                     dayDiv.classList.add('has-shift');
-                    let sumDayHours = dayShifts.reduce((acc, s) => acc + (parseFloat(s.hours) || 0), 0);
-                    
-                    dayDiv.innerHTML = `<span>${day}</span><span class="calendar-day-hours">${sumDayHours.toFixed(1)}ч</span>`;
-                    
-                    dayDiv.onclick = function() {
-                        editShift(dayShifts[0].id);
-                        switchSection('calc');
-                        switchView('list');
-                    };
+                    let sum = dayShifts.reduce((acc, s) => acc + (parseFloat(s.hours) || 0), 0);
+                    dayDiv.innerHTML = `<span>${day}</span><span class="calendar-day-hours">${sum.toFixed(1)}ч</span>`;
+                    dayDiv.onclick = () => { editShift(dayShifts[0].id); switchSection('calc'); switchView('list'); };
                 } else {
                     dayDiv.textContent = day;
                 }
-
                 gridEl.appendChild(dayDiv);
             }
         }
+
+        // РАЗДЕЛ ЗАМЕТОК С ФОТО И ЛОКАЛСТОРАДЖЕМ
+        let notes = JSON.parse(localStorage.getItem('my_notes')) || [];
+        let currentNoteImageBase64 = '';
+
+        document.getElementById('noteImageInput').addEventListener('change', function(event) {
+            let file = event.target.files[0];
+            if (!file) return;
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                currentNoteImageBase64 = e.target.result;
+                document.getElementById('noteImagePreview').src = currentNoteImageBase64;
+                document.getElementById('noteImagePreviewContainer').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function clearNoteImage() {
+            currentNoteImageBase64 = '';
+            document.getElementById('noteImageInput').value = '';
+            document.getElementById('noteImagePreviewContainer').style.display = 'none';
+            document.getElementById('noteImagePreview').src = '';
+        }
+
+        function saveNote() {
+            let textEl = document.getElementById('noteTextContent');
+            let editIdEl = document.getElementById('noteEditingId');
+            let text = textEl.value.trim();
+
+            if (!text && !currentNoteImageBase64) {
+                alert("Заметка пуста! Добавьте текст или фото.");
+                return;
+            }
+
+            let editId = editIdEl.value;
+            let now = new Date();
+            let dateStr = now.toLocaleDateString('ru-RU') + ' ' + now.toLocaleTimeString('ru-RU', {hour: '2-digit', minute:'2-digit'});
+
+            if (editId) {
+                let index = notes.findIndex(n => n.id == editId);
+                if (index !== -1) {
+                    notes[index].text = text;
+                    if (currentNoteImageBase64) notes[index].image = currentNoteImageBase64;
+                    notes[index].date = dateStr + ' (ред.)';
+                }
+                cancelNoteEdit();
+            } else {
+                notes.unshift({
+                    id: Date.now(),
+                    text: text,
+                    image: currentNoteImageBase64,
+                    date: dateStr
+                });
+                textEl.value = '';
+                clearNoteImage();
+            }
+
+            try {
+                localStorage.setItem('my_notes', JSON.stringify(notes));
+            } catch (e) {
+                alert("Ошибка сохранения: файл изображения слишком большой.");
+            }
+            updateNotesUI();
+            if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+        }
+
+        function updateNotesUI() {
+            let listEl = document.getElementById('notesList');
+            if (!listEl) return;
+            listEl.innerHTML = '';
+
+            if (notes.length === 0) {
+                listEl.innerHTML = '<p style="font-size:12px; color:var(--tg-theme-hint-color); text-align:center;">Нет заметок</p>';
+                return;
+            }
+
+            notes.forEach(note => {
+                let item = document.createElement('div');
+                item.className = 'note-card';
+                let imgHtml = note.image ? `<img src="${note.image}" class="note-card-img" onclick="showFullImage('${note.image}')">` : '';
+                let textHtml = note.text ? `<div class="note-card-text">${escapeHtml(note.text)}</div>` : '';
+
+                item.innerHTML = `
+                    ${textHtml}
+                    ${imgHtml}
+                    <div class="note-card-footer">
+                        <span>${note.date}</span>
+                        <div class="action-btns">
+                            <button class="action-btn edit-btn" onclick="editNote(${note.id})">✏️</button>
+                            <button class="action-btn delete-btn" onclick="deleteNote(${note.id})">🗑</button>
+                        </div>
+                    </div>`;
+                listEl.appendChild(item);
+            });
+        }
+
+        function escapeHtml(text) {
+            let map = {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'};
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        window.editNote = function(id) {
+            let note = notes.find(n => n.id == id);
+            if (!note) return;
+
+            document.getElementById('noteEditingId').value = note.id;
+            document.getElementById('noteTextContent').value = note.text || '';
+            if (note.image) {
+                currentNoteImageBase64 = note.image;
+                document.getElementById('noteImagePreview').src = note.image;
+                document.getElementById('noteImagePreviewContainer').style.display = 'block';
+            } else {
+                clearNoteImage();
+            }
+
+            document.getElementById('saveNoteBtn').textContent = 'Сохранить изменения';
+            document.getElementById('cancelNoteEditBtn').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.cancelNoteEdit = function() {
+            document.getElementById('noteEditingId').value = '';
+            document.getElementById('noteTextContent').value = '';
+            clearNoteImage();
+            document.getElementById('saveNoteBtn').textContent = 'Сохранить заметку';
+            document.getElementById('cancelNoteEditBtn').style.display = 'none';
+        }
+
+        window.deleteNote = function(id) {
+            if (document.getElementById('noteEditingId').value == id) cancelNoteEdit();
+            notes = notes.filter(n => n.id !== id);
+            localStorage.setItem('my_notes', JSON.stringify(notes));
+            updateNotesUI();
+        }
+
+        function showFullImage(src) {
+            let w = window.open("");
+            w.document.write(`<img src="${src}" style="max-width:100%; height:auto; display:block; margin:auto;">`);
+        }
+
+        updateNotesUI();
     </script>
 </body>
 </html>
