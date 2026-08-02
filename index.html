@@ -1415,17 +1415,21 @@ const imageModal = document.getElementById('imageModal');
 const fullSizeImage = document.getElementById('fullSizeImage');
 const closeModal = document.querySelector('.close-image-modal');
 
-// Находим контейнер, где выводятся все заметки (замените 'notesContainer' на ID вашего контейнера, если он называется иначе)
-const notesContainer = document.getElementById('notesContainer'); // или ваш актуальный ID блока с заметками
+// Убедитесь, что здесь указан правильный ID вашего контейнера с заметками
+const notesContainer = document.getElementById('notesContainer'); 
 
-// Обработка клика по картинке внутри заметки
+// Универсальная функция открытия картинки
+function openFullImage(event) {
+  if (event.target.tagName === 'IMG' && event.target.classList.contains('note-image')) {
+    imageModal.style.display = 'block';
+    fullSizeImage.src = event.target.src;
+  }
+}
+
+// Слушаем и клики (для ПК), и касания (для телефонов)
 if (notesContainer) {
-  notesContainer.addEventListener('click', function(event) {
-    if (event.target.tagName === 'IMG' && event.target.classList.contains('note-image')) {
-      imageModal.style.display = 'block';
-      fullSizeImage.src = event.target.src;
-    }
-  });
+  notesContainer.addEventListener('click', openFullImage);
+  notesContainer.addEventListener('touchstart', openFullImage);
 }
 
 // Закрытие по крестику
@@ -1433,6 +1437,24 @@ if (closeModal) {
   closeModal.addEventListener('click', function() {
     imageModal.style.display = 'none';
   });
+  closeModal.addEventListener('touchstart', function() {
+    imageModal.style.display = 'none';
+  });
+}
+
+// Закрытие по клику/тапу на темный фон мимо картинки
+if (imageModal) {
+  imageModal.addEventListener('click', function(event) {
+    if (event.target === imageModal) {
+      imageModal.style.display = 'none';
+    }
+  });
+  imageModal.addEventListener('touchstart', function(event) {
+    if (event.target === imageModal) {
+      imageModal.style.display = 'none';
+    }
+  });
+}
 }
 
 // Закрытие по клику на темный фон мимо картинки
