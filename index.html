@@ -1249,6 +1249,7 @@
                 item.className = 'preview-item';
                 
                 let img = document.createElement('img');
+                img.className = 'note-image';
                 img.src = base64;
                 
                 let btn = document.createElement('button');
@@ -1409,6 +1410,39 @@
             let w = window.open("");
             w.document.write(`<body style="margin:0; background:#000; display:flex; align-items:center; justify-content:center; height:100vh;"><img src="${src}" style="max-width:100%; max-height:100vh; display:block;"></body>`);
         }
+        // Находим элементы нашего модального окна
+const imageModal = document.getElementById('imageModal');
+const fullSizeImage = document.getElementById('fullSizeImage');
+const closeModal = document.querySelector('.close-image-modal');
+
+// Находим контейнер, где выводятся все заметки (замените 'notesContainer' на ID вашего контейнера, если он называется иначе)
+const notesContainer = document.getElementById('notesContainer'); // или ваш актуальный ID блока с заметками
+
+// Обработка клика по картинке внутри заметки
+if (notesContainer) {
+  notesContainer.addEventListener('click', function(event) {
+    if (event.target.tagName === 'IMG' && event.target.classList.contains('note-image')) {
+      imageModal.style.display = 'block';
+      fullSizeImage.src = event.target.src;
+    }
+  });
+}
+
+// Закрытие по крестику
+if (closeModal) {
+  closeModal.addEventListener('click', function() {
+    imageModal.style.display = 'none';
+  });
+}
+
+// Закрытие по клику на темный фон мимо картинки
+if (imageModal) {
+  imageModal.addEventListener('click', function(event) {
+    if (event.target === imageModal) {
+      imageModal.style.display = 'none';
+    }
+  });
+}
     </script>
     <!-- Модальное окно для полноэкранного просмотра картинок -->
 <div id="imageModal" class="image-modal">
