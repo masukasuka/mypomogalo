@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>«Помогало»</title>
+    <!-- Скрипт Telegram Web App -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Скрипт localForage для работы с IndexedDB -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
     <style>
         :root {
             --tg-theme-bg-color: #ffffff;
@@ -403,7 +406,6 @@
             padding-top: 6px;
         }
 
-        /* Стили для заметок с фото */
         .note-card {
             background: var(--tg-theme-bg-color);
             border: 1px solid var(--tg-theme-hint-color, #ccc);
@@ -731,7 +733,6 @@
             }
         }
 
-        // Фильтр грузовых проб
         function filterBrakesTable(query) {
             let filter = query.toLowerCase().trim();
             let table = document.getElementById('brakesTable');
@@ -758,7 +759,6 @@
             }
         }
 
-        // Логика пассажирских проб
         function togglePassTrialMode() {
             let mode = document.getElementById('passTrialType').value;
             let carsGroup = document.getElementById('passCarsGroup');
@@ -825,7 +825,7 @@
             if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         }
 
-        // Хранилище смен и норм
+        // Хранилище смен и норм (Остается в localStorage, так как это легкий текст)
         let shifts = JSON.parse(localStorage.getItem('my_shifts')) || [];
         let norms = JSON.parse(localStorage.getItem('my_month_norms')) || {};
         
@@ -996,7 +996,7 @@
                     visibleCount++;
                     let hNum = parseFloat(s.hours) || 0;
                     let hInt = Math.floor(hNum), mInt = Math.round((hNum - hInt) * 60);
-                    let details = s.note ? `<br><span style="color:var(--tg-theme-button-color);">📝 ${s.note}</span>` : '';
+                    let details = s.note ? `<br><span style="color:var(--tg-theme-button-color);">📝 ${escapeHtml(s.note)}</span>` : '';
 
                     let item = document.createElement('div');
                     item.className = 'history-item';
@@ -1073,18 +1073,74 @@
             }
         }
 
-        // РАЗДЕЛ ЗАМЕТОК С ФОТО И ЛОКАЛСТОРАДЖЕМ
-        let notes = JSON.parse(localStorage.getItem('my_notes')) || [];
+        // ==========================================
+        // РАЗДЕЛ ЗАМЕТОК: INDEXEDDB + CANVAS СЖАТИЕ
+        // ==========================================
+        
+        let notes = [];
         let currentNoteImageBase64 = '';
 
+        // Настройка базы данных
+        localforage.config({
+            name: 'PomogaloApp',
+            storeName: 'notes_store'
+        });
+
+        // Загрузка заметок при старте
+        async function loadNotes() {
+            try {
+                let savedNotes = await localforage.getItem('my_notes');
+                if (savedNotes) {
+                    notes = savedNotes;
+                }
+                updateNotesUI();
+            } catch (e) {
+                console.error("Ошибка загрузки заметок:", e);
+            }
+        }
+        loadNotes();
+
+        // Сжатие фото через Canvas
         document.getElementById('noteImageInput').addEventListener('change', function(event) {
             let file = event.target.files[0];
             if (!file) return;
+
             let reader = new FileReader();
             reader.onload = function(e) {
-                currentNoteImageBase64 = e.target.result;
-                document.getElementById('noteImagePreview').src = currentNoteImageBase64;
-                document.getElementById('noteImagePreviewContainer').style.display = 'block';
+                let img = new Image();
+                img.onload = function() {
+                    let canvas = document.createElement('canvas');
+                    let ctx = canvas.getContext('2d');
+                    
+                    // Максимальный размер 1000px по бОльшей стороне (хорошее качество, малый вес)
+                    let maxW = 1000;
+                    let maxH = 1000;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > maxW) {
+                            height = Math.round(height *= maxW / width);
+                            width = maxW;
+                        }
+                    } else {
+                        if (height > maxH) {
+                            width = Math.round(width *= maxH / height);
+                            height = maxH;
+                        }
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Сжимаем в JPEG с качеством 70%
+                    currentNoteImageBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                    
+                    document.getElementById('noteImagePreview').src = currentNoteImageBase64;
+                    document.getElementById('noteImagePreviewContainer').style.display = 'block';
+                };
+                img.src = e.target.result;
             };
             reader.readAsDataURL(file);
         });
@@ -1096,7 +1152,7 @@
             document.getElementById('noteImagePreview').src = '';
         }
 
-        function saveNote() {
+        async function saveNote() {
             let textEl = document.getElementById('noteTextContent');
             let editIdEl = document.getElementById('noteEditingId');
             let text = textEl.value.trim();
@@ -1130,12 +1186,13 @@
             }
 
             try {
-                localStorage.setItem('my_notes', JSON.stringify(notes));
+                await localforage.setItem('my_notes', notes);
+                updateNotesUI();
+                if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
             } catch (e) {
-                alert("Ошибка сохранения: файл изображения слишком большой.");
+                alert("Ошибка сохранения.");
+                console.error(e);
             }
-            updateNotesUI();
-            if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
         }
 
         function updateNotesUI() {
@@ -1200,19 +1257,23 @@
             document.getElementById('cancelNoteEditBtn').style.display = 'none';
         }
 
-        window.deleteNote = function(id) {
-            if (document.getElementById('noteEditingId').value == id) cancelNoteEdit();
-            notes = notes.filter(n => n.id !== id);
-            localStorage.setItem('my_notes', JSON.stringify(notes));
-            updateNotesUI();
+        window.deleteNote = async function(id) {
+            if (confirm("Вы уверены, что хотите удалить эту заметку?")) {
+                if (document.getElementById('noteEditingId').value == id) cancelNoteEdit();
+                notes = notes.filter(n => n.id !== id);
+                try {
+                    await localforage.setItem('my_notes', notes);
+                    updateNotesUI();
+                } catch (e) {
+                    console.error("Ошибка при удалении:", e);
+                }
+            }
         }
 
         function showFullImage(src) {
             let w = window.open("");
             w.document.write(`<img src="${src}" style="max-width:100%; height:auto; display:block; margin:auto;">`);
         }
-
-        updateNotesUI();
     </script>
 </body>
 </html>
