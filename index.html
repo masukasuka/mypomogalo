@@ -1416,7 +1416,7 @@ const fullSizeImage = document.getElementById('fullSizeImage');
 const closeModal = document.querySelector('.close-image-modal');
 const notesContainer = document.getElementById('notesList'); 
 
-// Используем pointerdown — он срабатывает мгновенно и от касания пальцем, и от клика мыши
+// Открытие картинки по касанию (телефон) или клику (компьютер)
 if (notesContainer) {
   notesContainer.addEventListener('pointerdown', function(event) {
     if (event.target.tagName === 'IMG' && event.target.classList.contains('note-image')) {
@@ -1426,12 +1426,14 @@ if (notesContainer) {
   });
 }
 
+// Закрытие по крестику
 if (closeModal) {
   closeModal.addEventListener('pointerdown', function() {
     imageModal.style.display = 'none';
   });
 }
 
+// Закрытие по клику/тапу на темный фон
 if (imageModal) {
   imageModal.addEventListener('pointerdown', function(event) {
     if (event.target === imageModal) {
