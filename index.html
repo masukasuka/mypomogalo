@@ -420,13 +420,20 @@
             margin-bottom: 8px;
             color: var(--tg-theme-text-color);
         }
-        .note-card-img {
-            max-width: 100%;
-            max-height: 200px;
-            border-radius: 6px;
+        /* Стили галереи фото в заметках */
+        .note-gallery {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
             margin-bottom: 8px;
-            display: block;
+            padding-bottom: 4px;
+        }
+        .note-gallery img {
+            max-height: 120px;
+            border-radius: 6px;
             cursor: pointer;
+            flex-shrink: 0;
+            border: 1px solid rgba(0,0,0,0.1);
         }
         .note-card-footer {
             display: flex;
@@ -436,6 +443,40 @@
             color: var(--tg-theme-hint-color);
             border-top: 1px solid rgba(0,0,0,0.05);
             padding-top: 6px;
+        }
+
+        /* Стили превью в форме загрузки */
+        .preview-list {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 6px;
+        }
+        .preview-item {
+            position: relative;
+            flex-shrink: 0;
+        }
+        .preview-item img {
+            height: 100px;
+            border-radius: 6px;
+            display: block;
+            border: 1px solid var(--tg-theme-hint-color, #ccc);
+        }
+        .preview-remove-btn {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            font-size: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     </style>
 </head>
@@ -535,12 +576,11 @@
                     <button class="brake-sub-btn" onclick="showBrakeSub('passenger')">Пассажирские</button>
                 </div>
 
-                <!-- Грузовые пробы -->
                 <div id="brakeSub-cargo" class="brake-sub-content active">
                     <div class="card" style="margin-bottom: 12px; padding: 10px;">
                         <div class="input-group" style="margin-bottom: 0;">
                             <label for="brakeSearchInput" style="font-weight: 600; color: var(--tg-theme-button-color);">🔍 Быстрый поиск участка или станции:</label>
-                            <input type="text" id="brakeSearchInput" placeholder="Например: Фаниполь, Орша, Брест, Жлобин" oninput="filterBrakesTable(this.value)" style="margin-top: 4px;">
+                            <input type="text" id="brakeSearchInput" placeholder="Например: Фаниполь, Орша" oninput="filterBrakesTable(this.value)" style="margin-top: 4px;">
                         </div>
                     </div>
 
@@ -574,17 +614,16 @@
                     </div>
                 </div>
 
-                <!-- Пассажирские пробы -->
                 <div id="brakeSub-passenger" class="brake-sub-content">
                     <div class="card" style="margin-bottom: 12px; padding: 10px;">
                         <div class="input-group" style="margin-bottom: 0;">
                             <label for="passengerBrakeSearch" style="font-weight: 600; color: var(--tg-theme-button-color);">🔍 Поиск по нормативам (пасс.):</label>
-                            <input type="text" id="passengerBrakeSearch" placeholder="Например: полная, сокращенная, ЭПТ" oninput="filterPassengerBrakes(this.value)" style="margin-top: 4px;">
+                            <input type="text" id="passengerBrakeSearch" placeholder="Например: полная, сокращенная" oninput="filterPassengerBrakes(this.value)" style="margin-top: 4px;">
                         </div>
                     </div>
 
                     <div class="card">
-                        <h3 style="margin-top: 0; font-size: 14px; color: var(--tg-theme-button-color);">💡 Экспресс-расчёт пассажирских проб</h3>
+                        <h3 style="margin-top: 0; font-size: 14px; color: var(--tg-theme-button-color);">💡 Экспресс-расчёт</h3>
                         <div class="input-group">
                             <label>Тип проверки тормозов:</label>
                             <select id="passTrialType" onchange="togglePassTrialMode()">
@@ -602,9 +641,9 @@
                     </div>
 
                     <div class="brake-card pass-brake-card" data-keywords="полная проверка эпт электоропневматические автотормоза">
-                        <div class="brake-card-title"><span>Полное опробование автотормозов (пассажирские)</span></div>
+                        <div class="brake-card-title"><span>Полное опробование автотормозов</span></div>
                         <div class="brake-card-content" style="display: block; border-top: none; padding-top: 0;">
-                            • Проверка действия ЭПТ на каждые два вагона с хвоста при отправлении с начальных станций.<br>
+                            • Проверка действия ЭПТ на каждые два вагона с хвоста.<br>
                             • Убедиться в отпуске тормозов всех вагонов.
                         </div>
                     </div>
@@ -612,7 +651,6 @@
                     <div class="brake-card pass-brake-card" data-keywords="сокращенная проверка хвост конец">
                         <div class="brake-card-title"><span>Сокращенное опробование тормозов</span></div>
                         <div class="brake-card-content" style="display: block; border-top: none; padding-top: 0;">
-                            • Выполняется после прицепки локомотива, смены бригад, при стоянке более 20 минут.<br>
                             • Проверяется действие автотормозов двух хвостовых вагонов.
                         </div>
                     </div>
@@ -635,7 +673,7 @@
             <p style="font-size: 13px; color: var(--tg-theme-hint-color);">Раздел в разработке.</p>
         </div>
 
-        <!-- РАЗДЕЛ 4: Заметки (С фото и текстом) -->
+        <!-- РАЗДЕЛ 4: Заметки (С несколькими фото) -->
         <div id="section-notes" class="content-section">
             <h2>Заметки</h2>
             
@@ -646,14 +684,16 @@
                     <textarea id="noteTextContent" placeholder="Введите текст, памятку или важную информацию..."></textarea>
                 </div>
                 
+                <!-- Атрибут multiple позволяет выбрать несколько фото -->
                 <div class="input-group">
-                    <label>Прикрепить фото:</label>
-                    <input type="file" id="noteImageInput" accept="image/*" style="font-size: 12px; padding: 6px;">
+                    <label>Прикрепить фото (можно несколько):</label>
+                    <input type="file" id="noteImageInput" accept="image/*" multiple style="font-size: 12px; padding: 6px;">
                 </div>
                 
-                <div id="noteImagePreviewContainer" style="display: none; margin-bottom: 10px; position: relative;">
-                    <img id="noteImagePreview" src="" alt="Превью" style="max-width: 100%; max-height: 150px; border-radius: 8px; display: block;">
-                    <button type="button" onclick="clearNoteImage()" style="position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 12px;">✕</button>
+                <!-- Контейнер для превью нескольких фото -->
+                <div id="noteImagesPreviewContainer" style="display: none; margin-bottom: 10px;">
+                    <div id="noteImagesList" class="preview-list"></div>
+                    <button type="button" onclick="clearAllNoteImages()" style="background: #ff4d4d; color: white; border: none; border-radius: 6px; padding: 4px 8px; font-size: 11px; cursor: pointer; margin-top: 4px;">Удалить все фото</button>
                 </div>
 
                 <button class="calc-btn" id="saveNoteBtn" onclick="saveNote()">Сохранить заметку</button>
@@ -712,10 +752,6 @@
 
             let activeSubBtn = document.querySelector(`.sub-nav-btn[onclick="showSubSection('${subId}')"]`);
             if (activeSubBtn) activeSubBtn.classList.add('active');
-
-            if (tg && tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('light');
-            }
         }
 
         function showBrakeSub(subType) {
@@ -727,10 +763,6 @@
 
             let activeBtn = document.querySelector(`.brake-sub-btn[onclick="showBrakeSub('${subType}')"]`);
             if (activeBtn) activeBtn.classList.add('active');
-
-            if (tg && tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('light');
-            }
         }
 
         function filterBrakesTable(query) {
@@ -773,11 +805,11 @@
             resBox.style.display = 'block';
 
             if (type === 'full') {
-                resBox.innerHTML = `<strong>Полная проверка (${cars} ваг.):</strong><br>• Проверка ЭПТ/автотормозов по всей длине состава.<br>• Контроль отпуска хвостового вагона.`;
+                resBox.innerHTML = `<strong>Полная проверка (${cars} ваг.):</strong><br>• Проверка ЭПТ/автотормозов по всей длине состава.`;
             } else if (type === 'short') {
                 resBox.innerHTML = `<strong>Сокращенная проверка (${cars} ваг.):</strong><br>• Проверка торможения и отпуска <b>2-х хвостовых вагонов</b>.`;
             } else {
-                resBox.innerHTML = `<strong>Плотность тормозной сети:</strong><br>• Фиксация времени падения давления при закрытом кране машиниста.`;
+                resBox.innerHTML = `<strong>Плотность тормозной сети:</strong><br>• Фиксация времени падения давления.`;
             }
             if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
         }
@@ -822,10 +854,9 @@
                 btnList.classList.remove('active');
                 renderCalendar();
             }
-            if (tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
         }
 
-        // Хранилище смен и норм (Остается в localStorage, так как это легкий текст)
+        // Хранилище смен и норм
         let shifts = JSON.parse(localStorage.getItem('my_shifts')) || [];
         let norms = JSON.parse(localStorage.getItem('my_month_norms')) || {};
         
@@ -1074,19 +1105,17 @@
         }
 
         // ==========================================
-        // РАЗДЕЛ ЗАМЕТОК: INDEXEDDB + CANVAS СЖАТИЕ
+        // РАЗДЕЛ ЗАМЕТОК: МНОЖЕСТВО ФОТО (МАССИВ)
         // ==========================================
         
         let notes = [];
-        let currentNoteImageBase64 = '';
+        let currentNoteImagesBase64 = []; // Теперь массив картинок
 
-        // Настройка базы данных
         localforage.config({
             name: 'PomogaloApp',
             storeName: 'notes_store'
         });
 
-        // Загрузка заметок при старте
         async function loadNotes() {
             try {
                 let savedNotes = await localforage.getItem('my_notes');
@@ -1100,56 +1129,100 @@
         }
         loadNotes();
 
-        // Сжатие фото через Canvas
-        document.getElementById('noteImageInput').addEventListener('change', function(event) {
-            let file = event.target.files[0];
-            if (!file) return;
+        // Асинхронная функция для сжатия одного фото
+        function processAndCompressImage(file) {
+            return new Promise((resolve) => {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    let img = new Image();
+                    img.onload = function() {
+                        let canvas = document.createElement('canvas');
+                        let ctx = canvas.getContext('2d');
+                        
+                        let maxW = 1000;
+                        let maxH = 1000;
+                        let width = img.width;
+                        let height = img.height;
 
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                let img = new Image();
-                img.onload = function() {
-                    let canvas = document.createElement('canvas');
-                    let ctx = canvas.getContext('2d');
-                    
-                    // Максимальный размер 1000px по бОльшей стороне (хорошее качество, малый вес)
-                    let maxW = 1000;
-                    let maxH = 1000;
-                    let width = img.width;
-                    let height = img.height;
-
-                    if (width > height) {
-                        if (width > maxW) {
-                            height = Math.round(height *= maxW / width);
-                            width = maxW;
+                        if (width > height) {
+                            if (width > maxW) { height = Math.round(height *= maxW / width); width = maxW; }
+                        } else {
+                            if (height > maxH) { width = Math.round(width *= maxH / height); height = maxH; }
                         }
-                    } else {
-                        if (height > maxH) {
-                            width = Math.round(width *= maxH / height);
-                            height = maxH;
-                        }
-                    }
-                    
-                    canvas.width = width;
-                    canvas.height = height;
-                    ctx.drawImage(img, 0, 0, width, height);
+                        
+                        canvas.width = width;
+                        canvas.height = height;
+                        ctx.drawImage(img, 0, 0, width, height);
 
-                    // Сжимаем в JPEG с качеством 70%
-                    currentNoteImageBase64 = canvas.toDataURL('image/jpeg', 0.7);
-                    
-                    document.getElementById('noteImagePreview').src = currentNoteImageBase64;
-                    document.getElementById('noteImagePreviewContainer').style.display = 'block';
+                        let base64 = canvas.toDataURL('image/jpeg', 0.7);
+                        currentNoteImagesBase64.push(base64);
+                        resolve();
+                    };
+                    img.src = e.target.result;
                 };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Обработка нескольких файлов при выборе
+        document.getElementById('noteImageInput').addEventListener('change', async function(event) {
+            let files = event.target.files;
+            if (!files || files.length === 0) return;
+
+            // Блокируем кнопку сохранения на время обработки
+            let saveBtn = document.getElementById('saveNoteBtn');
+            let origText = saveBtn.textContent;
+            saveBtn.textContent = 'Обработка фото...';
+            saveBtn.disabled = true;
+
+            for (let i = 0; i < files.length; i++) {
+                await processAndCompressImage(files[i]);
+            }
+            
+            saveBtn.textContent = origText;
+            saveBtn.disabled = false;
+            
+            renderPreviews();
         });
 
-        function clearNoteImage() {
-            currentNoteImageBase64 = '';
-            document.getElementById('noteImageInput').value = '';
-            document.getElementById('noteImagePreviewContainer').style.display = 'none';
-            document.getElementById('noteImagePreview').src = '';
+        function renderPreviews() {
+            let container = document.getElementById('noteImagesPreviewContainer');
+            let list = document.getElementById('noteImagesList');
+            list.innerHTML = '';
+
+            if (currentNoteImagesBase64.length === 0) {
+                container.style.display = 'none';
+                document.getElementById('noteImageInput').value = '';
+                return;
+            }
+
+            container.style.display = 'block';
+            currentNoteImagesBase64.forEach((base64, index) => {
+                let item = document.createElement('div');
+                item.className = 'preview-item';
+                
+                let img = document.createElement('img');
+                img.src = base64;
+                
+                let btn = document.createElement('button');
+                btn.className = 'preview-remove-btn';
+                btn.innerHTML = '✕';
+                btn.onclick = () => removeImagePreview(index);
+
+                item.appendChild(img);
+                item.appendChild(btn);
+                list.appendChild(item);
+            });
+        }
+
+        function removeImagePreview(index) {
+            currentNoteImagesBase64.splice(index, 1);
+            renderPreviews();
+        }
+
+        function clearAllNoteImages() {
+            currentNoteImagesBase64 = [];
+            renderPreviews();
         }
 
         async function saveNote() {
@@ -1157,8 +1230,8 @@
             let editIdEl = document.getElementById('noteEditingId');
             let text = textEl.value.trim();
 
-            if (!text && !currentNoteImageBase64) {
-                alert("Заметка пуста! Добавьте текст или фото.");
+            if (!text && currentNoteImagesBase64.length === 0) {
+                alert("Заметка пуста! Добавьте текст или хотя бы одно фото.");
                 return;
             }
 
@@ -1170,19 +1243,21 @@
                 let index = notes.findIndex(n => n.id == editId);
                 if (index !== -1) {
                     notes[index].text = text;
-                    if (currentNoteImageBase64) notes[index].image = currentNoteImageBase64;
+                    notes[index].images = [...currentNoteImagesBase64]; // копируем массив
                     notes[index].date = dateStr + ' (ред.)';
+                    // удаляем старое одиночное фото если оно было, чтобы не дублировать
+                    if (notes[index].image !== undefined) delete notes[index].image; 
                 }
                 cancelNoteEdit();
             } else {
                 notes.unshift({
                     id: Date.now(),
                     text: text,
-                    image: currentNoteImageBase64,
+                    images: [...currentNoteImagesBase64],
                     date: dateStr
                 });
                 textEl.value = '';
-                clearNoteImage();
+                clearAllNoteImages();
             }
 
             try {
@@ -1208,7 +1283,20 @@
             notes.forEach(note => {
                 let item = document.createElement('div');
                 item.className = 'note-card';
-                let imgHtml = note.image ? `<img src="${note.image}" class="note-card-img" onclick="showFullImage('${note.image}')">` : '';
+                
+                // Поддержка старых заметок (где было одно photo.image) и новых (photo.images array)
+                let noteImages = note.images ? [...note.images] : [];
+                if (note.image) noteImages.push(note.image);
+
+                let imgHtml = '';
+                if (noteImages.length > 0) {
+                    imgHtml = '<div class="note-gallery">';
+                    noteImages.forEach(src => {
+                        imgHtml += `<img src="${src}" onclick="showFullImage('${src}')">`;
+                    });
+                    imgHtml += '</div>';
+                }
+
                 let textHtml = note.text ? `<div class="note-card-text">${escapeHtml(note.text)}</div>` : '';
 
                 item.innerHTML = `
@@ -1236,13 +1324,13 @@
 
             document.getElementById('noteEditingId').value = note.id;
             document.getElementById('noteTextContent').value = note.text || '';
-            if (note.image) {
-                currentNoteImageBase64 = note.image;
-                document.getElementById('noteImagePreview').src = note.image;
-                document.getElementById('noteImagePreviewContainer').style.display = 'block';
-            } else {
-                clearNoteImage();
-            }
+            
+            // Собираем картинки из старого и нового форматов
+            let noteImgs = note.images ? [...note.images] : [];
+            if (note.image) noteImgs.push(note.image);
+            
+            currentNoteImagesBase64 = noteImgs;
+            renderPreviews();
 
             document.getElementById('saveNoteBtn').textContent = 'Сохранить изменения';
             document.getElementById('cancelNoteEditBtn').style.display = 'block';
@@ -1252,7 +1340,7 @@
         window.cancelNoteEdit = function() {
             document.getElementById('noteEditingId').value = '';
             document.getElementById('noteTextContent').value = '';
-            clearNoteImage();
+            clearAllNoteImages();
             document.getElementById('saveNoteBtn').textContent = 'Сохранить заметку';
             document.getElementById('cancelNoteEditBtn').style.display = 'none';
         }
@@ -1272,7 +1360,7 @@
 
         function showFullImage(src) {
             let w = window.open("");
-            w.document.write(`<img src="${src}" style="max-width:100%; height:auto; display:block; margin:auto;">`);
+            w.document.write(`<body style="margin:0; background:#000; display:flex; align-items:center; justify-content:center; height:100vh;"><img src="${src}" style="max-width:100%; max-height:100vh; display:block;"></body>`);
         }
     </script>
 </body>
