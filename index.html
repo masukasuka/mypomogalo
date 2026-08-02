@@ -1250,6 +1250,12 @@
                 
                 let img = document.createElement('img');
                 img.className = 'note-image';
+
+        // Сразу вешаем событие прямо на эту картинку
+img.addEventListener('pointerdown', function() {
+  imageModal.style.display = 'block';
+  fullSizeImage.src = img.src;
+});
                 img.src = base64;
                 
                 let btn = document.createElement('button');
