@@ -1228,30 +1228,55 @@ if (vu45Sec) vu45Sec.style.display = 'none';
         }
 
         function filterBrakesTable(query) {
-            let filter = query.toLowerCase().trim();
-            let table = document.getElementById('brakesTable');
-            if (!table) return;
+    let filter = query.toLowerCase().trim();
+    let table = document.getElementById('brakesTable');
+    if (!table) return;
 
-            let rows = table.getElementsByTagName('tr');
-            let noMatchEl = document.getElementById('noBrakesMatch');
-            let matchCount = 0;
+    let rows = table.getElementsByTagName('tr');
+    let noMatchEl = document.getElementById('noBrakesMatch');
+    let matchCount = 0;
+    
+    let currentGroup = null;
+    let groupHasVisibleRows = false;
 
-            for (let i = 1; i < rows.length; i++) {
-                let row = rows[i];
-                if (!row.classList.contains('route-group') && row.classList.contains('brake-row')) {
-                    let text = row.textContent.toLowerCase();
-                    if (filter === '' || text.includes(filter)) {
-                        row.style.display = '';
-                        matchCount++;
-                    } else {
-                        row.style.display = 'none';
-                    }
-                }
+    for (let i = 0; i < rows.length; i++) {
+        let row = rows[i];
+
+        // Если это строка группы маршрута
+        if (row.classList.contains('route-group')) {
+            // Перед началом новой группы проверяем, были ли видимые строки в предыдущей
+            if (currentGroup) {
+                currentGroup.style.display = groupHasVisibleRows ? '' : 'none';
             }
-            if (noMatchEl) {
-                noMatchEl.style.display = (matchCount === 0 && filter !== '') ? 'block' : 'none';
+            currentGroup = row;
+            groupHasVisibleRows = false; // сбрасываем для новой группы
+            continue;
+        }
+
+        // Если это обычная строка с данными (.brake-row)
+        if (row.classList.contains('brake-row')) {
+            let text = row.textContent.toLowerCase();
+            if (filter === '' || text.includes(filter)) {
+                row.style.display = '';
+                matchCount++;
+                groupHasVisibleRows = true; // нашли подходящую строку в текущей группе
+            } else {
+                row.style.display = 'none';
             }
         }
+    }
+
+    // Не забываем обработать самую последнюю группу после окончания цикла
+    if (currentGroup) {
+        currentGroup.style.display = groupHasVisibleRows ? '' : 'none';
+    }
+
+    // Сообщение, если ничего не найдено
+    if (noMatchEl) {
+        noMatchEl.style.display = (matchCount === 0 && filter !== '') ? 'block' : 'none';
+    }
+}
+
 
         function togglePassTrialMode() {
             let mode = document.getElementById('passTrialType').value;
