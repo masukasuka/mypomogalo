@@ -492,30 +492,29 @@
   opacity: 0.8;
 }
 
-/* Скрытый по умолчанию темный фон на весь экран */
+/* Сама картинка, отцентрированная по середине */
 .image-modal {
-  display: none; 
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    justify-content: center;
+    align-items: center;
+    overflow: auto;
 }
 
-/* Сама картинка, отцентрированная по середине */
 .image-modal-content {
-  margin: auto;
-  display: block;
-  max-width: 90%;
-  max-height: 90%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  object-fit: contain;
+    margin: auto;
+    display: block;
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
 }
+
 
 /* Кнопка закрытия (крестик) в правом верхнем углу */
 .close-image-modal {
