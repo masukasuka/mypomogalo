@@ -1437,48 +1437,48 @@ if (notesContainer) {
   notesContainer.addEventListener('touchstart', openFullImage);
 }
 
+
+// Закрытие по крестику
 if (closeModal) {
-  closeModal.addEventListener('click', () => imageModal.style.display = 'none');
-  closeModal.addEventListener('touchstart', () => imageModal.style.display = 'none');
+  closeModal.addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeImageModal();
+  });
+  closeModal.addEventListener('touchstart', (e) => {
+    e.stopPropagation();
+    closeImageModal();
+  });
 }
 
+// Закрытие по клику на темный фон
 if (imageModal) {
   imageModal.addEventListener('click', (e) => {
-    if (e.target === imageModal) imageModal.style.display = 'none';
+    if (e.target === imageModal) closeImageModal();
   });
   imageModal.addEventListener('touchstart', (e) => {
-    if (e.target === imageModal) imageModal.style.display = 'none';
+    if (e.target === imageModal) closeImageModal();
   });
 }
-document.addEventListener('contextmenu', function(event) {
-  if (event.target.tagName === 'IMG' && event.target.classList.contains('note-image')) {
-    event.preventDefault(); // Запрещаем вызов системного меню на картинках
-  }
-});
 
-
-        // Запрет системного меню на картинках
-document.addEventListener('contextmenu', function(event) {
-  if (event.target.tagName === 'IMG' && event.target.classList.contains('note-image')) {
-    event.preventDefault(); 
-  }
-});
-
-// Глобальный перехватчик кликов для старых и новых картинок
-document.addEventListener('click', function(event) {
-    if (event.target.tagName === 'IMG' && (event.target.classList.contains('note-image') || event.target.closest('.note-gallery'))) {
-        event.preventDefault();
-        event.stopPropagation();
-        
-        let modal = document.getElementById('imageModal');
-        let modalImg = document.getElementById('fullSizeImage');
-        
-        if (modal && modalImg) {
-            modal.style.display = 'block';
-            modalImg.src = event.target.src;
-        }
+// Функция плавного закрытия модалки с возвратом истории для кнопки «Назад»
+function closeImageModal() {
+  let modal = document.getElementById('imageModal');
+  if (modal && modal.style.display === 'block') {
+    modal.style.display = 'none';
+    // Если мы добавляли состояние в историю при открытии, убираем его
+    if (window.history.state && window.history.state.modalOpen) {
+      window.history.back();
     }
-}, true);
+  }
+}
+
+// Перехват кнопки «Назад» на телефоне
+window.addEventListener('popstate', function() {
+  let modal = document.getElementById('imageModal');
+  if (modal) {
+    modal.style.display = 'none';
+  }
+});
 
     </script>
     <!-- Модальное окно для полноэкранного просмотра картинок -->
