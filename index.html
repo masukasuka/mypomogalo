@@ -1450,34 +1450,38 @@ function closeImageModal() {
     }
 }
 
-// Переменная для отслеживания состояния зума
-let isZoomed = false;
-
-// Увеличение картинки по двойному тапу (клику)
+// Функция открытия и зума картинки
 let fullSizeImg = document.getElementById('fullSizeImage');
 if (fullSizeImg) {
+    // Делаем контейнер картинки прокручиваемым для удобного просмотра деталей
+    let modal = document.getElementById('imageModal');
+    if (modal) {
+        modal.style.overflow = 'auto';
+        fullSizeImg.style.maxHeight = 'none'; // Снимаем ограничения, чтобы можно было прокрутить большую схему
+        fullSizeImg.style.width = '100%';
+        fullSizeImg.style.cursor = 'zoom-in';
+    }
+
     fullSizeImg.addEventListener('click', function(e) {
         e.stopPropagation();
         
-        if (!isZoomed) {
-            this.style.transform = 'scale(2.5)';
-            this.style.transition = 'transform 0.3s ease';
-            this.style.cursor = 'zoom-out';
-            isZoomed = true;
+        // Переключаем увеличение по клику
+        if (!this.classList.contains('zoomed')) {
+            this.style.transform = 'scale(2)';
+            this.style.transformOrigin = 'top left';
+            this.classList.add('zoomed');
         } else {
             this.style.transform = 'scale(1)';
-            this.style.cursor = 'zoom-in';
-            isZoomed = false;
+            this.classList.remove('zoomed');
         }
     });
 }
 
-// Функция сброса зума
 function resetZoom() {
     let img = document.getElementById('fullSizeImage');
     if (img) {
         img.style.transform = 'scale(1)';
-        isZoomed = false;
+        img.classList.remove('zoomed');
     }
 }
 
