@@ -1026,45 +1026,112 @@ input, select {
                 <div id="brakeSub-passenger" class="brake-sub-content">
                     <div class="card" style="margin-bottom: 12px; padding: 10px;">
                         <div class="input-group" style="margin-bottom: 0;">
-                            <label for="passengerBrakeSearch" style="font-weight: 600; color: var(--tg-theme-button-color);">🔍 Поиск по нормативам (пасс.):</label>
+                            <label for="passengerBrakeSearch" style="font-weight: 600; color: var(--tg-theme-button-color);">🔍 Поиск проб:</label>
                             <input type="text" id="passengerBrakeSearch" placeholder="Например: полная, сокращенная" oninput="filterPassengerBrakes(this.value)" style="margin-top: 4px;">
                         </div>
                     </div>
 
                     <div class="card">
-                        <h3 style="margin-top: 0; font-size: 14px; color: var(--tg-theme-button-color);">💡 Экспресс-расчёт</h3>
-                        <div class="input-group">
-                            <label>Тип проверки тормозов:</label>
-                            <select id="passTrialType" onchange="togglePassTrialMode()">
-                                <option value="full">Полная проверка</option>
-                                <option value="short">Сокращенная проверка</option>
-                                <option value="density">Проверка плотности</option>
-                            </select>
-                        </div>
-                        <div class="input-group" id="passCarsGroup">
-                            <label>Количество вагонов:</label>
-                            <input type="number" id="passCarsCount" value="15" min="1" max="30">
-                        </div>
-                        <button class="calc-btn" onclick="calculatePassTrialNorm()">Проверить норматив</button>
-                        <div class="result-box" id="passTrialResult" style="display: none; margin-top: 10px;"></div>
-                    </div>
+                        <div class="card-title">
+                            <span>Таблица 3 — Проверки действия тормозов (Пассажирские)</span>
+                             </div>
+                        <div class="card-content" style="display: block; border-top: none; padding-top: 0; overflow-x: auto;">
+                            <table id="brakesTable2" style="width:100%; border-collapse: collapse; font-size: 11px; margin-bottom: 8px;">
+                                <tr style="border-bottom: 1px solid rgba(0,0,0,0.1); text-align: left;">
+                                    <th style="padding: 4px;">Участок</th>
+                                    <th style="padding: 4px;">км/пк</th>
+                                    <th style="padding: 4px;">СК</th>
+                                    <th style="padding: 4px;">Т.п.</th>
+                                </tr>
+                                [03.08.2026 22:29] Maska: <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Минск – Брест</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Минск-Пасс. – Минск-Сорт.</td><td>пневм</td><td>751</td><td>8</td><td>35</td><td>200</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Минск-Сорт.</td><td>ЭПТ</td><td>754</td><td>5</td><td>60</td><td>300</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Минск-Сорт.<br><span style="font-size: 11px; color: #666;">(для поездов на электротяге)</span></td><td>пневм</td><td>753</td><td>2</td><td>35</td><td>200</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Минск-Сорт.<br><span style="font-size: 11px; color: #666;">(для поездов на электротяге)</span></td><td>ЭПТ</td><td>754</td><td>5</td><td>50</td><td>250</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Барановичи-Пол. – Барановичи-Центр.</td><td>пневм</td><td>2</td><td>3</td><td>35</td><td>150</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Барановичи-Центр.</td><td>ЭПТ</td><td>891</td><td>7</td><td>40</td><td>200</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Береза-Карт. – Бронная Гора</td><td>пневм</td><td>994</td><td>2</td><td>50</td><td>220</td></tr>
 
-                    <div class="brake-card pass-brake-card" data-keywords="полная проверка эпт электоропневматические автотормоза">
-                        <div class="brake-card-title"><span>Полное опробование автотормозов</span></div>
-                        <div class="brake-card-content" style="display: block; border-top: none; padding-top: 0;">
-                            • Проверка действия ЭПТ на каждые два вагона с хвоста.<br>
-                            • Убедиться в отпуске тормозов всех вагонов.
-                        </div>
-                    </div>
+<tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Брест – Минск</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Брест-Центр. – Брест-Вост.</td><td>пневм</td><td>1093</td><td>8</td><td>40</td><td>200</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Брест-Восточный</td><td>ЭПТ</td><td>1092</td><td>8</td><td>40</td><td>150</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Брест-Восточный</td><td>пневм</td><td>1092</td><td>8</td><td>40</td><td>150</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Брест-Восточный<br><span style="font-size: 11px; color: #666;">(для поездов на электротяге)</span></td><td>ЭПТ</td><td>1091</td><td>1</td><td>60</td><td>200</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Брест-Вост. – Жабинка</td><td>ЭПТ</td><td>1086</td><td>5</td><td>80</td><td>350</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Бронная Гора – Береза-Карт.</td><td>пневм</td><td>981</td><td>6</td><td>50</td><td>220</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Барановичи-Ц. – Погорельцы</td><td>пневм</td><td>888</td><td>5</td><td>60</td><td>300</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Барановичи-Ц. – Погорельцы</td><td>ЭПТ</td><td>885</td><td>5</td><td>70</td><td>350</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Барановичи-П. – Погорельцы</td><td>пневм</td><td>2</td><td>3</td><td>35</td><td>200</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Барановичи-П. – Погорельцы</td><td>ЭПТ</td><td>888</td><td>5</td><td>60</td><td>300</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Фаниполь – Минск-Сорт.</td><td>пневм</td><td>767</td><td>3</td><td>55</td><td>400</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Фаниполь – Минск-Сорт.</td><td>ЭПТ</td><td>765</td><td>3</td><td>50</td><td>400</td></tr>
 
-                    <div class="brake-card pass-brake-card" data-keywords="сокращенная проверка хвост конец">
-                        <div class="brake-card-title"><span>Сокращенное опробование тормозов</span></div>
-                        <div class="brake-card-content" style="display: block; border-top: none; padding-top: 0;">
-                            • Проверяется действие автотормозов двух хвостовых вагонов.
-                        </div>
-                    </div>
-                    <div id="noPassBrakesMatch" style="display: none; text-align: center; padding: 12px; font-size: 12px; color: var(--tg-theme-hint-color);">
-                        Ничего не найдено
+<tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Минск – Смоленск</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Минск-Пасс. – Минск-Вост.</td><td>пневм</td><td>749</td><td>9</td><td>25</td><td>150</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Степянка – Озерище</td><td>ЭПТ</td><td>738</td><td>7</td><td>80</td><td>350</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Орша – Городнянский</td><td>пневм</td><td>536</td><td>6</td><td>55</td><td>300</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Орша – Городнянский</td><td>ЭПТ</td><td>535</td><td>7</td><td>55</td><td>300</td></tr>
+[03.08.2026 22:29] Maska: <tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Смоленск – Минск</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Смоленск – Кр. Бор</td><td>пневм</td><td>422</td><td>3</td><td>55</td><td>350</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Смоленск – Кр. Бор</td><td>ЭПТ</td><td>424</td><td>5</td><td>55</td><td>300</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Орша (26 путь парк Е)*</td><td>пневм</td><td>540</td><td>3</td><td>35</td><td>200</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Орша-Центр. – Коханово</td><td>пневм</td><td>540</td><td>1</td><td>50</td><td>200</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Орша-Центр. – Коханово</td><td>ЭПТ</td><td>547</td><td>1</td><td>90</td><td>400</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Орша-Центр. – Коханово<br><span style="font-size: 11px; color: #666;">(для поездов, ведомых электропоездами ЭР9Т, ЧС8, ЭП10, ЭП20)</span></td><td>ЭПТ</td><td>547</td><td>1</td><td>110</td><td>500</td></tr>
+
+<tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Минск – Гомель</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Минск-Пасс. – Минск-Южн.</td><td>пневм</td><td>495</td><td>4</td><td>40</td><td>200</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Минск-Южн. – Колядичи</td><td>ЭПТ</td><td>490</td><td>5</td><td>70</td><td>350</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Осиповичи 1 – Осиповичи 3</td><td>пневм</td><td>388</td><td>9</td><td>40</td><td>250</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Осиповичи 1 – Осиповичи 3</td><td>ЭПТ</td><td>384</td><td>4</td><td>50</td><td>200</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Жлобин-Пасс. – Хальч</td><td>пневм</td><td>281</td><td>6</td><td>40</td><td>200</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Жлобин-Пасс. – Хальч</td><td>ЭПТ</td><td>279</td><td>9</td><td>60</td><td>250</td></tr>
+
+<tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Гомель – Минск</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Гомель-Пасс. – Гомель-Неч.</td><td>пневм</td><td>198</td><td>8</td><td>40</td><td>200</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Гомель-Пасс. – Гомель-Неч.</td><td>ЭПТ</td><td>200</td><td>6</td><td>40</td><td>150</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Жлобин-Пасс. – Жлобин-Сорт.</td><td>пневм</td><td>284</td><td>3</td><td>40</td><td>200</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Жлобин-Сорт. – Жлобин-Зап.</td><td>ЭПТ</td><td>286</td><td>9</td><td>60</td><td>250</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Жлобин-Сорт. – Жлобин-Зап.<br><span style="font-size: 11px; color: #666;">(для поездов на электротяге)</span></td><td>ЭПТ</td><td>288</td><td>5</td><td>70</td><td>300</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Осиповичи – Верейцы</td><td>пневм</td><td>395</td><td>1</td><td>50</td><td>250</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Осиповичи – Верейцы</td><td>ЭПТ</td><td>396</td><td>1</td><td>50</td><td>200</td></tr>
+
+<tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Минск – Вильнюс</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Минск-Сев. – Ждановичи</td><td>пневм</td><td>754</td><td>1</td><td>50</td><td>250</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Минск-Сев. – Ждановичи</td><td>ЭПТ</td><td>759</td><td>1</td><td>80</td><td>350</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Молодечно – Пруды</td><td>пневм</td><td>831</td><td>10</td><td>60</td><td>350</td></tr>
+[03.08.2026 22:29] Maska: <tr class="brake-row"><td style="padding: 4px;">Молодечно – Пруды</td><td>ЭПТ</td><td>834</td><td>2</td><td>60</td><td>300</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Гудогай – Кяна</td><td>пневм</td><td>901</td><td>6</td><td>60</td><td>300</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Кяна – Кивишкес</td><td>пневм</td><td>27</td><td>10</td><td>60</td><td>250</td></tr>
+
+<tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Вильнюс – Минск</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Вильнюс – Ново Вильня</td><td>пневм</td><td>2</td><td>9</td><td>50</td><td>125</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Вильнюс – Ново Вильня</td><td>ЭПТ</td><td>7</td><td>1</td><td>50</td><td>150</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Кяна – Гудогай</td><td>пневм</td><td>33</td><td>6</td><td>60</td><td>250</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Кяна – Гудогай</td><td>ЭПТ</td><td>904</td><td>7</td><td>70</td><td>250</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Кяна – Гудогай<br><span style="font-size: 11px; color: #666;">(для поездов на электротяге)</span></td><td>пневм</td><td>33</td><td>6</td><td>60</td><td>250</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Кяна – Гудогай<br><span style="font-size: 11px; color: #666;">(для поездов на электротяге)</span></td><td>ЭПТ</td><td>36</td><td>1</td><td>75</td><td>300</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Гудогай – Ошмяны</td><td>пневм</td><td>894</td><td>2</td><td>60</td><td>250</td></tr>
+
+<tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Гудогай – Ошмяны / Молодечно – Уша</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Гудогай – Ошмяны</td><td>ЭПТ</td><td>889</td><td>10</td><td>50</td><td>250</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Молодечно – Уша</td><td>пневм</td><td>825</td><td>3</td><td>60</td><td>250</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Молодечно – Уша</td><td>ЭПТ</td><td>823</td><td>5</td><td>60</td><td>200</td></tr>
+
+<tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Барановичи – Лида – Мосты</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Барановичи-Пол. – Барановичи-Центр. (5 г.п.)</td><td>пневм</td><td>2</td><td>3</td><td>35</td><td>150</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Барановичи-Центр. (5 г.п.)</td><td>ЭПТ</td><td>891</td><td>9</td><td>40</td><td>200</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Барановичи-Пол. – Барановичи-Центр. (9 г.п.)</td><td>пневм</td><td>4</td><td>1</td><td>40</td><td>150</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Барановичи-Центр. (9 г.п.)</td><td>ЭПТ</td><td>3</td><td>1</td><td>40</td><td>150</td></tr>
+
+<tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Жлобин – Калинковичи</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Жлобин-Пасс. – Жлобин-Под.</td><td>пневм</td><td>3</td><td>1</td><td>40</td><td>200</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Жлобин-Подольский</td><td>ЭПТ</td><td>4</td><td>10</td><td>60</td><td>250</td></tr>
+
+<tr class="route-group"><td colspan="4" style="padding: 4px; font-weight: 600; background: rgba(0,0,0,0.03);">Богатырево – Минск</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Богатырево – Помыслище</td><td>пневм</td><td>43</td><td>1</td><td>50</td><td>250</td></tr>
+<tr class="brake-row"><td style="padding: 4px;">Богатырево – Помыслище</td><td>ЭПТ</td><td>42</td><td>1</td><td>40</td><td>200</td></tr>
+                        
                     </div>
                 </div>
             </div>
