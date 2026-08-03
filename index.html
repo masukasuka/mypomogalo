@@ -1029,19 +1029,28 @@ if (vu45Sec) vu45Sec.style.display = 'none';
         }
 
         function showSection(sectionId) {
-            document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+    // 1. Скрываем все секции через стили и убираем класс active
+    document.querySelectorAll('.content-section').forEach(sec => {
+        sec.classList.remove('active');
+        sec.style.display = 'none'; // <-- Добавь это
+    });
+    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
 
-            let targetSection = document.getElementById('section-' + sectionId);
-            if (targetSection) targetSection.classList.add('active');
+    // 2. Находим нужную секцию и делаем ее видимой
+    let targetSection = document.getElementById('section-' + sectionId);
+    if (targetSection) {
+        targetSection.classList.add('active');
+        targetSection.style.display = 'block'; // <-- И это добавь
+    }
 
-            let activeBtn = document.querySelector(`.nav-btn[onclick="showSection('${sectionId}')"]`);
-            if (activeBtn) activeBtn.classList.add('active');
-            
-            if (tg && tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('light');
-            }
-        }
+    let activeBtn = document.querySelector(`.nav-btn[onclick="showSection('${sectionId}')"]`);
+    if (activeBtn) activeBtn.classList.add('active');
+
+    if (tg && tg.HapticFeedback) {
+        tg.HapticFeedback.impactOccurred('light');
+    }
+}
+
 
         function showSubSection(subId) {
             document.querySelectorAll('.sub-section').forEach(sub => sub.classList.remove('active'));
@@ -1864,7 +1873,6 @@ if (imageModalEl) {
   <img class="image-modal-content" id="fullSizeImage" style="touch-action: auto;">
 
 </div>
-    alert(document.getElementById('section-vu45').innerHTML);
 
 
 </body>
