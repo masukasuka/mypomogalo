@@ -1443,30 +1443,52 @@ function closeImageModal() {
     let modal = document.getElementById('imageModal');
     if (modal) {
         modal.style.display = 'none';
-        // Прячем официальную кнопку «Назад» в шапке Telegram при закрытии картинки
         if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.BackButton) {
             window.Telegram.WebApp.BackButton.hide();
         }
     }
 }
 
-// При открытии картинки (в вашем глобальном перехватчике кликов)
-let modal = document.getElementById('imageModal');
-let modalImg = document.getElementById('fullSizeImage');
-
-if (modal && modalImg) {
-    modal.style.display = 'block';
-    modalImg.src = event.target.src;
-    
-    // Показываем официальную кнопку «Назад» от Telegram в шапке приложения
-    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.BackButton) {
-        window.Telegram.WebApp.BackButton.show();
-        window.Telegram.WebApp.BackButton.onClick(function() {
-            closeImageModal();
-            // Убираем обработчик, чтобы он не срабатывал повторно
-            window.Telegram.WebApp.BackButton.offClick(closeImageModal);
-        });
+// Глобальный перехватчик кликов по картинкам
+document.addEventListener('click', function(event) {
+    if (event.target.tagName === 'IMG' && (event.target.classList.contains('note-image') || event.target.closest('.note-gallery'))) {
+        event.preventDefault();
+        event.stopPropagation();
+        
+        let modal = document.getElementById('imageModal');
+        let modalImg = document.getElementById('fullSizeImage');
+        
+        if (modal && modalImg) {
+            modal.style.display = 'block';
+            modalImg.src = event.target.src;
+            
+            // Включаем нативную кнопку «Назад» в шапке Telegram
+            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.BackButton) {
+                window.Telegram.WebApp.BackButton.show();
+                window.Telegram.WebApp.BackButton.onClick(function() {
+                    closeImageModal();
+                    window.Telegram.WebApp.BackButton.offClick(closeImageModal);
+                });
+            }
+        }
     }
+}, true);
+
+// Закрытие по крестику
+document.addEventListener('click', function(event) {
+    if (event.target.classList.contains('close-image-modal')) {
+        closeImageModal();
+    }
+});
+
+// Закрытие по клику на темный фон
+let imageModalEl = document.getElementById('imageModal');
+if (imageModalEl) {
+    imageModalEl.addEventListener('click', function(event) {
+        if (event.target === imageModalEl) {
+            closeImageModal();
+        }
+    });
 }
 
 
