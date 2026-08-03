@@ -1327,49 +1327,48 @@ img.src = base64;
 
 
         function updateNotesUI() {
-            let listEl = document.getElementById('notesList');
-            if (!listEl) return;
-            listEl.innerHTML = '';
+    let listEl = document.getElementById('notesList');
+    if (!listEl) return;
+    listEl.innerHTML = '';
 
-            if (notes.length === 0) {
-                listEl.innerHTML = '<p style="font-size:12px; color:var(--tg-theme-hint-color); text-align:center;">Нет заметок</p>';
-                return;
-            }
+    if (notes.length === 0) {
+        listEl.innerHTML = '<p style="font-size:12px; color:var(--tg-theme-hint-color); text-align:center;">Нет заметок</p>';
+        return;
+    }
 
-            notes.forEach(note => {
-                let item = document.createElement('div');
-                item.className = 'note-card';
-                
-                // Поддержка старых заметок (где было одно photo.image) и новых (photo.images array)
-                let noteImages = note.images ? [...note.images] : [];
-if (note.image) noteImages.push(note.image);
+    notes.forEach(note => {
+        let item = document.createElement('div');
+        item.className = 'note-card';
+        
+        let noteImages = note.images ? [...note.images] : [];
+        if (note.image) noteImages.push(note.image);
 
-let imgHtml = '';
-if (noteImages.length > 0) {
-    imgHtml = '<div class="note-gallery">';
-    noteImages.forEach(src => {
-        // Обязательно добавляем класс note-image, чтобы сработал наш обработчик
-        imgHtml += `<img src="${src}" class="note-image">`;
+        let imgHtml = '';
+        if (noteImages.length > 0) {
+            imgHtml = '<div class="note-gallery">';
+            noteImages.forEach(src => {
+                // Добавляем класс note-image, чтобы сработало наше модальное окно!
+                imgHtml += `<img src="${src}" class="note-image">`;
+            });
+            imgHtml += '</div>';
+        }
+
+        let textHtml = note.text ? `<div class="note-card-text">${escapeHtml(note.text)}</div>` : '';
+
+        item.innerHTML = `
+            ${textHtml}
+            ${imgHtml}
+            <div class="note-card-footer">
+                <span>${note.date}</span>
+                <div class="action-btns">
+                    <button class="action-btn edit-btn" onclick="editNote(${note.id})">✏️</button>
+                    <button class="action-btn delete-btn" onclick="deleteNote(${note.id})">🗑</button>
+                </div>
+            </div>`;
+        listEl.appendChild(item);
     });
-    imgHtml += '</div>';
 }
 
-
-                let textHtml = note.text ? `<div class="note-card-text">${escapeHtml(note.text)}</div>` : '';
-
-                item.innerHTML = `
-                    ${textHtml}
-                    ${imgHtml}
-                    <div class="note-card-footer">
-                        <span>${note.date}</span>
-                        <div class="action-btns">
-                            <button class="action-btn edit-btn" onclick="editNote(${note.id})">✏️</button>
-                            <button class="action-btn delete-btn" onclick="deleteNote(${note.id})">🗑</button>
-                        </div>
-                    </div>`;
-                listEl.appendChild(item);
-            });
-        }
 
         function escapeHtml(text) {
             let map = {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'};
