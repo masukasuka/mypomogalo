@@ -1443,9 +1443,41 @@ function closeImageModal() {
     let modal = document.getElementById('imageModal');
     if (modal) {
         modal.style.display = 'none';
+        resetZoom(); // Сбрасываем увеличение при закрытии
         if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.BackButton) {
             window.Telegram.WebApp.BackButton.hide();
         }
+    }
+}
+
+// Переменная для отслеживания состояния зума
+let isZoomed = false;
+
+// Увеличение картинки по двойному тапу (клику)
+let fullSizeImg = document.getElementById('fullSizeImage');
+if (fullSizeImg) {
+    fullSizeImg.addEventListener('click', function(e) {
+        e.stopPropagation();
+        
+        if (!isZoomed) {
+            this.style.transform = 'scale(2.5)';
+            this.style.transition = 'transform 0.3s ease';
+            this.style.cursor = 'zoom-out';
+            isZoomed = true;
+        } else {
+            this.style.transform = 'scale(1)';
+            this.style.cursor = 'zoom-in';
+            isZoomed = false;
+        }
+    });
+}
+
+// Функция сброса зума
+function resetZoom() {
+    let img = document.getElementById('fullSizeImage');
+    if (img) {
+        img.style.transform = 'scale(1)';
+        isZoomed = false;
     }
 }
 
@@ -1461,6 +1493,7 @@ document.addEventListener('click', function(event) {
         if (modal && modalImg) {
             modal.style.display = 'block';
             modalImg.src = event.target.src;
+            resetZoom(); // Сбрасываем старый зум при открытии новой картинки
             
             if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.BackButton) {
                 window.Telegram.WebApp.BackButton.show();
