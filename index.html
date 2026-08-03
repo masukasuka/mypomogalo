@@ -1450,22 +1450,28 @@ function closeImageModal() {
     }
 }
 
+
 // Функция открытия и зума картинки
 let fullSizeImg = document.getElementById('fullSizeImage');
 if (fullSizeImg) {
     let modal = document.getElementById('imageModal');
     if (modal) {
         modal.style.overflow = 'auto';
-        fullSizeImg.style.maxHeight = 'none';
-        fullSizeImg.style.width = '100%';
-        fullSizeImg.style.cursor = 'zoom-in';
+        modal.style.display = 'flex';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        
+        fullSizeImg.style.maxHeight = '90vh';
+        fullSizeImg.style.maxWidth = '90vw';
+        fullSizeImg.style.objectFit = 'contain';
         fullSizeImg.style.transition = 'transform 0.3s ease';
+        fullSizeImg.style.cursor = 'zoom-in';
     }
 
     fullSizeImg.addEventListener('click', function(e) {
         e.stopPropagation();
         if (!this.classList.contains('zoomed')) {
-            this.style.transform = 'scale(2)';
+            this.style.transform = 'scale(2.2)';
             this.classList.add('zoomed');
             this.style.cursor = 'zoom-out';
         } else {
@@ -1481,9 +1487,9 @@ function resetZoom() {
     if (img) {
         img.style.transform = 'scale(1)';
         img.classList.remove('zoomed');
+        if (img.style) img.style.cursor = 'zoom-in';
     }
 }
-
 
 // Глобальный перехватчик кликов по картинкам
 document.addEventListener('click', function(event) {
