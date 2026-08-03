@@ -1438,47 +1438,59 @@ if (notesContainer) {
 }
 
 
-// Закрытие по крестику
-if (closeModal) {
-  closeModal.addEventListener('click', (e) => {
-    e.stopPropagation();
-    closeImageModal();
-  });
-  closeModal.addEventListener('touchstart', (e) => {
-    e.stopPropagation();
-    closeImageModal();
-  });
-}
+// Глобальный перехватчик кликов для открытия картинок и добавления истории для кнопки «Назад»
+document.addEventListener('click', function(event) {
+    if (event.target.tagName === 'IMG' && (event.target.classList.contains('note-image') || event.target.closest('.note-gallery'))) {
+        event.preventDefault();
+        event.stopPropagation();
+        
+        let modal = document.getElementById('imageModal');
+        let modalImg = document.getElementById('fullSizeImage');
+        
+        if (modal && modalImg) {
+            modal.style.display = 'block';
+            modalImg.src = event.target.src;
+            window.history.pushState({ modalOpen: true }, '');
+        }
+    }
+}, true);
+
+// Закрытие модального окна по крестику
+document.addEventListener('click', function(event) {
+    if (event.target.classList.contains('close-image-modal')) {
+        closeImageModal();
+    }
+});
 
 // Закрытие по клику на темный фон
-if (imageModal) {
-  imageModal.addEventListener('click', (e) => {
-    if (e.target === imageModal) closeImageModal();
-  });
-  imageModal.addEventListener('touchstart', (e) => {
-    if (e.target === imageModal) closeImageModal();
-  });
+let imageModalEl = document.getElementById('imageModal');
+if (imageModalEl) {
+    imageModalEl.addEventListener('click', function(event) {
+        if (event.target === imageModalEl) {
+            closeImageModal();
+        }
+    });
 }
 
-// Функция плавного закрытия модалки с возвратом истории для кнопки «Назад»
+// Функция закрытия с возвратом истории
 function closeImageModal() {
-  let modal = document.getElementById('imageModal');
-  if (modal && modal.style.display === 'block') {
-    modal.style.display = 'none';
-    // Если мы добавляли состояние в историю при открытии, убираем его
-    if (window.history.state && window.history.state.modalOpen) {
-      window.history.back();
+    let modal = document.getElementById('imageModal');
+    if (modal && modal.style.display === 'block') {
+        modal.style.display = 'none';
+        if (window.history.state && window.history.state.modalOpen) {
+            window.history.back();
+        }
     }
-  }
 }
 
-// Перехват кнопки «Назад» на телефоне
+// Перехват системной кнопки «Назад» на телефоне
 window.addEventListener('popstate', function() {
-  let modal = document.getElementById('imageModal');
-  if (modal) {
-    modal.style.display = 'none';
-  }
+    let modal = document.getElementById('imageModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
 });
+
 
     </script>
     <!-- Модальное окно для полноэкранного просмотра картинок -->
