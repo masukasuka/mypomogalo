@@ -1500,12 +1500,17 @@ document.addEventListener('click', function(event) {
         let modal = document.getElementById('imageModal');
         let modalImg = document.getElementById('fullSizeImage');
         
-                if (modal && modalImg) {
+                        if (modal && modalImg) {
             modal.style.display = 'flex';
             modal.style.alignItems = 'center';
             modal.style.justifyContent = 'center';
             modalImg.src = event.target.src;
+            modalImg.style.maxWidth = '100%';
+            modalImg.style.maxHeight = '90vh';
+            modalImg.style.objectFit = 'contain';
+            modalImg.style.transform = 'scale(1)';
             resetZoom();
+
  // Сбрасываем старый зум при открытии новой картинки
             
             if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.BackButton) {
