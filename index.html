@@ -526,6 +526,136 @@
   font-weight: bold;
   cursor: pointer;
 }
+        .calculator-card {
+    background: #181818;
+    border-radius: 12px;
+    padding: 14px;
+    margin: 12px 0;
+    color: #fff;
+    font-family: inherit;
+}
+
+.calculator-card h3 {
+    margin: 0 0 12px 0;
+    font-size: 16px;
+    color: #d63031; 
+}
+
+.calc-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.calc-field {
+    flex: 1;
+}
+
+.calc-field label {
+    display: block;
+    font-size: 11px;
+    margin-bottom: 3px;
+    color: #aaa;
+}
+
+.calc-field input, .calc-field select {
+    width: 100%;
+    padding: 7px 8px;
+    border-radius: 6px;
+    border: 1px solid #333;
+    background: #242424;
+    color: #fff;
+    font-size: 13px;
+    box-sizing: border-box;
+}
+
+.calc-results-block {
+    background: #202020;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 12px 0;
+    border-left: 3px solid #d63031;
+}
+
+.res-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+
+.res-item:last-child {
+    margin-bottom: 0;
+}
+
+.res-value {
+    font-weight: bold;
+    color: #f5f6fa;
+}
+
+.table-title {
+    font-size: 13px;
+    color: #ccc;
+    margin: 15px 0 8px 0;
+}
+
+.axes-table {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.table-header, .table-row {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr 1fr;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+}
+
+.table-header {
+    color: #888;
+    font-size: 11px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #333;
+}
+
+.table-row {
+    background: #222;
+    padding: 6px 8px;
+    border-radius: 6px;
+}
+
+.axle-count {
+    background: #111;
+    border: 1px solid #444;
+    border-radius: 4px;
+    color: #fff;
+    padding: 4px 6px;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 13px;
+}
+
+.axle-total {
+    text-align: right;
+    color: #00cec9;
+    font-weight: 500;
+}
+
+.table-footer-total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding: 8px 10px;
+    background: #242424;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 13px;
+    color: #d63031;
+}
+
     </style>
 </head>
 <body>
@@ -754,6 +884,121 @@
             <div class="history-list" id="notesList"></div>
         </div>
     </main>
+<div class="calculator-card">
+    <h3>Справка о тормозах (ВУ-45)</h3>
+    
+    <div class="calc-row">
+        <div class="calc-field">
+            <label>Вес поезда (т)</label>
+            <input type="number" id="trainWeight" placeholder="Например: 3000">
+        </div>
+        <div class="calc-field">
+            <label>Уклон, ‰</label>
+            <input type="number" id="trainSlope" placeholder="напр. 18">
+        </div>
+        <div class="calc-field">
+            <label>Нажатие на 100т</label>
+            <select id="brakeNorm">
+                <option value="33">33 (Груженый)</option>
+                <option value="55">55 (Порожний)</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="calc-results-block">
+        <div class="res-item">
+            <span>Фактическое нажатие:</span>
+            <span id="resFact" class="res-value">0 тс</span>
+        </div>
+        <div class="res-item">
+            <span>Требуемое нажатие:</span>
+            <span id="resRequired" class="res-value">0 тс</span>
+        </div>
+        <div class="res-item">
+            <span>Требуется ручников:</span>
+            <span id="resHandBrakes" class="res-value">0 осей</span>
+        </div>
+        <div class="res-item">
+            <span>Требуется башмаков:</span>
+            <span id="resShoes" class="res-value">0 шт</span>
+        </div>
+    </div>
+
+    <h4 class="table-title">Расчет фактического нажатия по осям</h4>
+    <div class="axes-table">
+        <div class="table-header">
+            <span>Нажатие на ось</span>
+            <span>Количество осей</span>
+            <span>Нажатие колодок</span>
+        </div>
+        
+        <div class="table-row" data-axles="3">
+            <span class="axle-label">3</span>
+            <input type="number" class="axle-count" placeholder="0" min="0">
+            <span class="axle-total">0</span>
+        </div>
+        <div class="table-row" data-axles="3.5">
+            <span class="axle-label">3.5</span>
+            <input type="number" class="axle-count" placeholder="0" min="0">
+            <span class="axle-total">0</span>
+        </div>
+        <div class="table-row" data-axles="4">
+            <span class="axle-label">4</span>
+            <input type="number" class="axle-count" placeholder="0" min="0">
+            <span class="axle-total">0</span>
+        </div>
+        <div class="table-row" data-axles="4.5">
+            <span class="axle-label">4.5</span>
+            <input type="number" class="axle-count" placeholder="0" min="0">
+            <span class="axle-total">0</span>
+        </div>
+        <div class="table-row" data-axles="5">
+            <span class="axle-label">5</span>
+            <input type="number" class="axle-count" placeholder="0" min="0">
+            <span class="axle-total">0</span>
+        </div>
+        <div class="table-row" data-axles="5.5">
+            <span class="axle-label">5.5</span>
+            <input type="number" class="axle-count" placeholder="0" min="0">
+            <span class="axle-total">0</span>
+        </div>
+        <div class="table-row" data-axles="6">
+            <span class="axle-label">6</span>
+            <input type="number" class="axle-count" placeholder="0" min="0">
+            <span class="axle-total">0</span>
+        </div>
+        <div class="table-row" data-axles="6.5">
+            <span class="axle-label">6.5</span>
+            <input type="number" class="axle-count" placeholder="0" min="0">
+            <span class="axle-total">0</span>
+        </div>
+        <div class="table-row" data-axles="7">
+            <span class="axle-label">7</span>
+            <input type="number" class="axle-count" placeholder="0" min="0">
+            <span class="axle-total">0</span>
+        </div>
+        <div class="table-row" data-axles="7.5">
+            <span class="axle-label">7.5</span>
+            <input type="number" class="axle-count" placeholder="0" min="0">
+            <span class="axle-total">0</span>
+        </div>
+        <div class="table-row" data-axles="8">
+            <span class="axle-label">8</span>
+            <input type="number" class="axle-count" placeholder="0" min="0">
+            <span class="axle-total">0</span>
+        </div>
+        <div class="table-row" data-axles="8.5">
+            <span class="axle-label">8.5</span>
+            <input type="number" class="axle-count" placeholder="0" min="0">
+            <span class="axle-total">0</span>
+        </div>
+    </div>
+
+    <div class="table-footer-total">
+        <span>Всего фактическое нажатие:</span>
+        <span id="grandTotalFact">0 тс</span>
+    </div>
+</div>
 
     <nav>
         <button class="nav-btn active" onclick="showSection('calc')">Часы</button>
@@ -1540,6 +1785,70 @@ if (imageModalEl) {
     });
 }
 
+
+        document.addEventListener('DOMContentLoaded', function() {
+    function updateVUDocument() {
+        let weight = parseFloat(document.getElementById('trainWeight').value) || 0;
+        let slope = parseFloat(document.getElementById('trainSlope').value) || 0;
+        let norm = parseFloat(document.getElementById('brakeNorm').value) || 33;
+
+        // Расчет требуемого нажатия (тс)
+        let requiredBrake = (weight * norm) / 100;
+        let reqElem = document.getElementById('resRequired');
+        if (reqElem) reqElem.innerText = requiredBrake.toFixed(1) + ' тс';
+
+        // Расчет ручников и башмаков
+        let requiredHand = Math.ceil((weight * slope) / 1000);
+        let requiredShoes = Math.max(2, Math.ceil(requiredHand / 2));
+        
+        let handElem = document.getElementById('resHandBrakes');
+        let shoesElem = document.getElementById('resShoes');
+        if (handElem) handElem.innerText = (weight > 0 ? requiredHand : 0) + ' осей';
+        if (shoesElem) shoesElem.innerText = (weight > 0 ? requiredShoes : 0) + ' шт';
+
+        // Подсчет фактического нажатия по таблице осей
+        let rows = document.querySelectorAll('.table-row');
+        let grandTotal = 0;
+
+        rows.forEach(row => {
+            let axleWeight = parseFloat(row.getAttribute('data-axles'));
+            let input = row.querySelector('.axle-count');
+            let totalSpan = row.querySelector('.axle-total');
+            
+            if (input && totalSpan) {
+                let count = parseFloat(input.value) || 0;
+                let rowSum = axleWeight * count;
+                totalSpan.innerText = rowSum > 0 ? rowSum.toFixed(1) : '0';
+                grandTotal += rowSum;
+            }
+        });
+
+        let resFactElem = document.getElementById('resFact');
+        let grandTotalElem = document.getElementById('grandTotalFact');
+        
+        let formattedFact = grandTotal.toFixed(1) + ' тс';
+        if (resFactElem) resFactElem.innerText = formattedFact;
+        if (grandTotalElem) grandTotalElem.innerText = formattedFact;
+
+        // Индикация нормы (зеленый / красный)
+        if (resFactElem) {
+            if (weight > 0 && grandTotal >= requiredBrake) {
+                resFactElem.style.color = '#00b894'; 
+            } else if (weight > 0) {
+                resFactElem.style.color = '#d63031'; 
+            } else {
+                resFactElem.style.color = '#f5f6fa';
+            }
+        }
+    }
+
+    // Слушатели на поля ввода калькулятора
+    let calcInputs = document.querySelectorAll('.calculator-card input, .calculator-card select');
+    calcInputs.forEach(input => {
+        input.addEventListener('input', updateVUDocument);
+        input.addEventListener('change', updateVUDocument);
+    });
+});
 
     </script>
     <!-- Модальное окно для полноэкранного просмотра картинок -->
