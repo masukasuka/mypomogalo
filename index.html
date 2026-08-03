@@ -1888,6 +1888,53 @@ if (imageModalEl) {
     });
 });
 
+        // --- Логика свайпов для переключения разделов ---
+document.addEventListener('DOMContentLoaded', () => {
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const minSwipeDistance = 50;
+    const sectionsOrder = ['calc', 'speeds', 'docs', 'notes', 'vu45'];
+
+    document.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, false);
+
+    document.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, false);
+
+    function handleSwipe() {
+        let diff = touchEndX - touchStartX;
+        if (Math.abs(diff) < minSwipeDistance) return;
+
+        let activeBtn = document.querySelector('.nav-btn.active');
+        if (!activeBtn) return;
+
+        let currentSectionId = '';
+        sectionsOrder.forEach(id => {
+            if (activeBtn.getAttribute('onclick').includes(id)) {
+                currentSectionId = id;
+            }
+        });
+
+        let currentIndex = sectionsOrder.indexOf(currentSectionId);
+        if (currentIndex === -1) return;
+
+        if (diff < 0) {
+            let nextIndex = currentIndex + 1;
+            if (nextIndex < sectionsOrder.length) {
+                showSection(sectionsOrder[nextIndex]);
+            }
+        } else {
+            let prevIndex = currentIndex - 1;
+            if (prevIndex >= 0) {
+                showSection(sectionsOrder[prevIndex]);
+            }
+        }
+    }
+});
+
     </script>
     <!-- Модальное окно для полноэкранного просмотра картинок -->
 <div id="imageModal" class="image-modal" style="overflow: auto;">
