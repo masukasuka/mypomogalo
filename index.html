@@ -1462,7 +1462,6 @@ document.addEventListener('click', function(event) {
             modal.style.display = 'block';
             modalImg.src = event.target.src;
             
-            // Включаем нативную кнопку «Назад» в шапке Telegram
             if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.BackButton) {
                 window.Telegram.WebApp.BackButton.show();
                 window.Telegram.WebApp.BackButton.onClick(function() {
