@@ -1277,49 +1277,54 @@ img.src = base64;
         }
 
         async function saveNote() {
-            let textEl = document.getElementById('noteTextContent');
-            let editIdEl = document.getElementById('noteEditingId');
-            let text = textEl.value.trim();
+    let textEl = document.getElementById('noteTextContent');
+    let editIdEl = document.getElementById('noteEditingId');
+    let text = textEl.value.trim();
 
-            if (!text && currentNoteImagesBase64.length === 0) {
-                alert("Заметка пуста! Добавьте текст или хотя бы одно фото.");
-                return;
+    if (!text && currentNoteImagesBase64.length === 0) {
+        alert("Заметка пуста! Добавьте текст или хотя бы одно фото.");
+        return;
+    }
+
+    let editId = editIdEl.value;
+    let now = new Date();
+    let dateStr = now.toLocaleDateString('ru-RU') + ' ' + now.toLocaleTimeString('ru-RU', {hour: '2-digit', minute:'2-digit'});
+
+    try {
+        if (editId) {
+            let index = notes.findIndex(n => n.id == editId);
+            if (index !== -1) {
+                notes[index].text = text;
+                notes[index].images = [...currentNoteImagesBase64];
+                notes[index].date = dateStr + ' (ред.)';
+                if (notes[index].image !== undefined) delete notes[index].image; 
             }
-
-            let editId = editIdEl.value;
-            let now = new Date();
-            let dateStr = now.toLocaleDateString('ru-RU') + ' ' + now.toLocaleTimeString('ru-RU', {hour: '2-digit', minute:'2-digit'});
-
-            if (editId) {
-                let index = notes.findIndex(n => n.id == editId);
-                if (index !== -1) {
-                    notes[index].text = text;
-                    notes[index].images = [...currentNoteImagesBase64]; // копируем массив
-                    notes[index].date = dateStr + ' (ред.)';
-                    // удаляем старое одиночное фото если оно было, чтобы не дублировать
-                    if (notes[index].image !== undefined) delete notes[index].image; 
-                }
-                cancelNoteEdit();
-            } else {
-                notes.unshift({
-                    id: Date.now(),
-                    text: text,
-                    images: [...currentNoteImagesBase64],
-                    date: dateStr
-                });
-                textEl.value = '';
-                clearAllNoteImages();
-            }
-
-            try {
-                await localforage.setItem('my_notes', notes);
-                updateNotesUI();
-                if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-            } catch (e) {
-                alert("Ошибка сохранения.");
-                console.error(e);
-            }
+        } else {
+            notes.unshift({
+                id: Date.now(),
+                text: text,
+                images: [...currentNoteImagesBase64],
+                date: dateStr
+            });
         }
+
+        // Сохраняем в localforage
+        await localforage.setItem('my_notes', notes);
+        
+        // Очищаем форму только после успешного сохранения
+        textEl.value = '';
+        clearAllNoteImages();
+        cancelNoteEdit();
+        
+        updateNotesUI();
+        if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+        
+    } catch (e) {
+        console.error("Ошибка сохранения:", e);
+        alert("Ошибка сохранения: возможно, картинка слишком большого размера. Попробуйте выбрать фото меньшего разрешения.");
+    }
+}
+
 
         function updateNotesUI() {
             let listEl = document.getElementById('notesList');
