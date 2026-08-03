@@ -1449,7 +1449,13 @@ if (imageModal) {
     if (e.target === imageModal) imageModal.style.display = 'none';
   });
 }
+document.addEventListener('contextmenu', function(event) {
+  if (event.target.tagName === 'IMG' && event.target.classList.contains('note-image')) {
+    event.preventDefault(); // Запрещаем вызов системного меню на картинках
+  }
+});
 
+    
     </script>
     <!-- Модальное окно для полноэкранного просмотра картинок -->
 <div id="imageModal" class="image-modal">
