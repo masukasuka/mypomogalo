@@ -1456,7 +1456,30 @@ document.addEventListener('contextmenu', function(event) {
   }
 });
 
-    
+
+        // Запрет системного меню на картинках
+document.addEventListener('contextmenu', function(event) {
+  if (event.target.tagName === 'IMG' && event.target.classList.contains('note-image')) {
+    event.preventDefault(); 
+  }
+});
+
+// Глобальный перехватчик кликов для старых и новых картинок
+document.addEventListener('click', function(event) {
+    if (event.target.tagName === 'IMG' && (event.target.classList.contains('note-image') || event.target.closest('.note-gallery'))) {
+        event.preventDefault();
+        event.stopPropagation();
+        
+        let modal = document.getElementById('imageModal');
+        let modalImg = document.getElementById('fullSizeImage');
+        
+        if (modal && modalImg) {
+            modal.style.display = 'block';
+            modalImg.src = event.target.src;
+        }
+    }
+}, true);
+
     </script>
     <!-- Модальное окно для полноэкранного просмотра картинок -->
 <div id="imageModal" class="image-modal">
