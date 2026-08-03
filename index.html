@@ -1251,14 +1251,9 @@
                 item.className = 'preview-item';
                 
                 let img = document.createElement('img');
-                img.className = 'note-image';
+img.className = 'note-image';
+img.src = base64;
 
-        // Сразу вешаем событие прямо на эту картинку
-img.addEventListener('pointerdown', function() {
-  imageModal.style.display = 'block';
-  fullSizeImage.src = img.src;
-});
-                img.src = base64;
                 
                 let btn = document.createElement('button');
                 btn.className = 'preview-remove-btn';
