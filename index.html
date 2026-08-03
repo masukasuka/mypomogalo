@@ -1342,16 +1342,18 @@ img.addEventListener('pointerdown', function() {
                 
                 // Поддержка старых заметок (где было одно photo.image) и новых (photo.images array)
                 let noteImages = note.images ? [...note.images] : [];
-                if (note.image) noteImages.push(note.image);
+if (note.image) noteImages.push(note.image);
 
-                let imgHtml = '';
-                if (noteImages.length > 0) {
-                    imgHtml = '<div class="note-gallery">';
-                    noteImages.forEach(src => {
-                        imgHtml += `<img src="${src}" onclick="showFullImage('${src}')">`;
-                    });
-                    imgHtml += '</div>';
-                }
+let imgHtml = '';
+if (noteImages.length > 0) {
+    imgHtml = '<div class="note-gallery">';
+    noteImages.forEach(src => {
+        // Обязательно добавляем класс note-image, чтобы сработал наш обработчик
+        imgHtml += `<img src="${src}" class="note-image">`;
+    });
+    imgHtml += '</div>';
+}
+
 
                 let textHtml = note.text ? `<div class="note-card-text">${escapeHtml(note.text)}</div>` : '';
 
