@@ -513,14 +513,7 @@
     max-width: 90vw;
     max-height: 90vh;
     object-fit: contain;
-    transition: transform 0.3s ease;
-    cursor: zoom-in;
 }
-
-.image-modal-content.zoomed {
-    cursor: zoom-out;
-}
-
 
 
 /* Кнопка закрытия (крестик) в правом верхнем углу */
@@ -1506,8 +1499,7 @@ document.addEventListener('click', function(event) {
         let modal = document.getElementById('imageModal');
         let modalImg = document.getElementById('fullSizeImage');
         
-                        
-        if (modal && modalImg) {
+                        if (modal && modalImg) {
             modal.style.display = 'flex';
             modal.style.alignItems = 'center';
             modal.style.justifyContent = 'center';
@@ -1518,19 +1510,7 @@ document.addEventListener('click', function(event) {
             modalImg.style.transform = 'scale(1)';
             resetZoom();
 
-            // Клик для зума конкретно в модальном окне
-            modalImg.onclick = function(e) {
-                e.stopPropagation();
-                if (!this.classList.contains('zoomed')) {
-                    this.style.transform = 'scale(2.2)';
-                    this.classList.add('zoomed');
-                } else {
-                    this.style.transform = 'scale(1)';
-                    this.classList.remove('zoomed');
-                }
-            };
-        }
-
+ // Сбрасываем старый зум при открытии новой картинки
             
             if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.BackButton) {
                 window.Telegram.WebApp.BackButton.show();
