@@ -655,6 +655,28 @@
     font-size: 13px;
     color: #d63031;
 }
+        /* 1. Включаем нормальный скролл для всего приложения или активной секции */
+body, html {
+    height: 100%;
+    margin: 0;
+    overflow-x: hidden;
+    overflow-y: auto; /* Разрешаем вертикальный скролл */
+}
+
+/* 2. Делаем так, чтобы активный раздел не блокировал прокрутку */
+.content-section.active {
+    display: block !important;
+    overflow-y: auto;
+    max-height: calc(100vh - 70px); /* Оставляем место под нижнее меню */
+    padding-bottom: 80px; /* Чтобы нижние строки таблицы не прятались за кнопками меню */
+}
+
+/* 3. Исправляем отображение текста в выпадающих списках / инпутах, чтобы ничего не сжималось */
+input, select {
+    box-sizing: border-box;
+    text-overflow: ellipsis;
+}
+
 
     </style>
 </head>
