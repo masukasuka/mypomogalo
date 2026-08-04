@@ -478,14 +478,14 @@
             justify-content: center;
             align-items: center;
         }
-        /* --- СТИЛИ ДЛЯ ЛАЙТБОКСА (ВСПЛЫВАЮЩЕГО ОКНА) --- */
+/* --- СТИЛИ ДЛЯ ЛАЙТБОКСА (ВСПЛЫВАЮЩЕГО ОКНА) --- */
 
 /* Делаем так, чтобы на превью в заметке хотелось кликнуть */
 .note-image {
   cursor: pointer;
   transition: opacity 0.3s;
-    touch-action: manipulation;
-    -webkit-touch-callout: none;
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
 }
 
 .note-image:hover {
@@ -505,6 +505,15 @@
     justify-content: center;
     align-items: center;
     overflow: auto;
+    /* Блокируем любые клики и события сквозь подложку на фон */
+    pointer-events: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Элементы внутри модального окна должны быть кликабельными */
+.image-modal img,
+.close-image-modal {
+    pointer-events: auto;
 }
 
 .image-modal-content {
@@ -513,8 +522,8 @@
     max-width: 90vw;
     max-height: 90vh;
     object-fit: contain;
+    touch-action: pinch-zoom; /* Разрешаем штатный зум пальцами только самой картинке */
 }
-
 
 /* Кнопка закрытия (крестик) в правом верхнем углу */
 .close-image-modal {
@@ -525,7 +534,16 @@
   font-size: 40px;
   font-weight: bold;
   cursor: pointer;
+  z-index: 1001;
 }
+
+/* Класс для блокировки прокрутки и скролла всей страницы под модалкой */
+body.modal-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+}
+
         .calculator-card {
     background: #181818;
     border-radius: 12px;
