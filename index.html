@@ -2073,6 +2073,7 @@ function closeImageModal() {
         if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.BackButton) {
             window.Telegram.WebApp.BackButton.hide();
         }
+        document.body.classList.remove('modal-open');
     }
 }
 
@@ -2135,6 +2136,8 @@ document.addEventListener('click', function(event) {
             modalImg.style.maxHeight = '90vh';
             modalImg.style.objectFit = 'contain';
             modalImg.style.transform = 'scale(1)';
+                 document.body.classList.add('modal-open'); // <-- Добавить сюда
+               
             resetZoom();
 
  // Сбрасываем старый зум при открытии новой картинки
